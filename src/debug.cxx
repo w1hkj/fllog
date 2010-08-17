@@ -43,7 +43,7 @@
 #include "debug.h"
 //#include "icons.h"
 #include "gettext.h"
-#include "rig.h"
+#include "fllog.h"
 
 using namespace std;
 
@@ -74,8 +74,7 @@ static void save_cb(Fl_Widget *w, void*);
 //static void popup_message(void*);
 
 Fl_Menu_Item src_menu[] = {
-	{ _("Rig control"), 0, 0, 0, FL_MENU_TOGGLE | FL_MENU_VALUE },
-	{ _("RPC"), 0, 0, 0, FL_MENU_TOGGLE | FL_MENU_VALUE },
+	{ _("Serial I/O"), 0, 0, 0, FL_MENU_TOGGLE | FL_MENU_VALUE },
 	{ _("Other"), 0, 0, 0, FL_MENU_TOGGLE | FL_MENU_VALUE },
 	{ 0 }
 };
@@ -247,7 +246,7 @@ static void clear_cb(Fl_Widget* w, void*)
 
 static void save_cb(Fl_Widget* w, void*)
 {
-	string filename = RigHomeDir;
+	string filename = LogHomeDir;
 	filename.append("debug_log.txt");
 	buffer->savefile(filename.c_str());
 }

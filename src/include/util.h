@@ -3,6 +3,8 @@
 #ifndef UTIL_H
 #define UTIL_H
 
+#include "config.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -106,13 +108,13 @@ extern "C" {
 const__ uint32_t ceil2(uint32_t n);
 const__ uint32_t floor2(uint32_t n);
 
-//#if !HAVE_STRCASESTR
-//char* strcasestr(const char* haystack, const char* needle);
-//#endif
+#if !HAVE_STRCASESTR || __WIN32__
+char* strcasestr(const char* haystack, const char* needle);
+#endif
 
-//#if !HAVE_STRLCPY
-//size_t strlcpy(char* dest, const char* src, size_t size);
-//#endif
+#if !HAVE_STRLCPY || __WIN32__
+size_t strlcpy(char* dest, const char* src, size_t size);
+#endif
 
 int set_cloexec(int fd, unsigned char v);
 int set_nonblock(int fd, unsigned char v);

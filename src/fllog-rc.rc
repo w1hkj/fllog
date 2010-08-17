@@ -1,0 +1,7 @@
+#include <windows.h> // include for version info constants
+#include "flwkeyrc.h"
+
+IDI_ICON ICON DISCARDABLE "flwkey.ico"
+
+//A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "flwkey.ico"
+

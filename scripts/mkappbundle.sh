@@ -30,8 +30,8 @@ if ! test -w "$build"; then
 fi
 
 plist="${data}/mac/Info.plist.in"
-flrig_icon="${data}/mac/flrig.icns"
-for f in "$plist" "$flrig_icon"; do
+fllog_icon="${data}/mac/fllog.icns"
+for f in "$plist" "$fllog_icon"; do
     test -r "$f" && continue
     echo "E: ${f}: not readable" >&2
     exit 1
@@ -106,9 +106,9 @@ name=$(echo "$PACKAGE_TARNAME" | upcase1)
 # we'll use the first four consonants as the signature
 signature="$(echo $PACKAGE_TARNAME | sed 's/[aeiouAEIOU]//g; s/\(^....\).*/\1/')"
 binary="$PACKAGE_TARNAME"
-icon="$flrig_icon"
-version="${FLRIG_VERSION_MAJOR}.${FLRIG_VERSION_MINOR}"
-appversion="$FLRIG_VERSION"
+icon="$fllog_icon"
+version="${FLLOG_VERSION_MAJOR}.${FLLOG_VERSION_MINOR}"
+appversion="$FLLOG_VERSION"
 
 bundle
 

@@ -40,8 +40,9 @@ unsigned long ver2int(const char* version)
 
 	return v;
 }
-/*
-#if !HAVE_STRCASESTR
+
+
+#if !HAVE_STRCASESTR || __WIN32__
 #  include <ctype.h>
 // from git 1.6.1.2 compat/strcasestr.c
 char *strcasestr(const char *haystack, const char *needle)
@@ -64,9 +65,9 @@ char *strcasestr(const char *haystack, const char *needle)
 	return NULL;
 }
 #endif // !HAVE_STRCASESTR
-*/
 
-#if !HAVE_STRLCPY
+
+#if !HAVE_STRLCPY || __win32__
 // from git 1.6.1.2 compat/strcasestr.c
 size_t strlcpy(char *dest, const char *src, size_t size)
 {
@@ -80,6 +81,7 @@ size_t strlcpy(char *dest, const char *src, size_t size)
 	return ret;
 }
 #endif // !HAVE_STRLCPY
+
 
 #ifdef __WIN32__
 int set_cloexec(int fd, unsigned char v) { return 0; }

@@ -1,40 +1,46 @@
 # Copyright (c) 2008 Dave Freese, W1HKJ (w1hkj AT w1hkj DOT com)
 
-bin_PROGRAMS = flrig
+bin_PROGRAMS = fllog
 
-flrig_CPPFLAGS = @FLRIG_BUILD_CPPFLAGS@
-flrig_CXXFLAGS = @FLRIG_BUILD_CXXFLAGS@
-flrig_CFLAGS = $(flrig_CXXFLAGS)
-flrig_LDFLAGS = @FLRIG_BUILD_LDFLAGS@
-flrig_LDADD = @FLRIG_BUILD_LDADD@
+fllog_CPPFLAGS = @FLLOG_BUILD_CPPFLAGS@
+fllog_CXXFLAGS = @FLLOG_BUILD_CXXFLAGS@
+fllog_CFLAGS = $(fllog_CXXFLAGS)
+fllog_LDFLAGS = @FLLOG_BUILD_LDFLAGS@
+fllog_LDADD = @FLLOG_BUILD_LDADD@
 
-MINGW32_SRC = flrig-rc.rc include/flrigrc.h
+MINGW32_SRC = \
+	fllog-rc.rc \
+	include/fllogrc.h \
+	mingw.c \
+	compat/regex.c \
+	include/compat.h
+
 
 # We distribute these but do not always compile them
-EXTRA_flrig_SOURCES = $(FLRIG_WIN32_RES_SRC) $(MINGW32_SRC)
+EXTRA_fllog_SOURCES = $(FLLOG_WIN32_RES_SRC) $(MINGW32_SRC)
 
-flrig_SOURCES =
+fllog_SOURCES =
 
 if MINGW32
 if HAVE_WINDRES
-  flrig_SOURCES += $(MINGW32_SRC)
+  fllog_SOURCES += $(MINGW32_SRC)
 endif
 endif
 
 ########################################################################
 
 
-FLRIG_VERSION_MAJOR = @FLRIG_VERSION_MAJOR@
-FLRIG_VERSION_MINOR = @FLRIG_VERSION_MINOR@
-FLRIG_VERSION_PATCH = @FLRIG_VERSION_PATCH@
-FLRIG_VERSION = @FLRIG_VERSION@
+FLLOG_VERSION_MAJOR = @FLLOG_VERSION_MAJOR@
+FLLOG_VERSION_MINOR = @FLLOG_VERSION_MINOR@
+FLLOG_VERSION_PATCH = @FLLOG_VERSION_PATCH@
+FLLOG_VERSION = @FLLOG_VERSION@
 
 .EXPORT_ALL_VARIABLES: nsisinst appbundle
 
 # Sources that are generated,
 BUILT_SOURCES =
 # not distributed,
-nodist_flrig_SOURCES = $(BUILT_SOURCES)
+nodist_fllog_SOURCES = $(BUILT_SOURCES)
 # and deleted by the clean targets
 CLEANFILES = $(BUILT_SOURCES)
 CLEAN_LOCAL =
@@ -47,25 +53,25 @@ endif
 endif
 
 install-data-local:
-	if test -f $(srcdir)/../data/flrig.xpm; then \
+	if test -f $(srcdir)/../data/fllog.xpm; then \
 	    $(mkinstalldirs) $(DESTDIR)/$(datadir)/pixmaps; \
-	    $(INSTALL_DATA) $(srcdir)/../data/flrig.xpm $(DESTDIR)/$(datadir)/pixmaps; \
+	    $(INSTALL_DATA) $(srcdir)/../data/fllog.xpm $(DESTDIR)/$(datadir)/pixmaps; \
 	fi
-	if test -f $(srcdir)/../data/flrig.desktop; then \
+	if test -f $(srcdir)/../data/fllog.desktop; then \
 	    $(mkinstalldirs) $(DESTDIR)/$(datadir)/applications; \
-	    $(INSTALL_DATA) $(srcdir)/../data/flrig.desktop $(DESTDIR)/$(datadir)/applications; \
+	    $(INSTALL_DATA) $(srcdir)/../data/fllog.desktop $(DESTDIR)/$(datadir)/applications; \
 	fi
 
 uninstall-local:
-	rm -f $(DESTDIR)/$(datadir)/pixmaps/flrig.xpm
-	rm -f $(DESTDIR)/$(datadir)/applications/flrig.desktop
+	rm -f $(DESTDIR)/$(datadir)/pixmaps/fllog.xpm
+	rm -f $(DESTDIR)/$(datadir)/applications/fllog.desktop
 
-FL_SRC = rigpanel.fl
+FLLOG_FL_SRC = logbook/lgbook.fl
 
 if HAVE_FLUID
-flgen: $(FL_SRC)
+flgen: $(FLLOG_FL_SRC)
 	(cd $(srcdir)/include; \
-	for f in $(FL_SRC); do \
+	for f in $(FLLOG_FL_SRC); do \
 	    c=$${f%.fl}.cxx; \
 		h=$${f%.fl}.h; \
 		h=$${h##*/}; \
@@ -74,8 +80,8 @@ flgen: $(FL_SRC)
 endif
 
 
-INSTALLER_FILE = flrig-$(FLRIG_VERSION)_setup.exe
-APPBUNDLE=flrig-$(FLRIG_VERSION)
+INSTALLER_FILE = fllog-$(FLLOG_VERSION)_setup.exe
+APPBUNDLE=fllog-$(FLLOG_VERSION)
 APPBUNDLE_NOLIBS=$(APPBUNDLE)-nolibs
 
 if HAVE_NSIS
@@ -109,113 +115,90 @@ clean-local:
 	-rm -rf $(CLEAN_LOCAL)
 
 # Sources that we build. It is OK to have headers here.
-flrig_SOURCES += \
+fllog_SOURCES += \
 	combo.cxx \
 	debug.cxx \
-	dialogs.cxx \
-	Fl_SigBar.cxx \
-	FreqControl.cxx \
-	images.cxx \
-	ptt.cxx \
-	rig.cxx \
-	rig_io.cxx \
-	rigpanel.cxx \
-	rigbase.cxx \
-	rigs/FT100D.cxx \
-	rigs/FT450.cxx \
-	rigs/FT817.cxx \
-	rigs/FT857D.cxx \
-	rigs/FT950.cxx \
-	rigs/FT2000.cxx \
-	rigs/IC706MKIIG.cxx \
-	rigs/IC728.cxx \
-	rigs/IC735.cxx \
-	rigs/ICgeneric.cxx \
-	rigs/K2.cxx \
-	rigs/K3.cxx \
-	rigs/TS140.cxx \
-	rigs/TS2000.cxx \
-	rigs/TT516.cxx \
-	rigs/TT538.cxx \
-	rigs/TT550.cxx \
-	rigs/TT563.cxx \
-	rigs.cxx \
-	serial.cxx \
+	flslider2.cxx \
+	fllog.cxx \
 	status.cxx \
 	support.cxx \
 	util.cxx \
 	ValueSlider.cxx \
-	xml_io.cxx 
+	Fl_Native_File_Chooser.cxx \
+	flinput2.cxx \
+	pixmaps.cxx \
+	icons.cxx \
+	fileselect.cxx \
+	logbook/adif_io.cxx \
+	logbook/date.cxx \
+	logbook/logsupport.cxx \
+	logbook/table.cxx \
+	logbook/calendar.cxx \
+	logbook/lgbook.cxx \
+	logbook/logbook.cxx \
+	logbook/qso_db.cxx \
+	logbook/textio.cxx \
+	re.cxx 
 
 # Additional source files that are distributed
 EXTRA_DIST = \
-	$(srcdir)/config.h \
-	$(srcdir)/include/combo.h \
-	$(srcdir)/include/compat.h \
-	$(srcdir)/include/compat-mingw.h \
-	$(srcdir)/include/debug.h \
-	$(srcdir)/include/dialogs.h \
-	$(srcdir)/include/fileselect.h \
-	$(srcdir)/include/flrigrc.h \
-	$(srcdir)/include/Fl_SigBar.h \
-	$(srcdir)/include/FreqControl.h \
-	$(srcdir)/include/FT100D.h \
-	$(srcdir)/include/FT450.h \
-	$(srcdir)/include/FT817.h \
-	$(srcdir)/include/FT857D.h \
-	$(srcdir)/include/FT890.h \
-	$(srcdir)/include/FT950.h \
-	$(srcdir)/include/FT1000MV.h \
-	$(srcdir)/include/FT2000.h \
-	$(srcdir)/include/generic.h \
-	$(srcdir)/include/gettext.h \
-	$(srcdir)/include/IC706MKIIG.h \
-	$(srcdir)/include/IC728.h \
-	$(srcdir)/include/IC735.h \
-	$(srcdir)/include/ICgeneric.h \
-	$(srcdir)/include/images.h \
-	$(srcdir)/include/K2.h \
-	$(srcdir)/include/K3.h \
-	$(srcdir)/include/mingw.h \
-	$(srcdir)/include/ptt.h \
-	$(srcdir)/include/rig.h \
-	$(srcdir)/include/rigbase.h \
-	$(srcdir)/include/rig_io.h \
-	$(srcdir)/include/rigpanel.h \
-	$(srcdir)/include/serial.h \
-	$(srcdir)/include/status.h \
-	$(srcdir)/include/support.h \
-	$(srcdir)/include/TS140.h \
-	$(srcdir)/include/TS2000.h \
-	$(srcdir)/include/TT516.h \
-	$(srcdir)/include/TT538.h \
-	$(srcdir)/include/TT550.h \
-	$(srcdir)/include/TT563.h \
-	$(srcdir)/include/util.h \
-	$(srcdir)/include/ValueSlider.h \
-	$(srcdir)/include/xml_io.h \
-	$(srcdir)/images/alc.xbm \
-	$(srcdir)/images/fwd.xbm \
-	$(srcdir)/images/P200.xbm \
-	$(srcdir)/images/P50.xbm \
-	$(srcdir)/images/S60.xbm \
-	$(srcdir)/images/swr.xbm \
-	$(srcdir)/images/P100.xbm \
-	$(srcdir)/images/P25.xbm \
-	$(srcdir)/images/smeter.xbm \
-	$(srcdir)/images/SWR.xbm
+	config.h \
+	flnfc_common.cxx \
+	compat/regex.c \
+	compat/regex.h \
+	Fl_Native_File_Chooser_FLTK.cxx \
+	Fl_Native_File_Chooser_MAC.cxx \
+	Fl_Native_File_Chooser_WIN32.cxx \
+	fllog_icon.cxx \
+	logbook/lgbook.fl \
+	include/adif_def.h \
+	include/adif_io.h \
+	include/calendar.h \
+	include/date.h \
+	include/field_def.h \
+	include/lgbook.h \
+	include/log.h \
+	include/logbook.h \
+	include/logger.h \
+	include/logsupport.h \
+	include/textio.h \
+	include/qso_db.h \
+	include/table.h \
+	include/combo.h \
+	include/debug.h \
+	include/fileselect.h \
+	include/fllogrc.h \
+	include/flslider2.h \
+	include/font_browser.h \
+	include/gettext.h \
+	include/mingw.h \
+	include/fllog.h \
+	include/status.h \
+	include/support.h \
+	include/threads.h \
+	include/re.h \
+	include/util.h \
+	include/ValueSlider.h \
+	include/flinput2.h \
+	include/pixmaps.h \
+	include/icons.h \
+	include/fileselect.h \
+	include/FL/Fl_Native_File_Chooser.H \
+	include/FL/Fl_Native_File_Chooser_FLTK.H \
+	include/FL/Fl_Native_File_Chooser_MAC.H \
+	include/FL/Fl_Native_File_Chooser_WIN32.H
 
 # Additional non-source files that are distributed
 # Additional source files that support non-Linux cross compilation
 EXTRA_DIST += \
-	$(srcdir)/../data/flrig.desktop \
-	$(srcdir)/../data/flrig.xpm \
+	$(srcdir)/../data/fllog.desktop \
+	$(srcdir)/../data/fllog.xpm \
 	$(srcdir)/../data/win32/fl_app.nsi \
-	$(srcdir)/../data/win32/flrig.ico \
+	$(srcdir)/../data/win32/fllog.ico \
 	$(srcdir)/../scripts/mknsisinst.sh \
 	$(srcdir)/../scripts/build4mingw.sh \
 	$(srcdir)/../data/mac/Info.plist.in \
-	$(srcdir)/../data/mac/flrig.icns \
+	$(srcdir)/../data/mac/fllog.icns \
 	$(srcdir)/../scripts/mkappbundle.sh \
-	$(FLRIG_WIN32_SRC) \
-	$(FLRIG_FL_SRC)
+	$(FLLOG_WIN32_SRC) \
+	$(FLLOG_FL_SRC)

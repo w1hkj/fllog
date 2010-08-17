@@ -1,13 +1,10 @@
+#include <string>
+
+#include "font_browser.h"
 #include "support.h"
 
-struct CPT {
-	int nbr;
-	char *szPort;
-};
+extern Fl_Double_Window *dlgSetup;
+extern void create_comm_dialog();
 
-extern Fl_Double_Window *dlgDisplayConfig;
-extern Fl_Double_Window *dlgXcvrConfig;
-extern Fl_Double_Window *dlgMemoryDialog;
 
-extern CPT commPortTable[];
-extern int iNbrCommPorts;
+

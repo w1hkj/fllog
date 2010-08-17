@@ -44,32 +44,33 @@ struct datambr {
 };
 
 struct retvals {
+//  Fl_Output * Inp;
   Fl_Input *Inp;
-  void	 * retval;
-  int	  * idx;};
+  void     * retval;
+  int      * idx;};
 
 class Fl_PopBrowser : public Fl_Window {
 
   friend void popbrwsr_cb(Fl_Widget *, long);
 
   protected:
-	Fl_Select_Browser *popbrwsr;
-	retvals  Rvals;
-	int hRow;
-	int wRow;
+    Fl_Select_Browser *popbrwsr;
+    retvals  Rvals;
+    int hRow;
+    int wRow;
   public: 
-	Fl_PopBrowser (int x, int y, int w, int h, retvals R);
-	~Fl_PopBrowser ();
-	void popshow (int, int);
-	void pophide ();
-	void popbrwsr_cb_i (Fl_Widget *, long);
+    Fl_PopBrowser (int x, int y, int w, int h, retvals R);
+    ~Fl_PopBrowser ();
+    void popshow (int, int);
+    void pophide ();
+    void popbrwsr_cb_i (Fl_Widget *, long);
 
-	void add (char *s, void *d = 0);
-	void clear ();
-	void sort ();
-	int  handle (int);
+    void add (char *s, void *d = 0);
+    void clear ();
+    void sort ();
+    int  handle (int);
 
-	Fl_ComboBox *parent;
+    Fl_ComboBox *parent;
 
 };
 
@@ -78,42 +79,43 @@ class Fl_ComboBox : public Fl_Group  {
   friend class Fl_PopBrowser;
   
   protected:
-	Fl_Button	 *Btn;
-	Fl_Input	  *Output;
-	Fl_PopBrowser *Brwsr;
-	datambr	   **datalist;
-	int		   listsize;
-	int		   maxsize;
-	int		   listtype;
+    Fl_Button     *Btn;
+//    Fl_Output     *Output;
+    Fl_Input      *Output;
+    Fl_PopBrowser *Brwsr;
+    datambr       **datalist;
+    int           listsize;
+    int           maxsize;
+    int           listtype;
 
   private:
-	int width;
-	int height;
-	void *retdata;
-	int  idx;
-	retvals R;
+    int width;
+    int height;
+    void *retdata;
+    int  idx;
+    retvals R;
 
   public:
 
-	Fl_ComboBox (int x, int y, int w, int h, const char * = 0);
+    Fl_ComboBox (int x, int y, int w, int h, const char * = 0);
 	~Fl_ComboBox();
 	
-	const char *value ();
-	void value (const char *);
-	void put_value( const char *);
-	void fl_popbrwsr(Fl_Widget *);
+    const char *value ();
+    void value (const char *);
+    void put_value( const char *);
+    void fl_popbrwsr(Fl_Widget *);
 
-	void type (int = 0);
-	void add (const char *s, void *d = 0);
-	void clear ();
-	void sort ();
-	int  index ();
+    void type (int = 0);
+    void add (const char *s, void *d = 0);
+    void clear ();
+    void sort ();
+    int  index ();
 	void index (int i);
-	void *data ();
-	void textfont (int);
-	void textsize (uchar);
-	void readonly();
-
+    void *data ();
+    void textfont (int);
+    void textsize (uchar);
+    void readonly();
+    int size();
 };
 
 
