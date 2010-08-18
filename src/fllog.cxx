@@ -243,9 +243,11 @@ int main (int argc, char *argv[])
 	ptw32_init();
 #endif
 
-//	progStatus.loadLastState();
+	progStatus.loadLastState();
 
-//	mainwindow->resize( progStatus.mainX, progStatus.mainY, mainwindow->w(), mainwindow->h());
+	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
+	if (!progStatus.logbookfilename.empty())
+		OpenLogbook();
 
 	mainwindow->xclass(KNAME);
 

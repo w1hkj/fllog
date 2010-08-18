@@ -736,8 +736,7 @@ void create_logbook_dialogs() {
         inpQSLrcvddate_log->when(FL_WHEN_RELEASE);
         o->format(2);
       } // Fl_DateInput* inpQSLrcvddate_log
-      { inpNotes_log = new Fl_Input2(5, 112, 455, 35, _("Notes"));
-        inpNotes_log->tooltip(_("Interesting notes (80 chars max)"));
+      { inpNotes_log = new Fl_Input2(5, 98, 455, 50, _("Notes"));
         inpNotes_log->type(4);
         inpNotes_log->box(FL_DOWN_BOX);
         inpNotes_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -746,7 +745,7 @@ void create_logbook_dialogs() {
         inpNotes_log->labelfont(0);
         inpNotes_log->labelsize(12);
         inpNotes_log->labelcolor((Fl_Color)FL_FOREGROUND_COLOR);
-        inpNotes_log->align(FL_ALIGN_TOP_LEFT);
+        inpNotes_log->align(FL_ALIGN_BOTTOM_LEFT);
         inpNotes_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpNotes_log
       { Fl_DateInput* o = inpQSLsentdate_log = new Fl_DateInput(462, 114, 100, 22, _("QSL-sent"));
@@ -876,7 +875,7 @@ void create_logbook_dialogs() {
         } // Fl_Button* bSearchNext
         o->end();
       } // Fl_Group* o
-      { inpCONT_log = new Fl_Input2(40, 149, 65, 22, _("CONT"));
+      { inpCONT_log = new Fl_Input2(87, 149, 65, 22, _("CONT"));
         inpCONT_log->tooltip(_("Continent"));
         inpCONT_log->box(FL_DOWN_BOX);
         inpCONT_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -888,7 +887,7 @@ void create_logbook_dialogs() {
         inpCONT_log->align(FL_ALIGN_LEFT);
         inpCONT_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpCONT_log
-      { inpDXCC_log = new Fl_Input2(154, 149, 65, 22, _("DXCC"));
+      { inpDXCC_log = new Fl_Input2(191, 149, 65, 22, _("DXCC"));
         inpDXCC_log->tooltip(_("DXCC designator"));
         inpDXCC_log->box(FL_DOWN_BOX);
         inpDXCC_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -900,7 +899,7 @@ void create_logbook_dialogs() {
         inpDXCC_log->align(FL_ALIGN_LEFT);
         inpDXCC_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpDXCC_log
-      { inpIOTA_log = new Fl_Input2(268, 149, 65, 22, _("IOTA"));
+      { inpIOTA_log = new Fl_Input2(295, 149, 65, 22, _("IOTA"));
         inpIOTA_log->tooltip(_("Islands on the air"));
         inpIOTA_log->box(FL_DOWN_BOX);
         inpIOTA_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -912,7 +911,7 @@ void create_logbook_dialogs() {
         inpIOTA_log->align(FL_ALIGN_LEFT);
         inpIOTA_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpIOTA_log
-      { inpCQZ_log = new Fl_Input2(382, 149, 65, 22, _("CQZ"));
+      { inpCQZ_log = new Fl_Input2(394, 149, 65, 22, _("CQZ"));
         inpCQZ_log->tooltip(_("CQ zone"));
         inpCQZ_log->box(FL_DOWN_BOX);
         inpCQZ_log->color((Fl_Color)FL_BACKGROUND2_COLOR);

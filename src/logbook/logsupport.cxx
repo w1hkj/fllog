@@ -279,6 +279,14 @@ void cb_mnuNewLogbook(){
 	clearRecord();
 }
 
+void OpenLogbook()
+{
+	adifFile.readFile (progStatus.logbookfilename.c_str(), &qsodb);
+	qsodb.isdirty(0);
+	loadBrowser();
+	dlgLogbook->label(fl_filename_name(progStatus.logbookfilename.c_str()));
+}
+
 void cb_mnuOpenLogbook()
 {
 	const char* p = FSEL::select(_("Open logbook file"), "ADIF\t*." ADIF_SUFFIX,
@@ -286,14 +294,9 @@ void cb_mnuOpenLogbook()
 	if (p) {
 		saveLogbook();
 		qsodb.deleteRecs();
-
 		logbook_filename = p;
 		progStatus.logbookfilename = logbook_filename;
-
-		adifFile.readFile (logbook_filename.c_str(), &qsodb);
-		qsodb.isdirty(0);
-		loadBrowser();
-		dlgLogbook->label(fl_filename_name(logbook_filename.c_str()));
+		OpenLogbook();
 	}
 }
 

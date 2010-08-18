@@ -12,6 +12,8 @@ using namespace std;
 struct status {
 	int		mainX;
 	int		mainY;
+	int		mainW;
+	int		mainH;
 
 // logbook entries
 	string logbookfilename;

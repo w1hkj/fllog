@@ -43,6 +43,7 @@ extern void cb_mnuExportTEXT_log();
 extern void cb_Export_Cabrillo();
 
 extern void saveLogbook();
+extern void OpenLogbook();
 
 extern void activateButtons();
 extern void saveRecord ();

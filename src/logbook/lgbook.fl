@@ -11,8 +11,7 @@ decl {\#include <FL/Fl_Pixmap.H>} {}
 
 decl {\#include "logsupport.h"} {} 
 
-decl {\#include "support.h"} {selected
-} 
+decl {\#include "support.h"} {} 
 
 decl {\#include "pixmaps.h"} {} 
 
@@ -409,8 +408,8 @@ btnSelectTX_pwr->value(0);}
         class Fl_DateInput
       }
       Fl_Input inpNotes_log {
-        label Notes
-        tooltip {Interesting notes (80 chars max)} xywh {5 112 455 35} type Multiline labelsize 12 align 5
+        label Notes selected
+        xywh {5 98 455 50} type Multiline labelsize 12 align 6
         class Fl_Input2
       }
       Fl_Input inpQSLsentdate_log {
@@ -484,22 +483,22 @@ btnSelectTX_pwr->value(0);}
       }
       Fl_Input inpCONT_log {
         label CONT
-        tooltip Continent xywh {40 149 65 22} labelsize 12
+        tooltip Continent xywh {87 149 65 22} labelsize 12
         class Fl_Input2
       }
       Fl_Input inpDXCC_log {
         label DXCC
-        tooltip {DXCC designator} xywh {154 149 65 22} labelsize 12
+        tooltip {DXCC designator} xywh {191 149 65 22} labelsize 12
         class Fl_Input2
       }
       Fl_Input inpIOTA_log {
         label IOTA
-        tooltip {Islands on the air} xywh {268 149 65 22} labelsize 12
+        tooltip {Islands on the air} xywh {295 149 65 22} labelsize 12
         class Fl_Input2
       }
       Fl_Input inpCQZ_log {
         label CQZ
-        tooltip {CQ zone} xywh {382 149 65 22} labelsize 12
+        tooltip {CQ zone} xywh {394 149 65 22} labelsize 12
         class Fl_Input2
       }
       Fl_Input inpITUZ_log {

@@ -24,6 +24,8 @@
 status progStatus = {
 	50,			// int mainX;
 	50,			// int mainY;
+	580,		// int mainW;
+	385,		// int mainH;
 	""			// string	logbookfilename
 };
 
@@ -33,13 +35,19 @@ void status::saveLastState()
 
 	int mX = mainwindow->x();
 	int mY = mainwindow->y();
+	int mH = mainwindow->h();
+	int mW = mainwindow->w();
+
 	if (mX >= 0 && mX >= 0) {
 		mainX = mX;
 		mainY = mY;
 	}
+
 	spref.set("version", PACKAGE_VERSION);
 	spref.set("mainx", mX);
 	spref.set("mainy", mY);
+	spref.set("mainw", mW);
+	spref.set("mainh", mH);
 	spref.set("logbook_filename", logbookfilename.c_str());
 }
 
@@ -51,6 +59,8 @@ void status::loadLastState()
 		char defbuffer[200];
 		spref.get("mainx", mainX, mainX);
 		spref.get("mainy", mainY, mainY);
+		spref.get("mainw", mainW, mainW);
+		spref.get("mainh", mainH, mainH);
 		spref.get("logbook_filename", defbuffer, "", 199); logbookfilename = defbuffer;
 	}
 }
