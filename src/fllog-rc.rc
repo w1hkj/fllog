@@ -1,7 +1,7 @@
 #include <windows.h> // include for version info constants
-#include "flwkeyrc.h"
+#include "fllogrc.h"
 
-IDI_ICON ICON DISCARDABLE "flwkey.ico"
+IDI_ICON ICON DISCARDABLE "fllog.ico"
 
-//A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "flwkey.ico"
+//A ICON MOVEABLE PURE LOADONCALL DISCARDABLE "fllog.ico"
 

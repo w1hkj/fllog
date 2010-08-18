@@ -4,17 +4,17 @@
 # Copyright (c) 2009 Stelios Bounanos, M0GLD.
 # Copyright (c) 2009 Dave Freese, W1HKJ
 
-# substitute your application name for instances of FLWKEY
+# substitute your application name for instances of FLLOG
 
 # Variables
-!define FLWKEY_DESCRIPTION "${FLWKEY_NAME} ${FLWKEY_VERSION}"
-!define FLWKEY_STRING "${FLWKEY_NAME}-${FLWKEY_VERSION}"
+!define FLLOG_DESCRIPTION "${FLLOG_NAME} ${FLLOG_VERSION}"
+!define FLLOG_STRING "${FLLOG_NAME}-${FLLOG_VERSION}"
 
-!define PRODUCT_BINARY "${FLWKEY_BINARY}"
-!define PRODUCT_NAME "${FLWKEY_NAME}"
-!define PRODUCT_VERSION "${FLWKEY_VERSION}"
-!define PRODUCT_STRING "${FLWKEY_STRING}"
-!define PRODUCT_DESCRIPTION "${FLWKEY_DESCRIPTION}"
+!define PRODUCT_BINARY "${FLLOG_BINARY}"
+!define PRODUCT_NAME "${FLLOG_NAME}"
+!define PRODUCT_VERSION "${FLLOG_VERSION}"
+!define PRODUCT_STRING "${FLLOG_STRING}"
+!define PRODUCT_DESCRIPTION "${FLLOG_DESCRIPTION}"
 
 # Compression options
 SetCompressor /SOLID lzma
@@ -59,7 +59,7 @@ InstProgressFlags smooth
 VIAddVersionKey ProductName "${PRODUCT_NAME}"
 VIAddVersionKey ProductVersion "${PRODUCT_VERSION}"
 VIAddVersionKey FileVersion "${PRODUCT_VERSION}"
-VIAddVersionKey FileDescription "${FLWKEY_DESCRIPTION} installer"
+VIAddVersionKey FileDescription "${FLLOG_DESCRIPTION} installer"
 VIAddVersionKey LegalCopyright "${PRODUCT_NAME} developers"
 VIAddVersionKey OriginalFilename "${INSTALLER_FILE}"
 VIProductVersion "3.0.0.0"
@@ -89,7 +89,7 @@ Section -install
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "DisplayVersion" "${PRODUCT_VERSION}"
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "DisplayIcon" '"$INSTDIR\${PRODUCT_BINARY}"'
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "HelpLink" "${SUPPORT_URL}"
-    WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "Publisher" "FLWKEY developers"
+    WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "Publisher" "FLLOG developers"
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "URLUpdateInfo" "${UPDATES_URL}"
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "UninstallString" '"$INSTDIR\uninstall.exe"'
     WriteRegStr HKLM "${REG_UNINSTALL_PATH}" "QuietUninstallString" '"$INSTDIR\uninstall.exe" /S'
@@ -98,12 +98,12 @@ Section -install
     WriteUninstaller "uninstall.exe"
 SectionEnd
 
-#Var WANT_FLWKEY
+#Var WANT_FLLOG
 
-Section "FLWKEY"
+Section "FLLOG"
 	SectionIn RO
 	SetOutPath $INSTDIR
-	File "${FLWKEY_BINARY}"
+	File "${FLLOG_BINARY}"
 	File /nonfatal "${MINGWM_DLL}" "${PTW32_DLL}"
 SectionEnd
 
@@ -114,21 +114,21 @@ SectionEnd
 # The following sections are optional
 Section "Start Menu Shortcuts"
     CreateDirectory "${SM_PATH}"
-	CreateShortCut "${SM_PATH}\${FLWKEY_NAME}.lnk" "$INSTDIR\${FLWKEY_BINARY}" "" "$INSTDIR\${FLWKEY_BINARY}" 0
-#	CreateShortCut "${SM_PATH}\${FLWKEY_NAME} Beginners' Guide.lnk" "${GUIDE_URL}"
-#	CreateShortCut "${SM_PATH}\${FLWKEY_NAME} Documentation.lnk" "${FLWKEY_DOCS_URL}"
+	CreateShortCut "${SM_PATH}\${FLLOG_NAME}.lnk" "$INSTDIR\${FLLOG_BINARY}" "" "$INSTDIR\${FLLOG_BINARY}" 0
+#	CreateShortCut "${SM_PATH}\${FLLOG_NAME} Beginners' Guide.lnk" "${GUIDE_URL}"
+#	CreateShortCut "${SM_PATH}\${FLLOG_NAME} Documentation.lnk" "${FLLOG_DOCS_URL}"
     CreateShortCut "${SM_PATH}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 SectionEnd
 
 Section "Desktop Shortcuts"
-	CreateShortCut "$DESKTOP\${FLWKEY_DESCRIPTION}.lnk" "$INSTDIR\${FLWKEY_BINARY}" "" \
-		"$INSTDIR\${FLWKEY_BINARY}" 0
+	CreateShortCut "$DESKTOP\${FLLOG_DESCRIPTION}.lnk" "$INSTDIR\${FLLOG_BINARY}" "" \
+		"$INSTDIR\${FLLOG_BINARY}" 0
 SectionEnd
 
 # This is unselected by default
 Section /o "Quick Launch Shortcuts"
-	CreateShortCut "$QUICKLAUNCH\${FLWKEY_DESCRIPTION}}.lnk" "$INSTDIR\${FLWKEY_BINARY}" "" \
-		"$INSTDIR\${FLWKEY_BINARY}" 0
+	CreateShortCut "$QUICKLAUNCH\${FLLOG_DESCRIPTION}}.lnk" "$INSTDIR\${FLLOG_BINARY}" "" \
+		"$INSTDIR\${FLLOG_BINARY}" 0
 SectionEnd
 
 # Uninstaller
@@ -138,13 +138,13 @@ Section "Uninstall"
     DeleteRegKey HKLM "${INSTALL_DIR_REG_KEY}"
 
 # Remove files and uninstaller
-	Delete /REBOOTOK $INSTDIR\${FLWKEY_BINARY}
+	Delete /REBOOTOK $INSTDIR\${FLLOG_BINARY}
     Delete /REBOOTOK $INSTDIR\uninstall.exe
 
 # Remove shortcuts, if any
     Delete "${SM_PATH}\*.*"
-	Delete "$DESKTOP\${FLWKEY_DESCRIPTION}.lnk"
-	Delete "$QUICKLAUNCH\${FLWKEY_DESCRIPTION}.lnk"
+	Delete "$DESKTOP\${FLLOG_DESCRIPTION}.lnk"
+	Delete "$QUICKLAUNCH\${FLLOG_DESCRIPTION}.lnk"
 
 # Remove directories used
     RMDir "${SM_PATH}"

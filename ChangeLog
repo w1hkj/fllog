@@ -1,37 +1,4 @@
+2010-08-18  David Freese  <w1hkj@w1hkj.com>
 
-
-=Version 0.9.99=
-
-2010-08-12  David Freese  <w1hkj@w1hkj.com>
-
-	6cb42b9: Echo testing
-
-
-=Version 0.9.98=
-
-
-
-=Version 0.9.97=
-
-	a92cb82: Logbook
-	bd998a7: Serial timing
-
-
-=Version 0.9.96=
-
-	e92e25a: Key Port
-
-
-=Version 0.9.95=
-
-	22b8013: WK1.0 mods
-
-
-=Version 0.9.94=
-
-	11f2cf3: Logbook-Save
-
-
-=Version 0.9.93=
-
-	a59cfa8: Prosigns
+	23919a9: Field Limits
+	e8957e7: Logbook Init Branch

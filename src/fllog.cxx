@@ -32,16 +32,13 @@
 #  undef dirent
 #endif
 
-//#include "fileselect.h"
 #include <dirent.h>
 
 #include <FL/x.H>
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Image.H>
 
-//#include "images/fllog.xpm"
 #include "support.h"
-#include "dialogs.h"
 #include "status.h"
 #include "debug.h"
 #include "util.h"
