@@ -277,6 +277,7 @@ void cb_mnuNewLogbook(){
 	qsodb.deleteRecs();
 	wBrowser->clear();
 	clearRecord();
+	activateButtons();
 }
 
 void OpenLogbook()
@@ -285,6 +286,7 @@ void OpenLogbook()
 	qsodb.isdirty(0);
 	loadBrowser();
 	dlgLogbook->label(fl_filename_name(progStatus.logbookfilename.c_str()));
+	activateButtons();
 }
 
 void cb_mnuOpenLogbook()
@@ -371,11 +373,12 @@ void cb_mnuShowLogbook()
 enum State {VIEWREC, NEWREC};
 static State logState = VIEWREC;
 
-void activateButtons() {
-
+void activateButtons() 
+{
 	if (logState == NEWREC) {
 		bNewSave->label(_("Save"));
 		bUpdateCancel->label(_("Cancel"));
+		bUpdateCancel->activate();
 		bDelete->deactivate ();
 		bSearchNext->deactivate ();
 		bSearchPrev->deactivate ();
@@ -384,10 +387,18 @@ void activateButtons() {
 	}
 	bNewSave->label(_("New"));
 	bUpdateCancel->label(_("Update"));
-	bDelete->activate();
-	bSearchNext->activate ();
-	bSearchPrev->activate ();
-	wBrowser->take_focus();
+	if (qsodb.nbrRecs() > 0) {
+		bDelete->activate();
+		bUpdateCancel->activate();
+		bSearchNext->activate ();
+		bSearchPrev->activate ();
+		wBrowser->take_focus();
+	} else {
+		bDelete->deactivate();
+		bUpdateCancel->deactivate();
+		bSearchNext->deactivate();
+		bSearchPrev->deactivate();
+	}
 }
 
 void cb_btnNewSave(Fl_Button* b, void* d) {

@@ -22,7 +22,6 @@ friend std::ostream &operator<<( std::ostream &, const cQsoRec &);
 friend std::istream &operator>>( std::istream &, cQsoRec & );
 
 private:
-//	char *qsofield[NUMFIELDS];
 	string qsofield[NUMFIELDS];
 	bool normal; // sort ordering
 public:

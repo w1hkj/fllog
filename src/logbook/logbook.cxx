@@ -49,7 +49,7 @@ static void *logbook_loop(void *args)
 
 void start_logbook ()
 {
-	create_logbook_dialogs();
+//	create_logbook_dialogs();
 
 	if (progStatus.logbookfilename.empty()) {
 		logbook_filename = LogHomeDir;
@@ -68,6 +68,7 @@ void start_logbook ()
 
 	loadBrowser();
 	qsodb.isdirty(0);
+	activateButtons();
 
 //	if (pthread_create(&logbook_thread, NULL, logbook_loop, NULL) < 0)
 //		LOG_ERROR("%s", "pthread_create failed");
