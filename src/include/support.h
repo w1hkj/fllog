@@ -27,4 +27,7 @@ extern void close_logbook();
 extern void about();
 extern void on_line_help();
 
+extern void start_server(int);
+extern void exit_server();
+
 #endif

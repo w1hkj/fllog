@@ -38,7 +38,7 @@ const char *fieldnames[] = {
 };
 
 FIELD fields[] = {
-//  TYPE, NAME, LEN, SIZE, WIDGET
+//  TYPE, NAME, WIDGET
 	{ADDRESS,    0,  NULL},                // contacted stations mailing address
 	{AGE,        0,  NULL},                // contacted operators age in years
 	{ARRL_SECT,  0,  NULL},                // contacted stations ARRL section
@@ -91,21 +91,8 @@ void initfields()
 {
 	for (int i = 0; i < NUMFIELDS; i++) {
 		fields[i].name = new string(fieldnames[i]);
-//		fields[i].len = fields[i].name->length();
 	}
 }
-
-/*
-int fieldnbr (const char *s) {
-	for (int i = 0;  i < NUMFIELDS; i++)
-		if (fields[i].name == s) {
-//		if (strncasecmp( fields[i].name, s, fields[i].size) == 0) {
-			if (fields[i].type == COMMENT) return(NOTES);
-			return fields[i].type;
-		}
-	return -1;
-}
-*/
 
 int findfield( char *p )
 {
@@ -156,6 +143,33 @@ int fldsize;
 		p++;
 	}
 	adifqso.putField (fieldnum, p2+1, fldsize);
+}
+
+// ---------------------------------------------------------------------
+// add_record
+//
+// used by xmlrpc server to add a record to the database
+//   buffer contains an ADIF record with <eor> as terminator
+//   db points to the current database
+//
+//----------------------------------------------------------------------
+void cAdifIO::add_record(const char *buffer, cQsoDb &db)
+{
+	int found;
+	char * p = strchr(buffer,'<'); // find first ADIF specifier
+	adifqso.clearRec();
+
+	while (p) {
+		found = findfield(p+1);
+		if (found > -1)
+			fillfield (found, p+1);
+		else if (found == -1) { // <eor> reached; add this record to db
+			db.qsoNewRec (&adifqso);
+			adifqso.clearRec();
+		}
+		p = strchr(p + 1,'<');
+	}
+	db.SortByDate();
 }
 
 void cAdifIO::readFile (const char *fname, cQsoDb *db) {

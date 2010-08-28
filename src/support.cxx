@@ -49,3 +49,119 @@ int main_handler(int event)
 	}
 	return 0;
 }
+
+//======================================================================
+// xmlrpc support
+//======================================================================
+#include "XmlRpc.h"
+
+using namespace XmlRpc;
+
+// The server
+XmlRpcServer s;
+cAdifIO xml_adif;
+
+// Request record if it exists else return "NO_RECORD"
+// Returns ADIF record
+class log_get_record : public XmlRpcServerMethod
+{
+public:
+  log_get_record(XmlRpcServer* s) : XmlRpcServerMethod("log.get_record", s) {}
+
+  void execute(XmlRpcValue& params, XmlRpcValue& result)
+  {
+	std::string callsign = std::string(params[0]);
+    std::string resultString = fetch_record(callsign.c_str());
+	result = resultString;
+  }
+
+  std::string help() { return std::string("log.get_record CALL"); }
+
+} log_get_record(&s);    // This constructor registers the method with the server
+
+// Arguments: CALLSIGN MODE TIME_SPAN FREQ
+class log_check_dup : public XmlRpcServerMethod
+{
+public:
+  log_check_dup(XmlRpcServer* s) : XmlRpcServerMethod("log.check_dup", s) {}
+
+  void execute(XmlRpcValue& params, XmlRpcValue& result)
+  {
+	if (params.size() != 4) {
+		result = "Wrong # parameters";
+		return;
+	}
+	std::string callsign = std::string(params[0]);
+	std::string mode = std::string(params[1]);
+	std::string spn = std::string(params[2]);
+	std::string freq = std::string(params[3]);
+	int ispn = atoi(spn.c_str());
+	int ifreq = atoi(freq.c_str());
+	bool res = qsodb.duplicate(
+			callsign.c_str(),
+			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, (ispn > 0),
+			freq.c_str(), ifreq > 0,
+			"", false,
+			mode.c_str(), true,
+			"", false );
+	result = (res ? "true" : "false");
+	}
+
+	std::string help() { return std::string("log.check_dup CALL MODE TIME_SPAN FREQ_HZ"); }
+
+} log_check_dup(&s);
+
+void updateBrowser(void *)
+{
+	loadBrowser(false);
+}
+
+// One argument is passed, result is "Hello, " + arg.
+class log_add_record : public XmlRpcServerMethod
+{
+public:
+  log_add_record(XmlRpcServer* s) : XmlRpcServerMethod("log.add_record", s) {}
+
+  void execute(XmlRpcValue& params, XmlRpcValue& result)
+  {
+    std::string adif_record = std::string(params[0]);
+	xml_adif.add_record(adif_record.c_str(), qsodb);
+	Fl::awake(updateBrowser);
+  }
+	std::string help() { return std::string("log.add_record ADIF RECORD"); }
+
+} log_add_record(&s);
+
+pthread_t *xml_thread = 0;
+
+void * xml_thread_loop(void *d)
+{
+	for(;;) {
+		s.work(-1.0);
+	}
+	return NULL;
+}
+
+void start_server(int port)
+{
+	XmlRpc::setVerbosity(0);
+
+// Create the server socket on the specified port
+	s.bindAndListen(port);
+
+// Enable introspection
+	s.enableIntrospection(true);
+
+	xml_thread = new pthread_t;
+	if (pthread_create(xml_thread, NULL, xml_thread_loop, NULL)) {
+		perror("pthread_create");
+		exit(EXIT_FAILURE);
+	}
+}
+
+void exit_server()
+{
+	s.exit();
+}
+
+

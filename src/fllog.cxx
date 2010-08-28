@@ -234,6 +234,8 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
+	start_server(8421);
+
 	Fl::lock();
 
 #if defined(__WIN32__) && defined(PTW32_STATIC_LIB)

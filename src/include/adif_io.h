@@ -21,6 +21,7 @@ public:
 	~cAdifIO () {};
 	int readAdifRec () {return 0;};
 	int writeAdifRec () {return 0;};
+	void add_record (const char *, cQsoDb &);
 	void readFile (const char *, cQsoDb *);
 	int writeFile (const char *, cQsoDb *);
 	int writeLog (const char *, cQsoDb *);

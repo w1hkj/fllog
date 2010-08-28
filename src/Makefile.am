@@ -138,7 +138,19 @@ fllog_SOURCES += \
 	logbook/logbook.cxx \
 	logbook/qso_db.cxx \
 	logbook/textio.cxx \
-	re.cxx 
+	re.cxx \
+	xmlrpccpp/XmlRpcClient.cpp \
+	xmlrpccpp/XmlRpcServer.cpp \
+	xmlrpccpp/XmlRpcThread.cpp \
+	xmlrpccpp/XmlRpcDispatch.cpp \
+	xmlrpccpp/XmlRpcServerMethod.cpp \
+	xmlrpccpp/XmlRpcThreadedServer.cpp \
+	xmlrpccpp/XmlRpcMutex.cpp \
+	xmlrpccpp/XmlRpcSocket.cpp \
+	xmlrpccpp/XmlRpcUtil.cpp \
+	xmlrpccpp/XmlRpcServerConnection.cpp \
+	xmlrpccpp/XmlRpcSource.cpp \
+	xmlrpccpp/XmlRpcValue.cpp
 
 # Additional source files that are distributed
 EXTRA_DIST = \
@@ -186,7 +198,22 @@ EXTRA_DIST = \
 	include/FL/Fl_Native_File_Chooser.H \
 	include/FL/Fl_Native_File_Chooser_FLTK.H \
 	include/FL/Fl_Native_File_Chooser_MAC.H \
-	include/FL/Fl_Native_File_Chooser_WIN32.H
+	include/FL/Fl_Native_File_Chooser_WIN32.H \
+	include/base64.h \
+	include/XmlRpcSource.h \
+	include/XmlRpcServerConnection.h \
+	include/XmlRpcClient.h \
+	include/XmlRpcServer.h \
+	include/XmlRpcThreadedServer.h \
+	XmlRpcDispatch.h \
+	include/XmlRpcThread.h \
+	include/XmlRpcException.h \
+	include/XmlRpcServerMethod.h \
+	include/XmlRpc.h \
+	include/XmlRpcUtil.h \
+	include/XmlRpcSocket.h \
+	include/XmlRpcMutex.h \
+	include/XmlRpcValue.h
 
 # Additional non-source files that are distributed
 # Additional source files that support non-Linux cross compilation

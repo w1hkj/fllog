@@ -13,12 +13,9 @@ using namespace std;
 struct FIELD {
   int  type;
   string *name;
-//  int  len;
-//  int  size;
   Fl_Check_Button **btn;
 };
 
 extern FIELD fields[];
-//extern int numfields;
 
 #endif

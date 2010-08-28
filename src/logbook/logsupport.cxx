@@ -557,6 +557,34 @@ void SearchLastQSO(const char *callsign)
 //	delete [] re;
 }
 
+static const char *adifmt = "<%s:%d>%s";
+const char *adif_record(cQsoRec *rec)
+{
+static char szrec[1000];
+static char szfield[100];
+string sFld;
+	szrec[0] = 0;
+	for (int j = 0; j < NUMFIELDS; j++) {
+		sFld = rec->getField(fields[j].type);
+		if (!sFld.empty()) {
+			snprintf(szfield, sizeof(szfield), adifmt,
+				fields[j].name->c_str(), sFld.length(), sFld.c_str());
+			strcat(szrec, szfield);
+		}
+	}
+	return (const char *)szrec;
+}
+
+const char *fetch_record(const char *callsign)
+{
+	cQsoRec *rec = SearchLog(callsign);
+	if (rec)
+		return adif_record(rec);
+	else
+		return "NO_RECORD";
+}
+
+
 void cb_search(Fl_Widget* w, void*)
 {
 	const char* str = inpSearchString->value();
@@ -860,6 +888,7 @@ void loadBrowser(bool keep_pos)
 	char szRecs[6];
 	snprintf(szRecs, sizeof(szRecs), "%5d", qsodb.nbrRecs());
 	txtNbrRecs_log->value(szRecs);
+	wBrowser->redraw();
 }
 
 //=============================================================================
