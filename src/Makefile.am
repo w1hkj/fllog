@@ -205,7 +205,7 @@ EXTRA_DIST = \
 	include/XmlRpcClient.h \
 	include/XmlRpcServer.h \
 	include/XmlRpcThreadedServer.h \
-	XmlRpcDispatch.h \
+	include/XmlRpcDispatch.h \
 	include/XmlRpcThread.h \
 	include/XmlRpcException.h \
 	include/XmlRpcServerMethod.h \
