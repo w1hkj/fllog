@@ -5,11 +5,56 @@
 #include <FL/Fl.H>
 #include "flinput2.h"
 #include <FL/Fl_Double_Window.H>
-extern Fl_Double_Window *wExport;
+extern Fl_Double_Window *dlgLogbook;
+#include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Group.H>
+extern Fl_Group *editGroup;
+#include "calendar.h"
+extern Fl_DateInput *inpDate_log;
+extern Fl_Input2 *inpTimeOn_log;
+extern Fl_DateInput *inpDateOff_log;
+extern Fl_Input2 *inpTimeOff_log;
+extern Fl_Input2 *inpCall_log;
+extern Fl_Input2 *inpName_log;
+extern Fl_Input2 *inpFreq_log;
+extern Fl_Input2 *inpMode_log;
+extern Fl_Input2 *inpRstR_log;
+extern Fl_Input2 *inpRstS_log;
+extern Fl_Input2 *inpTX_pwr_log;
+extern Fl_DateInput *inpQSLrcvddate_log;
+extern Fl_DateInput *inpQSLsentdate_log;
+extern Fl_Input2 *inpCONT_log;
+extern Fl_Input2 *inpDXCC_log;
+extern Fl_Input2 *inpQth_log;
+extern Fl_Input2 *inpState_log;
+extern Fl_Input2 *inpVE_Prov_log;
+extern Fl_Input2 *inpCountry_log;
+extern Fl_Input2 *inpLoc_log;
+extern Fl_Input2 *inpIOTA_log;
+extern Fl_Input2 *inpCQZ_log;
+extern Fl_Input2 *inpITUZ_log;
+extern Fl_Input2 *inpNotes_log;
+#include <FL/Fl_Button.H>
+extern void cb_btnNewSave(Fl_Button*, void*);
+extern Fl_Button *bNewSave;
+extern void cb_btnUpdateCancel(Fl_Button*, void*);
+extern Fl_Button *bUpdateCancel;
+extern void cb_btnDelete(Fl_Button*, void*);
+extern Fl_Button *bDelete;
+extern Fl_Input2 *txtNbrRecs_log;
+extern Fl_Input2 *inpSerNoOut_log;
+extern Fl_Input2 *inpMyXchg_log;
+extern Fl_Input2 *inpSerNoIn_log;
+extern Fl_Input2 *inpXchgIn_log;
+extern Fl_Input2 *inpSearchString;
+extern void cb_search(Fl_Button*, void*);
+extern Fl_Button *bSearchPrev;
+extern Fl_Button *bSearchNext;
+#include "table.h"
+extern Table *wBrowser;
+extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;
-#include <FL/Fl_Button.H>
 extern Fl_Button *btnClearAll;
 extern Fl_Button *btnCheckAll;
 #include <FL/Fl_Return_Button.H>
@@ -23,8 +68,9 @@ extern Fl_Check_Button *btnSelectName;
 extern Fl_Check_Button *btnSelectFreq;
 extern Fl_Check_Button *btnSelectBand;
 extern Fl_Check_Button *btnSelectMode;
-extern Fl_Check_Button *btnSelectQSOdate;
+extern Fl_Check_Button *btnSelectQSOdateOn;
 extern Fl_Check_Button *btnSelectTimeON;
+extern Fl_Check_Button *btnSelectQSOdateOff;
 extern Fl_Check_Button *btnSelectTimeOFF;
 extern Fl_Check_Button *btnSelectTX_pwr;
 extern Fl_Check_Button *btnSelectRSTsent;
@@ -47,50 +93,6 @@ extern Fl_Check_Button *btnSelectDXCC;
 extern Fl_Check_Button *btnSelectIOTA;
 extern Fl_Check_Button *btnSelectITUZ;
 extern Fl_Button *btnSetFieldDefaults;
-extern Fl_Double_Window *dlgLogbook;
-#include <FL/Fl_Menu_Bar.H>
-extern Fl_Group *editGroup;
-#include "calendar.h"
-extern Fl_DateInput *inpDate_log;
-extern Fl_Input2 *inpTimeOn_log;
-extern Fl_Input2 *inpTimeOff_log;
-extern Fl_Input2 *inpCall_log;
-extern Fl_Input2 *inpName_log;
-extern Fl_Input2 *inpFreq_log;
-extern Fl_Input2 *inpMode_log;
-extern Fl_Input2 *inpRstR_log;
-extern Fl_Input2 *inpRstS_log;
-extern Fl_Input2 *inpQth_log;
-extern Fl_Input2 *inpState_log;
-extern Fl_Input2 *inpVE_Prov_log;
-extern Fl_Input2 *inpCountry_log;
-extern Fl_Input2 *inpLoc_log;
-extern Fl_Input2 *inpTX_pwr_log;
-extern Fl_DateInput *inpQSLrcvddate_log;
-extern Fl_Input2 *inpNotes_log;
-extern Fl_DateInput *inpQSLsentdate_log;
-extern void cb_btnNewSave(Fl_Button*, void*);
-extern Fl_Button *bNewSave;
-extern void cb_btnUpdateCancel(Fl_Button*, void*);
-extern Fl_Button *bUpdateCancel;
-extern void cb_btnDelete(Fl_Button*, void*);
-extern Fl_Button *bDelete;
-extern Fl_Input2 *txtNbrRecs_log;
-extern Fl_Input2 *inpSerNoOut_log;
-extern Fl_Input2 *inpMyXchg_log;
-extern Fl_Input2 *inpSerNoIn_log;
-extern Fl_Input2 *inpXchgIn_log;
-extern Fl_Input2 *inpSearchString;
-extern void cb_search(Fl_Button*, void*);
-extern Fl_Button *bSearchPrev;
-extern Fl_Button *bSearchNext;
-extern Fl_Input2 *inpCONT_log;
-extern Fl_Input2 *inpDXCC_log;
-extern Fl_Input2 *inpIOTA_log;
-extern Fl_Input2 *inpCQZ_log;
-extern Fl_Input2 *inpITUZ_log;
-#include "table.h"
-extern Table *wBrowser;
 extern Fl_Double_Window *wCabrillo;
 extern Fl_Check_Browser *chkCabBrowser;
 extern Fl_Button *btnCabClearAll;
@@ -103,8 +105,10 @@ extern Fl_ComboBox *cboContest;
 extern Fl_Check_Button *btnCabCall;
 extern Fl_Check_Button *btnCabFreq;
 extern Fl_Check_Button *btnCabMode;
-extern Fl_Check_Button *btnCabQSOdate;
-extern Fl_Check_Button *btnCabTimeOFF;
+extern Fl_Check_Button *btnCabQSOdateOn;
+extern Fl_Check_Button *btnCabTimeOn;
+extern Fl_Check_Button *btnCabQSOdateOff;
+extern Fl_Check_Button *btnCabTimeOff;
 extern Fl_Check_Button *btnCabRSTsent;
 extern Fl_Check_Button *btnCabRSTrcvd;
 extern Fl_Check_Button *btnCabSerialIN;

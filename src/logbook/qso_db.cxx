@@ -248,9 +248,9 @@ const cQsoRec &cQsoRec::operator=(const cQsoRec &right) {
 }
 
 int compareTimes (const cQsoRec &r1, const cQsoRec &r2) {
-	if (r1.qsofield[TIME_OFF] < r2.qsofield[TIME_OFF])
+	if (r1.qsofield[TIME_ON] < r2.qsofield[TIME_ON])
 		return -1;
-	if (r1.qsofield[TIME_OFF] > r2.qsofield[TIME_OFF])
+	if (r1.qsofield[TIME_ON] > r2.qsofield[TIME_ON])
 		return 1;
 	return 0;
 }
