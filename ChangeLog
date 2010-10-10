@@ -1,6 +1,16 @@
-2010-08-28  David Freese  <w1hkj@w1hkj.com>
 
-	c9d1830: Verson 0.9.903
+
+=Version 0.9.04=
+
+2010-10-10  David Freese  <w1hkj@w1hkj.com>
+
+	6e306fe: Dup Check
+	1f99075: QSO_DATE_OFF addition
+	3d26eae: BAND check
+
+
+=Version 0.9.903=
+
 	afcb055: Logbook Server
 
 
