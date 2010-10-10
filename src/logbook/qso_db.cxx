@@ -465,7 +465,7 @@ bool cQsoDb::qsoIsValidFile(const char *fname) {
   if (!inQsoFile)
     return false;
   inQsoFile.getline (buff, 256);
-  if (strstr (buff, "_LOGBODUP DB") == 0) {
+  if (strstr (buff, "_LOGBOOK DB") == 0) {
     inQsoFile.close();
     return false;
   }
@@ -479,11 +479,11 @@ char buff[256];
   if (!inQsoFile)
     return 1;
   inQsoFile.getline (buff, 256);
-  if (strstr (buff, "_LOGBODUP DB") == 0) {
+  if (strstr (buff, "_LOGBOOK DB") == 0) {
     inQsoFile.close();
     return 2;
   }
-  if (strstr (buff, "_LOGBODUP DBX") == 0) // new file format
+  if (strstr (buff, "_LOGBOOK DBX") == 0) // new file format
     delim_in = '\n';
   if (strstr (buff, "3.0") != 0)
 	isVer3 = true;    
@@ -504,7 +504,7 @@ int cQsoDb::qsoWriteFile (const char *fname) {
   	printf("write failure: %s\n", fname);
     return 1;
   }
-  outQsoFile << "_LOGBODUP DBX 3.0" << '\n';
+  outQsoFile << "_LOGBOOK DBX 3.0" << '\n';
   for (int i = 0; i < nbrrecs; i++)
     outQsoFile << qsorec[i];
   outQsoFile.close();

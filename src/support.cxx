@@ -87,7 +87,7 @@ public:
 
   void execute(XmlRpcValue& params, XmlRpcValue& result)
   {
-	if (params.size() != 4) {
+	if (params.size() != 6) {
 		result = "Wrong # parameters";
 		return;
 	}
@@ -95,19 +95,28 @@ public:
 	std::string mode = std::string(params[1]);
 	std::string spn = std::string(params[2]);
 	std::string freq = std::string(params[3]);
+	std::string state = std::string(params[4]);
+	std::string xchg_in = std::string(params[5]);
 	int ispn = atoi(spn.c_str());
 	int ifreq = atoi(freq.c_str());
+	bool bspn = (ispn > 0);
+	bool bfreq = (ifreq > 0);
+	bool bmode = (mode != "0");
+	bool bstate = (state != "0");
+	bool bxchg = (xchg_in != "0");
 	bool res = qsodb.duplicate(
 			callsign.c_str(),
-			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, (ispn > 0),
-			freq.c_str(), ifreq > 0,
-			"", false,
-			mode.c_str(), true,
-			"", false );
+			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, bspn,
+			freq.c_str(), bfreq,
+			state.c_str(), bstate,
+			mode.c_str(), bmode,
+			xchg_in.c_str(), bxchg);
 	result = (res ? "true" : "false");
 	}
 
-	std::string help() { return std::string("log.check_dup CALL MODE TIME_SPAN FREQ_HZ"); }
+	std::string help() { 
+		return std::string("log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)"); 
+	}
 
 } log_check_dup(&s);
 
