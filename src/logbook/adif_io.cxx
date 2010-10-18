@@ -158,7 +158,7 @@ int fldsize;
 void cAdifIO::add_record(const char *buffer, cQsoDb &db)
 {
 	int found;
-	char * p = strchr(buffer,'<'); // find first ADIF specifier
+	char * p = strchr((char *)buffer,'<'); // find first ADIF specifier
 	adifqso.clearRec();
 
 	while (p) {
