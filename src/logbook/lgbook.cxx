@@ -46,6 +46,14 @@ static void cb_mnu_exit(Fl_Menu_*, void*) {
   cbExit();
 }
 
+static void cb_About(Fl_Menu_*, void*) {
+  about();
+}
+
+static void cb_On(Fl_Menu_*, void*) {
+  on_line_help();
+}
+
 Fl_Menu_Item menu_[] = {
  {_("File"), 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
  {_("Open"), 0,  (Fl_Callback*)cb_mnu_open_logbook, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
@@ -57,6 +65,10 @@ Fl_Menu_Item menu_[] = {
  {_("Export CSV"), 0,  (Fl_Callback*)cb_mnu_export_logbook_csv, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {_("Cabrillo Report"), 0,  (Fl_Callback*)cb_mnu_export_cabrillo, 0, 128, FL_NORMAL_LABEL, 0, 14, 0},
  {_("E&xit"), 0,  (Fl_Callback*)cb_mnu_exit, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {0,0,0,0,0,0,0,0,0},
+ {_("&Help"), 0,  0, 0, 64, FL_NORMAL_LABEL, 0, 14, 0},
+ {_("&About"), 0,  (Fl_Callback*)cb_About, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
+ {_("On-line help"), 0,  (Fl_Callback*)cb_On, 0, 0, FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
@@ -422,9 +434,9 @@ btnCabRSTrcvd->value(1);
 }
 
 void create_logbook_dialogs() {
-  { dlgLogbook = new Fl_Double_Window(584, 380, _("Logbook"));
+  { dlgLogbook = new Fl_Double_Window(584, 420, _("Logbook"));
     dlgLogbook->color((Fl_Color)FL_DARK1);
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 580, 20);
+    { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 580, 22);
       o->menu(menu_);
     } // Fl_Menu_Bar* o
     { editGroup = new Fl_Group(2, 23, 580, 285);
@@ -851,7 +863,7 @@ void create_logbook_dialogs() {
       } // Fl_Group* o
       editGroup->end();
     } // Fl_Group* editGroup
-    { wBrowser = new Table(2, 308, 580, 120);
+    { wBrowser = new Table(2, 308, 580, 110);
       wBrowser->box(FL_DOWN_FRAME);
       wBrowser->color((Fl_Color)FL_BACKGROUND2_COLOR);
       wBrowser->selection_color((Fl_Color)FL_SELECTION_COLOR);

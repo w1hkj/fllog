@@ -64,6 +64,9 @@ string title;
 
 bool Log_DEBUG = 0;
 
+int server_port = 8421;
+const char *server_addr = "127.0.0.1";
+
 //----------------------------------------------------------------------
 void visit_URL(void* arg)
 {
@@ -109,13 +112,14 @@ void about()
 	string msg = "\
 %s\n\
 Version %s\n\
-copyright W1HKJ, 2009\n\
+copyright W1HKJ, 2009-11\n\
 w1hkj@@w1hkj.com";
 	fl_message(msg.c_str(), PACKAGE_TARNAME, PACKAGE_VERSION);
 }
 
 void on_line_help()
 {
+//	visit_URL((void *)"http://www.w1hkj.com/fllog-help");
 }
 
 //----------------------------------------------------------------------
@@ -234,7 +238,7 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-	start_server(8421);
+	start_server(server_port);
 
 	Fl::lock();
 

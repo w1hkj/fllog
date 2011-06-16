@@ -21,11 +21,11 @@ decl {\#include "flinput2.h"} {public
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook
-    xywh {597 106 584 380} type Double color 47 hide resizable
+    label Logbook open
+    xywh {597 55 584 420} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
-      xywh {2 0 580 20}
+      xywh {2 0 580 22}
     } {
       Submenu {} {
         label File open
@@ -77,8 +77,23 @@ Function {create_logbook_dialogs()} {open return_type void
           xywh {0 0 36 21}
         }
       }
+      Submenu {} {
+        label {&Help} open
+        xywh {0 0 70 21}
+      } {
+        MenuItem {} {
+          label {&About}
+          callback {about();}
+          xywh {0 0 36 21}
+        }
+        MenuItem {} {
+          label {On-line help}
+          callback {on_line_help();} selected
+          xywh {0 0 36 21}
+        }
+      }
     }
-    Fl_Group editGroup {open selected
+    Fl_Group editGroup {
       xywh {2 23 580 285} box ENGRAVED_FRAME color 52
     } {
       Fl_Input inpDate_log {
@@ -277,7 +292,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
     }
     Fl_Group wBrowser {
-      xywh {2 308 580 120} box DOWN_FRAME color 7 selection_color 15 resizable
+      xywh {2 308 580 110} box DOWN_FRAME color 7 selection_color 15 resizable
       code0 {\#include "table.h"}
       class Table
     } {}
@@ -303,8 +318,8 @@ wBrowser->allowResize (1);
 wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
-    label {Export Setup} open
-    xywh {585 562 655 385} type Double modal visible
+    label {Export Setup}
+    xywh {585 562 655 385} type Double hide modal
   } {
     Fl_Group {} {
       label {Select Records to Export} open
@@ -368,7 +383,7 @@ btnSelectCONT->value(0);
 btnSelectCQZ->value(0);
 btnSelectITUZ->value(0);
 btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);} selected
+btnSelectNotes->value(0);}
         xywh {400 325 76 20}
       }
       Fl_Button btnCheckAllFields {
@@ -557,8 +572,8 @@ btnSelectTX_pwr->value(0);}
     }
   }
   Fl_Window wCabrillo {
-    label {Cabrillo Setup} open
-    xywh {582 159 655 340} type Double modal visible
+    label {Cabrillo Setup}
+    xywh {582 159 655 340} type Double hide modal
   } {
     Fl_Group {} {
       label {Select Records to Export} open
