@@ -79,6 +79,7 @@ void cTextFile::writeCSVHeader(FILE *txtFile)
 	if (btnSelectDXCC->value())      fprintf (txtFile, "%s", ",\"DXCC\"");
 	if (btnSelectIOTA->value())      fprintf (txtFile, "%s", ",\"IOTA\"");
 	if (btnSelectCONT->value())      fprintf (txtFile, "%s", ",\"CONT\"");
+	if (btnSelectCNTY->value())      fprintf (txtFile, "%s", ",\"CNTY\"");
 	if (btnSelectITUZ->value())      fprintf (txtFile, "%s", ",\"ITUZ\"");
 	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%s", ",\"QSL_RCVD\"");
 	if (btnSelectQSLsent->value())   fprintf (txtFile, "%s", ",\"QSL_SENT\"");
@@ -138,6 +139,8 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, ",\"%s\"", pRec->getField(IOTA));
 				if (btnSelectCONT->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(CONT));
+				if (btnSelectCNTY->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(CNTY));
 				if (btnSelectITUZ->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(ITUZ));
 				if (btnSelectQSLrcvd->value())
@@ -191,6 +194,7 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectDXCC->value())      fprintf (txtFile, "%-8s",  "DXCC");
 	if (btnSelectIOTA->value())      fprintf (txtFile, "%-8s", "IOTA");
 	if (btnSelectCONT->value())      fprintf (txtFile, "%-8s",  "CONT");
+	if (btnSelectCNTY->value())      fprintf (txtFile, "%-8s",  "CNTY");
 	if (btnSelectITUZ->value())      fprintf (txtFile, "%-8s",  "ITUZ");
 	
 	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%-10s", "QSLR");
@@ -251,6 +255,8 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, "%-8s", pRec->getField(IOTA));
 				if (btnSelectCONT->value())
 					fprintf (txtFile, "%-8s", pRec->getField(CONT));
+				if (btnSelectCNTY->value())
+					fprintf (txtFile, "%-8s", pRec->getField(CNTY));
 				if (btnSelectITUZ->value())
 					fprintf (txtFile, "%-8s", pRec->getField(ITUZ));
 				if (btnSelectQSLrcvd->value())
