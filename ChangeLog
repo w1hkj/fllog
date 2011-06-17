@@ -1,10 +1,16 @@
 
 
+=Version 0.9.905=
+
+2011-06-16  David Freese  <w1hkj@w1hkj.com>
+
+	d3a3bd0: Socket address
+	c239321: County field
+
+
 =Version 0.9.04=
 
-2010-10-10  David Freese  <w1hkj@w1hkj.com>
-
-	6e306fe: Dup Check
+	41f0d9e: Dup Check
 	1f99075: QSO_DATE_OFF addition
 	3d26eae: BAND check
 
