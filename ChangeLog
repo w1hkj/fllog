@@ -1,16 +1,23 @@
 
 
+=Version 0.9.906=
+
+2011-06-19  David Freese  <w1hkj@w1hkj.com>
+
+	be3a323: Server port
+	7f0363e: Save sort order
+
+
 =Version 0.9.905=
 
-2011-06-16  David Freese  <w1hkj@w1hkj.com>
-
-	d3a3bd0: Socket address
-	c239321: County field
+	e247981: Socket address
+	8de2815: County field
+	5d3afb2: Dup Check
 
 
 =Version 0.9.04=
 
-	41f0d9e: Dup Check
+	359ee07: Dup Check
 	1f99075: QSO_DATE_OFF addition
 	3d26eae: BAND check
 
