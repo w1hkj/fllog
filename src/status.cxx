@@ -74,13 +74,13 @@ void status::loadLastState()
 		spref.get("mainy", mainY, mainY);
 		spref.get("mainw", mainW, mainW);
 		spref.get("mainh", mainH, mainH);
-		spref.get("logbook_filename", defbuffer, "", 199); logbookfilename = defbuffer;
+		spref.get("logbook_filename", defbuffer, logbookfilename.c_str(), 199); logbookfilename = defbuffer;
 		if (spref.get("lastsort", i, i)) lastsort = (sorttype) i;
 		if (spref.get("callfwd", i, i)) callfwd = i;
 		if (spref.get("datefwd", i, i)) datefwd = i;
 		if (spref.get("modefwd", i, i)) modefwd = i;
 		if (spref.get("freqfwd", i, i)) freqfwd = i;
-		spref.get("server_port", defbuffer, "", 199); server_port = defbuffer;
+		spref.get("server_port", defbuffer, server_port.c_str(), 199); server_port = defbuffer;
 	}
 }
 
