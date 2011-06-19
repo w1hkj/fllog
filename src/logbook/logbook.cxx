@@ -36,7 +36,9 @@ void start_logbook ()
 	label.append(fl_filename_name(logbook_filename.c_str()));
 	dlgLogbook->copy_label(label.c_str());
 
+	restore_sort();
 	loadBrowser();
+
 	qsodb.isdirty(0);
 	activateButtons();
 }

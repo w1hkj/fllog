@@ -9,6 +9,8 @@
 
 using namespace std;
 
+enum sorttype {NONE, SORTCALL, SORTDATE, SORTFREQ, SORTMODE};
+
 struct status {
 	int		mainX;
 	int		mainY;
@@ -17,6 +19,12 @@ struct status {
 
 // logbook entries
 	string logbookfilename;
+	sorttype	lastsort;
+	bool callfwd;
+	bool datefwd;
+	bool modefwd;
+	bool freqfwd;
+
 
 	void saveLastState();
 	void loadLastState();

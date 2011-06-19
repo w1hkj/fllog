@@ -249,6 +249,7 @@ int main (int argc, char *argv[])
 	progStatus.loadLastState();
 
 	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
+
 	start_logbook();
 
 	mainwindow->xclass(KNAME);

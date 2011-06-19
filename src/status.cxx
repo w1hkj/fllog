@@ -26,7 +26,12 @@ status progStatus = {
 	50,			// int mainY;
 	580,		// int mainW;
 	385,		// int mainH;
-	""			// string	logbookfilename
+	"",			// string	logbookfilename
+	SORTDATE,
+	true,
+	true,
+	true,
+	true
 };
 
 void status::saveLastState()
@@ -49,6 +54,11 @@ void status::saveLastState()
 	spref.set("mainw", mW);
 	spref.set("mainh", mH);
 	spref.set("logbook_filename", logbookfilename.c_str());
+	spref.set("lastsort", lastsort);
+	spref.set("callfwd", callfwd);
+	spref.set("datefwd", datefwd);
+	spref.set("modefwd", modefwd);
+	spref.set("freqfwd", freqfwd);
 }
 
 void status::loadLastState()
@@ -57,11 +67,17 @@ void status::loadLastState()
 
 	if (spref.entryExists("version")) {
 		char defbuffer[200];
+		int i = lastsort;
 		spref.get("mainx", mainX, mainX);
 		spref.get("mainy", mainY, mainY);
 		spref.get("mainw", mainW, mainW);
 		spref.get("mainh", mainH, mainH);
 		spref.get("logbook_filename", defbuffer, "", 199); logbookfilename = defbuffer;
+		if (spref.get("lastsort", i, i)) lastsort = (sorttype) i;
+		if (spref.get("callfwd", i, i)) callfwd = i;
+		if (spref.get("datefwd", i, i)) datefwd = i;
+		if (spref.get("modefwd", i, i)) modefwd = i;
+		if (spref.get("freqfwd", i, i)) freqfwd = i;
 	}
 }
 

@@ -430,30 +430,23 @@ void cb_btnDelete(Fl_Button* b, void* d) {
 	wBrowser->take_focus();
 }
 
-enum sorttype {NONE, SORTCALL, SORTDATE, SORTFREQ, SORTMODE};
-sorttype lastsort = SORTDATE;
-bool callfwd = true;
-bool datefwd = true;
-bool modefwd = true;
-bool freqfwd = true;
-
 void restore_sort()
 {
-	switch (lastsort) {
+	switch (progStatus.lastsort) {
 	case SORTCALL :
-		cQsoDb::reverse = callfwd;
+		cQsoDb::reverse = progStatus.callfwd;
 		qsodb.SortByCall();
 		break;
 	case SORTDATE :
-		cQsoDb::reverse = datefwd;
+		cQsoDb::reverse = progStatus.datefwd;
 		qsodb.SortByDate();
 		break;
 	case SORTFREQ :
-		cQsoDb::reverse = freqfwd;
+		cQsoDb::reverse = progStatus.freqfwd;
 		qsodb.SortByFreq();
 		break;
 	case SORTMODE :
-		cQsoDb::reverse = modefwd;
+		cQsoDb::reverse = progStatus.modefwd;
 		qsodb.SortByMode();
 		break;
 	default: break;
@@ -461,49 +454,49 @@ void restore_sort()
 }
 
 void cb_SortByCall (void) {
-	if (lastsort == SORTCALL)
-		callfwd = !callfwd;
+	if (progStatus.lastsort == SORTCALL)
+		progStatus.callfwd = !progStatus.callfwd;
 	else {
-		callfwd = false;
-		lastsort = SORTCALL;
+		progStatus.callfwd = false;
+		progStatus.lastsort = SORTCALL;
 	}
-	cQsoDb::reverse = callfwd;
+	cQsoDb::reverse = progStatus.callfwd;
 	qsodb.SortByCall();
 	loadBrowser();
 }
 
 void cb_SortByDate (void) {
-	if (lastsort == SORTDATE)
-		datefwd = !datefwd;
+	if (progStatus.lastsort == SORTDATE)
+		progStatus.datefwd = !progStatus.datefwd;
 	else {
-		datefwd = false;
-		lastsort = SORTDATE;
+		progStatus.datefwd = false;
+		progStatus.lastsort = SORTDATE;
 	}
-	cQsoDb::reverse = datefwd;
+	cQsoDb::reverse = progStatus.datefwd;
 	qsodb.SortByDate();
 	loadBrowser();
 }
 
 void cb_SortByMode (void) {
-	if (lastsort == SORTMODE)
-		modefwd = !modefwd;
+	if (progStatus.lastsort == SORTMODE)
+		progStatus.modefwd = !progStatus.modefwd;
 	else {
-		modefwd = false;
-		lastsort = SORTMODE;
+		progStatus.modefwd = false;
+		progStatus.lastsort = SORTMODE;
 	}
-	cQsoDb::reverse = modefwd;
+	cQsoDb::reverse = progStatus.modefwd;
 	qsodb.SortByMode();
 	loadBrowser();
 }
 
 void cb_SortByFreq (void) {
-	if (lastsort == SORTFREQ)
-		freqfwd = !freqfwd;
+	if (progStatus.lastsort == SORTFREQ)
+		progStatus.freqfwd = !progStatus.freqfwd;
 	else {
-		freqfwd = false;
-		lastsort = SORTFREQ;
+		progStatus.freqfwd = false;
+		progStatus.lastsort = SORTFREQ;
 	}
-	cQsoDb::reverse = freqfwd;
+	cQsoDb::reverse = progStatus.freqfwd;
 	qsodb.SortByFreq();
 	loadBrowser();
 }
