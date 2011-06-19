@@ -64,7 +64,6 @@ string title;
 
 bool Log_DEBUG = 0;
 
-int server_port = 8421;
 const char *server_addr = "127.0.0.1";
 
 //----------------------------------------------------------------------
@@ -238,7 +237,7 @@ int main (int argc, char *argv[])
 		exit(1);
 	}
 
-	start_server(server_port);
+	start_server(atoi(progStatus.server_port.c_str()));
 
 	Fl::lock();
 

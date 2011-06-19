@@ -31,7 +31,8 @@ status progStatus = {
 	true,
 	true,
 	true,
-	true
+	true,
+	"8421"
 };
 
 void status::saveLastState()
@@ -59,6 +60,7 @@ void status::saveLastState()
 	spref.set("datefwd", datefwd);
 	spref.set("modefwd", modefwd);
 	spref.set("freqfwd", freqfwd);
+	spref.set("server_port", server_port.c_str());
 }
 
 void status::loadLastState()
@@ -78,6 +80,7 @@ void status::loadLastState()
 		if (spref.get("datefwd", i, i)) datefwd = i;
 		if (spref.get("modefwd", i, i)) modefwd = i;
 		if (spref.get("freqfwd", i, i)) freqfwd = i;
+		spref.get("server_port", defbuffer, "", 199); server_port = defbuffer;
 	}
 }
 

@@ -25,6 +25,7 @@ struct status {
 	bool modefwd;
 	bool freqfwd;
 
+	string server_port;
 
 	void saveLastState();
 	void loadLastState();
