@@ -1,8 +1,13 @@
 
 
-=Version 0.9.906=
+=Version 0.9.907=
 
 2011-06-19  David Freese  <w1hkj@w1hkj.com>
+
+	abfbb80: Prefs
+
+
+=Version 0.9.906=
 
 	be3a323: Server port
 	7f0363e: Save sort order
