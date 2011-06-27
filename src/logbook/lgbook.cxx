@@ -149,6 +149,8 @@ Fl_Button *bSearchNext=(Fl_Button *)0;
 
 Table *wBrowser=(Table *)0;
 
+Fl_Output *txtLogFile=(Fl_Output *)0;
+
 Fl_Double_Window *wExport=(Fl_Double_Window *)0;
 
 Fl_Check_Browser *chkExportBrowser=(Fl_Check_Browser *)0;
@@ -436,7 +438,7 @@ btnCabRSTrcvd->value(1);
 void create_logbook_dialogs() {
   { dlgLogbook = new Fl_Double_Window(584, 420, _("Logbook"));
     dlgLogbook->color((Fl_Color)FL_DARK1);
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 580, 22);
+    { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 109, 22);
       o->menu(menu_);
     } // Fl_Menu_Bar* o
     { editGroup = new Fl_Group(2, 23, 580, 285);
@@ -662,8 +664,8 @@ void create_logbook_dialogs() {
         inpLoc_log->align(FL_ALIGN_TOP_LEFT);
         inpLoc_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpLoc_log
-      { inpCNTY_log = new Fl_Input2(7, 156, 120, 22, _("Country"));
-        inpCNTY_log->tooltip(_("Islands on the air"));
+      { inpCNTY_log = new Fl_Input2(7, 156, 120, 22, _("County"));
+        inpCNTY_log->tooltip(_("County of station worked"));
         inpCNTY_log->box(FL_DOWN_BOX);
         inpCNTY_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
         inpCNTY_log->selection_color((Fl_Color)FL_SELECTION_COLOR);
@@ -876,6 +878,9 @@ void create_logbook_dialogs() {
       wBrowser->end();
       Fl_Group::current()->resizable(wBrowser);
     } // Table* wBrowser
+    { txtLogFile = new Fl_Output(150, 1, 430, 20, _("File:"));
+      txtLogFile->color((Fl_Color)FL_LIGHT3);
+    } // Fl_Output* txtLogFile
     dlgLogbook->end();
   } // Fl_Double_Window* dlgLogbook
   wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);

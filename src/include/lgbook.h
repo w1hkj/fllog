@@ -53,6 +53,8 @@ extern Fl_Button *bSearchPrev;
 extern Fl_Button *bSearchNext;
 #include "table.h"
 extern Table *wBrowser;
+#include <FL/Fl_Output.H>
+extern Fl_Output *txtLogFile;
 extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;

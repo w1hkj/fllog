@@ -273,7 +273,8 @@ void cb_mnuNewLogbook(){
 	logbook_filename = LogHomeDir;
 	logbook_filename.append("newlog." ADIF_SUFFIX);
 	progStatus.logbookfilename = logbook_filename;
-	dlgLogbook->label(fl_filename_name(logbook_filename.c_str()));
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
 	qsodb.deleteRecs();
 	wBrowser->clear();
 	clearRecord();
@@ -285,7 +286,8 @@ void OpenLogbook()
 	adifFile.readFile (progStatus.logbookfilename.c_str(), &qsodb);
 	qsodb.isdirty(0);
 	loadBrowser();
-	dlgLogbook->label(fl_filename_name(progStatus.logbookfilename.c_str()));
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
 	activateButtons();
 }
 
@@ -307,7 +309,8 @@ void cb_mnuSaveLogbook() {
 					 logbook_filename.c_str());
 	if (p) {
 		logbook_filename = p;
-		dlgLogbook->label(fl_filename_name(logbook_filename.c_str()));
+		txtLogFile->value(progStatus.logbookfilename.c_str());
+		txtLogFile->redraw();
 
 		cQsoDb::reverse = false;
 		qsodb.SortByDate();
@@ -338,7 +341,7 @@ void cb_Export_log() {
 	for( int i = 0; i < qsodb.nbrRecs(); i++ ) {
 		rec = qsodb.getRec (i);
 		memset(line, 0, sizeof(line));
-		snprintf(line,sizeof(line),"%8s  %4s  %-32s  %10s  %-s",
+		snprintf(line,sizeof(line),"%8s %4s %-12s %10s %-s",
 			rec->getField(QSO_DATE),
 			rec->getField(TIME_OFF),
 			rec->getField(CALL),
@@ -1020,7 +1023,7 @@ void cb_Export_Cabrillo() {
 	for( int i = 0; i < qsodb.nbrRecs(); i++ ) {
 		rec = qsodb.getRec (i);
 		memset(line, 0, sizeof(line));
-		snprintf(line,sizeof(line),"%8s  %4s  %-32s  %10s  %-s",
+		snprintf(line,sizeof(line),"%8s %4s %-12s %10s %-s",
 			rec->getField(QSO_DATE),
 			rec->getField(TIME_OFF),
 			rec->getField(CALL),
