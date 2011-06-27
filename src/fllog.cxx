@@ -118,7 +118,7 @@ w1hkj@@w1hkj.com";
 
 void on_line_help()
 {
-//	visit_URL((void *)"http://www.w1hkj.com/fllog-help");
+	visit_URL((void *)"http://www.w1hkj.com/fllog-help");
 }
 
 //----------------------------------------------------------------------

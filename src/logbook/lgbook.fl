@@ -22,10 +22,10 @@ Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
     label Logbook open
-    xywh {597 55 584 420} type Double color 47 resizable visible
+    xywh {596 55 584 420} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
-      xywh {2 0 580 22}
+      xywh {2 0 109 22}
     } {
       Submenu {} {
         label File open
@@ -88,12 +88,12 @@ Function {create_logbook_dialogs()} {open return_type void
         }
         MenuItem {} {
           label {On-line help}
-          callback {on_line_help();} selected
+          callback {on_line_help();}
           xywh {0 0 36 21}
         }
       }
     }
-    Fl_Group editGroup {
+    Fl_Group editGroup {open
       xywh {2 23 580 285} box ENGRAVED_FRAME color 52
     } {
       Fl_Input inpDate_log {
@@ -193,8 +193,8 @@ Function {create_logbook_dialogs()} {open return_type void
         class Fl_Input2
       }
       Fl_Input inpCNTY_log {
-        label Country
-        tooltip {Islands on the air} xywh {7 156 120 22} labelsize 12 align 5
+        label County
+        tooltip {County of station worked} xywh {7 156 120 22} labelsize 12 align 5
         class Fl_Input2
       }
       Fl_Input inpIOTA_log {
@@ -296,6 +296,10 @@ Function {create_logbook_dialogs()} {open return_type void
       code0 {\#include "table.h"}
       class Table
     } {}
+    Fl_Output txtLogFile {
+      label {File:} selected
+      xywh {150 1 430 20} color 54
+    }
   }
   code {wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);
 wBrowser->addColumn (_("Date"),85);
