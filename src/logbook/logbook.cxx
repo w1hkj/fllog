@@ -19,7 +19,7 @@ void do_load_browser(void *)
 	loadBrowser();
 }
 
-void start_logbook ()
+void start(void *)
 {
 	if (progStatus.logbookfilename.empty()) {
 		logbook_filename = LogHomeDir;
@@ -35,15 +35,18 @@ void start_logbook ()
 	txtLogFile->value(progStatus.logbookfilename.c_str());
 	txtLogFile->redraw();
 
-	string label = "Logbook Server - ";
-	label.append(fl_filename_name(logbook_filename.c_str()));
-	dlgLogbook->copy_label(label.c_str());
+	dlgLogbook->copy_label("Logbook Server");
 
 	restore_sort();
 	loadBrowser();
 
 	qsodb.isdirty(0);
 	activateButtons();
+}
+
+void start_logbook ()
+{
+	Fl::add_timeout(0.2, start);
 }
 
 void close_logbook()

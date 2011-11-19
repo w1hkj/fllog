@@ -436,12 +436,12 @@ btnCabRSTrcvd->value(1);
 }
 
 void create_logbook_dialogs() {
-  { dlgLogbook = new Fl_Double_Window(584, 420, _("Logbook"));
+  { dlgLogbook = new Fl_Double_Window(584, 430, _("Logbook"));
     dlgLogbook->color((Fl_Color)FL_DARK1);
     { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 109, 22);
       o->menu(menu_);
     } // Fl_Menu_Bar* o
-    { editGroup = new Fl_Group(2, 23, 580, 285);
+    { editGroup = new Fl_Group(2, 23, 580, 294);
       editGroup->box(FL_ENGRAVED_FRAME);
       editGroup->color((Fl_Color)FL_LIGHT2);
       { inpDate_log = new Fl_DateInput(7, 40, 100, 22, _("On Date"));
@@ -736,7 +736,7 @@ void create_logbook_dialogs() {
         inpDXCC_log->align(FL_ALIGN_TOP_LEFT);
         inpDXCC_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpDXCC_log
-      { inpNotes_log = new Fl_Input2(8, 195, 570, 35, _("Notes"));
+      { inpNotes_log = new Fl_Input2(8, 195, 570, 45, _("Notes"));
         inpNotes_log->tooltip(_("Interesting notes (80 chars max)"));
         inpNotes_log->type(4);
         inpNotes_log->box(FL_DOWN_BOX);
@@ -749,25 +749,25 @@ void create_logbook_dialogs() {
         inpNotes_log->align(FL_ALIGN_TOP_LEFT);
         inpNotes_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* inpNotes_log
-      { bNewSave = new Fl_Button(163, 280, 55, 22, _("New"));
+      { bNewSave = new Fl_Button(191, 290, 55, 22, _("New"));
         bNewSave->shortcut(0x8004e);
         bNewSave->color((Fl_Color)FL_LIGHT1);
         bNewSave->selection_color((Fl_Color)48);
         bNewSave->callback((Fl_Callback*)cb_btnNewSave);
       } // Fl_Button* bNewSave
-      { bUpdateCancel = new Fl_Button(235, 280, 55, 22, _("Update"));
+      { bUpdateCancel = new Fl_Button(263, 290, 55, 22, _("Update"));
         bUpdateCancel->shortcut(0x80055);
         bUpdateCancel->color((Fl_Color)FL_LIGHT1);
         bUpdateCancel->selection_color((Fl_Color)48);
         bUpdateCancel->callback((Fl_Callback*)cb_btnUpdateCancel);
       } // Fl_Button* bUpdateCancel
-      { bDelete = new Fl_Button(307, 280, 55, 22, _("Delete"));
+      { bDelete = new Fl_Button(335, 290, 55, 22, _("Delete"));
         bDelete->shortcut(0x80044);
         bDelete->color((Fl_Color)FL_LIGHT1);
         bDelete->selection_color((Fl_Color)48);
         bDelete->callback((Fl_Callback*)cb_btnDelete);
       } // Fl_Button* bDelete
-      { txtNbrRecs_log = new Fl_Input2(41, 280, 65, 22, _("Recs"));
+      { txtNbrRecs_log = new Fl_Input2(39, 290, 109, 22, _("Recs"));
         txtNbrRecs_log->tooltip(_("# Records in logbook"));
         txtNbrRecs_log->box(FL_DOWN_BOX);
         txtNbrRecs_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -779,9 +779,9 @@ void create_logbook_dialogs() {
         txtNbrRecs_log->align(FL_ALIGN_LEFT);
         txtNbrRecs_log->when(FL_WHEN_RELEASE);
       } // Fl_Input2* txtNbrRecs_log
-      { Fl_Group* o = new Fl_Group(8, 232, 453, 44);
+      { Fl_Group* o = new Fl_Group(6, 242, 453, 44);
         o->box(FL_ENGRAVED_FRAME);
-        { inpSerNoOut_log = new Fl_Input2(11, 250, 55, 22, _("Ser# out"));
+        { inpSerNoOut_log = new Fl_Input2(9, 260, 55, 22, _("Ser# out"));
           inpSerNoOut_log->tooltip(_("Contest seral # sent"));
           inpSerNoOut_log->box(FL_DOWN_BOX);
           inpSerNoOut_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -793,7 +793,7 @@ void create_logbook_dialogs() {
           inpSerNoOut_log->align(FL_ALIGN_TOP_LEFT);
           inpSerNoOut_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpSerNoOut_log
-        { inpMyXchg_log = new Fl_Input2(68, 250, 164, 22, _("Exchange Out"));
+        { inpMyXchg_log = new Fl_Input2(66, 260, 164, 22, _("Exchange Out"));
           inpMyXchg_log->tooltip(_("Contest exchange sent"));
           inpMyXchg_log->box(FL_DOWN_BOX);
           inpMyXchg_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -805,7 +805,7 @@ void create_logbook_dialogs() {
           inpMyXchg_log->align(FL_ALIGN_TOP_LEFT);
           inpMyXchg_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpMyXchg_log
-        { inpSerNoIn_log = new Fl_Input2(235, 250, 55, 22, _("Ser# in"));
+        { inpSerNoIn_log = new Fl_Input2(233, 260, 55, 22, _("Ser# in"));
           inpSerNoIn_log->tooltip(_("Contest serial # received"));
           inpSerNoIn_log->box(FL_DOWN_BOX);
           inpSerNoIn_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -817,7 +817,7 @@ void create_logbook_dialogs() {
           inpSerNoIn_log->align(FL_ALIGN_TOP_LEFT);
           inpSerNoIn_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpSerNoIn_log
-        { inpXchgIn_log = new Fl_Input2(293, 250, 164, 22, _("Exchange In"));
+        { inpXchgIn_log = new Fl_Input2(291, 260, 164, 22, _("Exchange In"));
           inpXchgIn_log->tooltip(_("Contest exchange received"));
           inpXchgIn_log->box(FL_DOWN_BOX);
           inpXchgIn_log->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -831,9 +831,9 @@ void create_logbook_dialogs() {
         } // Fl_Input2* inpXchgIn_log
         o->end();
       } // Fl_Group* o
-      { Fl_Group* o = new Fl_Group(464, 232, 116, 73);
+      { Fl_Group* o = new Fl_Group(462, 242, 116, 73);
         o->box(FL_ENGRAVED_FRAME);
-        { inpSearchString = new Fl_Input2(469, 250, 105, 22, _("Call Search"));
+        { inpSearchString = new Fl_Input2(467, 260, 105, 22, _("Call Search"));
           inpSearchString->tooltip(_("Search for this callsign"));
           inpSearchString->box(FL_DOWN_BOX);
           inpSearchString->color((Fl_Color)FL_BACKGROUND2_COLOR);
@@ -845,7 +845,7 @@ void create_logbook_dialogs() {
           inpSearchString->align(FL_ALIGN_TOP_LEFT);
           inpSearchString->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpSearchString
-        { bSearchPrev = new Fl_Button(469, 280, 24, 22);
+        { bSearchPrev = new Fl_Button(467, 290, 24, 22);
           bSearchPrev->tooltip(_("Find previous"));
           bSearchPrev->color((Fl_Color)FL_LIGHT1);
           bSearchPrev->selection_color((Fl_Color)48);
@@ -853,7 +853,7 @@ void create_logbook_dialogs() {
           bSearchPrev->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
           bSearchPrev->image(new Fl_Pixmap(left_arrow_icon));
         } // Fl_Button* bSearchPrev
-        { bSearchNext = new Fl_Button(550, 280, 24, 22);
+        { bSearchNext = new Fl_Button(548, 290, 24, 22);
           bSearchNext->tooltip(_("Find next"));
           bSearchNext->color((Fl_Color)FL_LIGHT1);
           bSearchNext->selection_color((Fl_Color)48);
@@ -865,7 +865,7 @@ void create_logbook_dialogs() {
       } // Fl_Group* o
       editGroup->end();
     } // Fl_Group* editGroup
-    { wBrowser = new Table(2, 308, 580, 110);
+    { wBrowser = new Table(2, 318, 580, 110);
       wBrowser->box(FL_DOWN_FRAME);
       wBrowser->color((Fl_Color)FL_BACKGROUND2_COLOR);
       wBrowser->selection_color((Fl_Color)FL_SELECTION_COLOR);

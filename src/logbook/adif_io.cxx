@@ -15,6 +15,7 @@
 #include "debug.h"
 #include "util.h"
 #include "date.h"
+#include "status.h"
 
 #ifdef __WOE32__
 static const char *szEOL = "\r\n";
@@ -37,6 +38,58 @@ const char *fieldnames[] = {
 	"STATE", "STX", "TEN_TEN",
 	"TIME_OFF", "TIME_ON", "TX_PWR", "VE_PROV", "SRX_STRING"
 };
+
+// 16 chars per  position in string div 16 gives index to field name
+// this string and the fieldname[] must have a 1:1 correspondence.
+
+static const char fastlookup[] = "\
+ADDRESS:        \
+AGE:            \
+ARRL_SECT:      \
+BAND:           \
+CALL:           \
+CNTY:           \
+COMMENT:        \
+CONT:           \
+CONTEST_ID:     \
+COUNTRY:        \
+CQZ:            \
+DXCC:           \
+EXPORT:         \
+FREQ:           \
+GRIDSQUARE:     \
+IOTA:           \
+ITUZ:           \
+MODE:           \
+STX_STRING:     \
+NAME:           \
+NOTES:          \
+OPERATOR:       \
+PFX:            \
+PROP_MODE:      \
+QSLRDATE:       \
+QSLSDATE:       \
+QSL_MSG:        \
+QSL_RCVD:       \
+QSL_SENT:       \
+QSL_VIA:        \
+QSO_DATE:       \
+QSO_DATE_OFF:   \
+QTH:            \
+RST_RCVD:       \
+RST_SENT:       \
+RX_PWR:         \
+SAT_MODE:       \
+SAT_NAME:       \
+SRX:            \
+STATE:          \
+STX:            \
+TEN_TEN:        \
+TIME_OFF:       \
+TIME_ON:        \
+TX_PWR:         \
+VE_PROV:        \
+SRX_STRING:     ";
 
 FIELD fields[] = {
 //  TYPE, NAME, WIDGET
@@ -96,29 +149,28 @@ void initfields()
 	}
 }
 
-int findfield( char *p )
+static int findfield( char *p )
 {
-	int m;
-	int test;
-
 	if (strncasecmp (p, "EOR>", 4) == 0)
 		return -1;
 
-// following two tests are for backward compatibility with older
-// fldigi fields
-// changed to comply with ADIF 2.2.3
-
-	if (strncasecmp (p, "XCHG1>", 6) == 0)
-		return XCHG1;
-	if (strncasecmp (p, "MYXCHG>", 7) == 0)
-		return MYXCHG;
-
-	string tststr;
-	for (m = 0; m < NUMFIELDS; m++) {
-		tststr = *(fields[m].name);
-		tststr += ':';
-		if ( (test = strncasecmp( p, tststr.c_str(), tststr.length() )) == 0)
-			return fields[m].type;
+	char *p1, *p2;
+	char *pos;
+	char *fl = (char *)fastlookup;
+	int n;
+	p1 = strchr(p, ':');
+	p2 = strchr(p, '>');
+	if (p1 && p2) {
+		if (p1 < p2) {
+			*p1 = 0;
+			pos = strstr(fl, p);
+			*p1 = ':';
+			if (pos) {
+				n = (pos - fastlookup) / 16;
+				if (n > 0 && n < NUMFIELDS)
+					return fields[n].type;
+			}
+		}
 	}
 	return -2;		//search key not found
 }
@@ -128,15 +180,16 @@ cAdifIO::cAdifIO ()
 	initfields();
 }
 
-void cAdifIO::fillfield (int fieldnum, char *buff){
-const char *p = buff;
+void cAdifIO::fillfield (int fieldnum, char *buff)
+{
+char *p = buff;
 int fldsize;
 	while (*p != ':' && *p != '>') p++;
 	if (*p == '>') return; // bad ADIF specifier ---> no ':' after field name
 // found first ':'
 	p++;
 	fldsize = 0;
-	const char *p2 = strchr(buff,'>');
+	char *p2 = strchr(buff,'>');
 	if (!p2) return;
 	while (p != p2) {
 		if (*p >= '0' && *p <= '9') {
@@ -144,8 +197,9 @@ int fldsize;
 		}
 		p++;
 	}
-	adifqso.putField (fieldnum, p2+1, fldsize);
+	adifqso->putField (fieldnum, p2+1, fldsize);
 }
+
 
 // ---------------------------------------------------------------------
 // add_record
@@ -159,42 +213,45 @@ void cAdifIO::add_record(const char *buffer, cQsoDb &db)
 {
 	int found;
 	char * p = strchr((char *)buffer,'<'); // find first ADIF specifier
-	adifqso.clearRec();
 
+	adifqso = 0;
 	while (p) {
-		found = findfield(p+1);
-		if (found > -1)
-			fillfield (found, p+1);
-		else if (found == -1) { // <eor> reached; add this record to db
-			db.qsoNewRec (&adifqso);
-			adifqso.clearRec();
-		}
+		found = findfield(p + 1);
+		if (found > -1) {
+			if (!adifqso) adifqso = db.newrec(); // need new record in db
+			fillfield (found, p + 1);
+		} else if (found == -1) // <eor> reached;
+			adifqso = 0;
 		p = strchr(p + 1,'<');
 	}
 	db.SortByDate();
+
 }
 
-void cAdifIO::readFile (const char *fname, cQsoDb *db) {
+void cAdifIO::readFile (const char *fname, cQsoDb *db) 
+{
 	long filesize = 0;
 	char *buff;
 	int found;
 	int retval;
 
 // open the adif file
-	adiFile = fopen (fname, "r");
-	if (!adiFile)
+	FILE *adiFile = fopen (fname, "r");
+
+	if (adiFile == NULL)
 		return;
 // determine its size for buffer creation
 	fseek (adiFile, 0, SEEK_END);
 	filesize = ftell (adiFile);
 
 	if (filesize == 0) {
-//	fl_alert2(_("Empty ADIF logbook file"));
-	return;
+		return;
 	}
 
 	buff = new char[filesize + 1];
+
 // read the entire file into the buffer
+
 	fseek (adiFile, 0, SEEK_SET);
 	retval = fread (buff, filesize, 1, adiFile);
 	fclose (adiFile);
@@ -202,24 +259,16 @@ void cAdifIO::readFile (const char *fname, cQsoDb *db) {
 // relaxed file integrity test to all importing from non conforming log programs
 	if ((strcasestr(buff, "<ADIF_VER:") != 0) &&
 		(strcasestr(buff, "<CALL:") == 0)) {
-//		fl_alert2(_("No records in ADIF logbook file"));
 		delete [] buff;
 		return;
 	}
 	if (strcasestr(buff, "<CALL:") == 0) {
-		fl_alert2(_("Not an ADIF file"));
 		delete [] buff;
 		return;
 	}
-	char *p = strcasestr(buff, "<DATA CHECKSUM:");
-	if (p) {
-		p = strchr(p + 1, '>');
-		if (p) {
-			p++;
-			file_checksum.clear();
-			for (int i = 0; i < 4; i++, p++) file_checksum += *p;
-		}
-	}
+
+	static char msg[100];
+	int len = 0;
 
 	char *p1 = buff, *p2;
 	if (*p1 != '<') { // yes, skip over header to start of records
@@ -235,42 +284,30 @@ void cAdifIO::readFile (const char *fname, cQsoDb *db) {
 	}
 
 	p2 = strchr(p1,'<'); // find first ADIF specifier
-	adifqso.clearRec();
 
+	txtLogFile->value("Parsing records:");
+	dlgLogbook->redraw();
+	Fl::flush();
+
+	adifqso = 0;
 	while (p2) {
 		found = findfield(p2+1);
-		if (found > -1)
+		if (found > -1) {
+			if (!adifqso) adifqso = db->newrec(); // need new record in db
 			fillfield (found, p2+1);
-		else if (found == -1) { // <eor> reached; add this record to db
-//update fields for older db
-			if (adifqso.getField(TIME_OFF)[0] == 0)
-				adifqso.putField(TIME_OFF, adifqso.getField(TIME_ON));
-
-			if (adifqso.getField(TIME_ON)[0] == 0)
-				adifqso.putField(TIME_ON, adifqso.getField(TIME_OFF));
-
-			if ((strlen(adifqso.getField(QSO_DATE)) > 7) && 
-				(adifqso.getField(QSO_DATE_OFF)[0] == 0)) {
-				char d_str[20];
-				int d, m, y, t_on, t_off;
-				strcpy(d_str, adifqso.getField(QSO_DATE));
-				d = atoi(&d_str[6]); d_str[6] = 0;
-				m = atoi(&d_str[4]); d_str[4] = 0;
-				y = atoi(d_str);
-				t_on = atoi(adifqso.getField(TIME_ON));
-				t_off = atoi(adifqso.getField(TIME_OFF));
-				Date dt(m, d, y);
-				if (t_off < t_on) dt++;
-				adifqso.putField(QSO_DATE_OFF, dt.szDate(2));
+		} else if (found == -1) { // <eor> reached;
+			adifqso = 0;
+			if (((++len % 100) == 0)) {
+				snprintf(msg, sizeof(msg), "Parsing records:%8d", len);
+				txtLogFile->value(msg);
+				txtLogFile->redraw();
+				Fl::flush();
 			}
-			db->qsoNewRec (&adifqso);
-			adifqso.clearRec();
 		}
 		p1 = p2 + 1;
 		p2 = strchr(p1,'<');
 	}
 
-	log_checksum = file_checksum;
 	db->SortByDate();
 	delete [] buff;
 }
@@ -303,7 +340,6 @@ int cAdifIO::writeFile (const char *fname, cQsoDb *db)
 			 strlen(ADIF_VERS), ADIF_VERS,
 			 strlen(PACKAGE_NAME), PACKAGE_NAME,
 			 strlen(PACKAGE_VERSION), PACKAGE_VERSION);
-//	db->SortByDate();
 	for (int i = 0; i < db->nbrRecs(); i++) {
 		rec = db->getRec(i);
 		if (rec->getField(EXPORT)[0] == 'E') {
@@ -425,30 +461,3 @@ void cAdifIO::do_checksum(cQsoDb &db)
 	log_checksum = checksum.scrc16(records);
 }
 
-bool cAdifIO::log_changed (const char *fname)
-{
-	int retval;
-// open the adif file
-	FILE *adiFile = fopen (fname, "r");
-	if (!adiFile) {
-		LOG_ERROR("Cannot open %s", fname);
-		return false;
-	}
-
-// read first 2048 chars
-	char buff[2048];
-	retval = fread (buff, 2048, 1, adiFile);
-	fclose (adiFile);
-
-	if (retval) {
-		string sbuff = buff;
-		size_t p = sbuff.find("<DATA CHECKSUM:");
-		if (p == string::npos) return false;
-		p = sbuff.find(">", p);
-		if (p == string::npos) return false;
-		p++;
-		if (log_checksum != sbuff.substr(p, 4))
-			return true;
-	}
-	return  false;
-}

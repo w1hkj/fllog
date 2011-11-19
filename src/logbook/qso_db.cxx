@@ -157,10 +157,10 @@ const char* band_freq(const char* band_name)
 }
 
 //======================================================================
-
 // class cQsoRec
 
 static int compby = COMPDATE;
+static bool date_off = true;
 
 bool cQsoDb::reverse = false;
 
@@ -170,8 +170,6 @@ cQsoRec::cQsoRec() {
 }
 
 cQsoRec::~cQsoRec () {
-//  for (int i = 0; i < NUMFIELDS; i++)
-//    delete [] qsofield[i];
 }
 
 void cQsoRec::clearRec () {
@@ -184,12 +182,11 @@ int cQsoRec::validRec() {
 }
 
 void cQsoRec::checkBand() {
-	size_t flen = qsofield[FREQ].length(),
-		   blen = qsofield[BAND].length();
+	size_t flen = qsofield[FREQ].length(), blen = qsofield[BAND].length();
 	if (flen == 0 && blen != 0)
-		qsofield[FREQ] = band_freq(qsofield[BAND].c_str());
+		qsofield[FREQ] =  band_freq(qsofield[BAND].c_str());
 	else if (blen == 0 && flen != 0)
-		qsofield[BAND] = band_name(qsofield[FREQ].c_str());
+		qsofield[BAND] =  band_name(qsofield[FREQ].c_str());
 }
 
 void cQsoRec::putField (int n, const char *s){
@@ -198,7 +195,7 @@ void cQsoRec::putField (int n, const char *s){
 }
 
 void cQsoRec::putField (int n, const char *s, int len) {
-    if (n < 0 || n >= NUMFIELDS) return;
+	if (n < 0 || n >= NUMFIELDS) return;
 	qsofield[n].clear();
 	qsofield[n].append(s, len);
 }
@@ -234,7 +231,7 @@ void cQsoRec::trimFields () {
 	}
 }
 
-const char * cQsoRec::getField (int n) {
+const char * cQsoRec::getField (int n) const {
 	if (n < 0 || n >= NUMFIELDS) return 0;
 	return (qsofield[n].c_str());
 }
@@ -248,45 +245,59 @@ const cQsoRec &cQsoRec::operator=(const cQsoRec &right) {
 }
 
 int compareTimes (const cQsoRec &r1, const cQsoRec &r2) {
-	if (r1.qsofield[TIME_ON] < r2.qsofield[TIME_ON])
-		return -1;
-	if (r1.qsofield[TIME_ON] > r2.qsofield[TIME_ON])
-		return 1;
+	if (date_off) {
+		if (r1.qsofield[TIME_OFF] < r2.qsofield[TIME_OFF])
+			return -1;
+		if (r1.qsofield[TIME_OFF] > r2.qsofield[TIME_OFF])
+			return 1;
+	} else {
+		if (r1.qsofield[TIME_ON] < r2.qsofield[TIME_ON])
+			return -1;
+		if (r1.qsofield[TIME_ON] > r2.qsofield[TIME_ON])
+			return 1;
+	}
 	return 0;
 }
 
 int compareDates (const cQsoRec &r1, const cQsoRec &r2) {
-	if (r1.qsofield[QSO_DATE] < r2.qsofield[QSO_DATE])
-		return -1;
-	if (r1.qsofield[QSO_DATE] > r2.qsofield[QSO_DATE])
-		return 1;
+	if (date_off) {
+		if (r1.qsofield[QSO_DATE_OFF] < r2.qsofield[QSO_DATE_OFF])
+			return -1;
+		if (r1.qsofield[QSO_DATE_OFF] > r2.qsofield[QSO_DATE_OFF])
+			return 1;
+	} else {
+		if (r1.qsofield[QSO_DATE] < r2.qsofield[QSO_DATE])
+			return -1;
+		if (r1.qsofield[QSO_DATE] > r2.qsofield[QSO_DATE])
+			return 1;
+	}
 	return compareTimes (r1,r2);
 }
 
 int compareCalls (const cQsoRec &r1, const cQsoRec &r2) {
-  int cmp = 0;
-  char *s1 = new char[r1.qsofield[CALL].length() + 1];
-  char *s2 = new char[r2.qsofield[CALL].length() + 1];
-  char *p1, *p2;
-  strcpy(s1, r1.qsofield[CALL].c_str());
-  strcpy(s2, r2.qsofield[CALL].c_str());
-  p1 = strpbrk (&s1[1], "0123456789");
-  p2 = strpbrk (&s2[1], "0123456789");
-  if (p1 && p2) {
-    cmp = (*p1 < *p2) ? -1 :(*p1 > *p2) ? 1 : 0;
-    if (cmp == 0) {
-      *p1 = 0; *p2 = 0;
-      cmp = strcmp (s1, s2);
-      if (cmp == 0)
-        cmp = strcmp(p1+1, p2+1);
-    }
-  } else
-    cmp = (r1.qsofield[CALL] == r2.qsofield[CALL]);
-  delete [] s1;
-  delete [] s2;
-  if (cmp == 0)
-    return compareDates (r1,r2);
-  return cmp;
+	int cmp = 0;
+	char *s1 = new char[r1.qsofield[CALL].length() + 1];
+	char *s2 = new char[r2.qsofield[CALL].length() + 1];
+	char *p1, *p2;
+	strcpy(s1, r1.qsofield[CALL].c_str());
+	strcpy(s2, r2.qsofield[CALL].c_str());
+	p1 = strpbrk (&s1[1], "0123456789");
+	p2 = strpbrk (&s2[1], "0123456789");
+	if (p1 && p2) {
+		cmp = (*p1 < *p2) ? -1 :(*p1 > *p2) ? 1 : 0;
+		if (cmp == 0) {
+			*p1 = 0; *p2 = 0;
+			cmp = strcmp (s1, s2);
+			if (cmp == 0)
+				cmp = strcmp(p1+1, p2+1);
+		}
+	} else
+		cmp = (r1.qsofield[CALL] == r2.qsofield[CALL]);
+	delete [] s1;
+	delete [] s2;
+	if (cmp == 0)
+		return compareDates (r1,r2);
+	return cmp;
 }
 
 int compareModes (const cQsoRec &r1, const cQsoRec &r2) {
@@ -332,19 +343,19 @@ int compareqsos (const void *p1, const void *p2) {
 }
 
 bool cQsoRec::operator==(const cQsoRec &right) const {
-  if (compareDates (*this, right) != 0) return false;
-  if (compareTimes (*this, right) != 0) return false;
-  if (compareCalls (*this, right) != 0) return false;
-  if (compareFreqs (*this, right) != 0) return false;
-  return true;
+	if (compareDates (*this, right) != 0) return false;
+	if (compareTimes (*this, right) != 0) return false;
+	if (compareCalls (*this, right) != 0) return false;
+	if (compareFreqs (*this, right) != 0) return false;
+	return true;
 }
 
 bool cQsoRec::operator<(const cQsoRec &right) const {
-  if (compareDates (*this, right) > -1) return false;
-  if (compareTimes (*this, right) > -1) return false;
-  if (compareCalls (*this, right) > -1) return false;
-  if (compareFreqs (*this, right) > -1) return false;
-  return true;
+	if (compareDates (*this, right) > -1) return false;
+	if (compareTimes (*this, right) > -1) return false;
+	if (compareCalls (*this, right) > -1) return false;
+	if (compareFreqs (*this, right) > -1) return false;
+	return true;
 }
 
 static char delim_in = '\t';
@@ -352,34 +363,45 @@ static char delim_out = '\t';
 static bool isVer3 = false;
 
 ostream &operator<< (ostream &output, const cQsoRec &rec) {
-  for (int i = 0; i < EXPORT; i++)
-    output << rec.qsofield[i].c_str() << delim_out;
-  return output;
+	for (int i = 0; i < EXPORT; i++)
+		output << rec.qsofield[i].c_str() << delim_out;
+	return output;
 }
 
 istream &operator>> (istream &input, cQsoRec &rec ) {
-char c;
-int i;
-  for (i = 0; i < NUMFIELDS; i++) {
-	rec.qsofield[i].clear();
-    c = input.get();
-    while (c != delim_in && c != EOF) {
-      rec.qsofield[i] += c;
-      c = input.get();
-    }
-  }
-  return input;
+	char c;
+	int i;
+	for (i = 0; i < NUMFIELDS; i++) {
+		rec.qsofield[i].clear();
+		c = input.get();
+		while (c != delim_in && c != EOF) {
+			rec.qsofield[i] += c;
+			c = input.get();
+		}
+	}
+	return input;
 }
 
 //======================================================================
 // class cQsoDb
 
-#define MAXRECS 8192
+#define MAXRECS 32768
+#define INCRRECS 8192
 
 cQsoDb::cQsoDb() {
   nbrrecs = 0;
   maxrecs = MAXRECS;
   qsorec = new cQsoRec[maxrecs];
+  compby = COMPDATE;
+  dirty = 0;
+}
+
+cQsoDb::cQsoDb(cQsoDb *db) {
+  nbrrecs = 0;
+  maxrecs = db->nbrRecs();
+  qsorec = new cQsoRec[maxrecs];
+  for (int i = 0; i < maxrecs; i++)
+	qsorec[i] = db->qsorec[i];
   compby = COMPDATE;
   dirty = 0;
 }
@@ -409,7 +431,7 @@ int cQsoDb::qsoFindRec(cQsoRec *rec) {
 
 void cQsoDb::qsoNewRec (cQsoRec *nurec) {
   if (nbrrecs == maxrecs) {
-    maxrecs *= 2;
+    maxrecs += INCRRECS;
     cQsoRec *atemp = new cQsoRec[maxrecs];
     for (int i = 0; i < nbrrecs; i++)
         atemp[i] = qsorec[i];
@@ -420,6 +442,20 @@ void cQsoDb::qsoNewRec (cQsoRec *nurec) {
   qsorec[nbrrecs].checkBand();
   nbrrecs++;
   dirty = 1;
+}
+
+cQsoRec* cQsoDb::newrec() {
+  if (nbrrecs == maxrecs) {
+    maxrecs += INCRRECS;
+    cQsoRec *atemp = new cQsoRec[maxrecs];
+    for (int i = 0; i < nbrrecs; i++)
+        atemp[i] = qsorec[i];
+    delete [] qsorec;
+    qsorec = atemp;
+  }
+  nbrrecs++;
+  dirty = 1;
+  return &qsorec[nbrrecs - 1];
 }
 
 void cQsoDb::qsoDelRec (int rnbr) {
@@ -465,7 +501,7 @@ bool cQsoDb::qsoIsValidFile(const char *fname) {
   if (!inQsoFile)
     return false;
   inQsoFile.getline (buff, 256);
-  if (strstr (buff, "_LOGBOOK DB") == 0) {
+  if (strstr (buff, "_LOGBODUP DB") == 0) {
     inQsoFile.close();
     return false;
   }
@@ -479,11 +515,11 @@ char buff[256];
   if (!inQsoFile)
     return 1;
   inQsoFile.getline (buff, 256);
-  if (strstr (buff, "_LOGBOOK DB") == 0) {
+  if (strstr (buff, "_LOGBODUP DB") == 0) {
     inQsoFile.close();
     return 2;
   }
-  if (strstr (buff, "_LOGBOOK DBX") == 0) // new file format
+  if (strstr (buff, "_LOGBODUP DBX") == 0) // new file format
     delim_in = '\n';
   if (strstr (buff, "3.0") != 0)
 	isVer3 = true;    
@@ -504,7 +540,7 @@ int cQsoDb::qsoWriteFile (const char *fname) {
   	printf("write failure: %s\n", fname);
     return 1;
   }
-  outQsoFile << "_LOGBOOK DBX 3.0" << '\n';
+  outQsoFile << "_LOGBODUP DBX 3.0" << '\n';
   for (int i = 0; i < nbrrecs; i++)
     outQsoFile << qsorec[i];
   outQsoFile.close();
@@ -566,7 +602,7 @@ bool cQsoDb::duplicate(
 		const char *xchg1, bool chkxchg1 )
 {
 	int f1, f2 = 0;
-	f1 = (int)atof(freq);
+	f1 = (int)(atof(freq)/1000.0);
 	bool b_freqDUP = true, b_stateDUP = true, b_modeDUP = true,
 		 b_xchg1DUP = true,
 		 b_dtimeDUP = true;
@@ -580,10 +616,6 @@ bool cQsoDb::duplicate(
 				   	   b_xchg1DUP = b_dtimeDUP = false;
 			if (chkfreq) {
 				f2 = (int)atof(qsorec[i].getField(FREQ));
-				while (f1 > 1000) f1 /= 1000;
-				while (f2 > 1000) f2 /= 1000;
-				if (f1 > 100) { f1 /= 10; f2 /= 10; }
-				f1 = (int)(f1); f2 = (int)(f2);
 				b_freqDUP = (f1 == f2);
 			}
 			if (chkstate)
