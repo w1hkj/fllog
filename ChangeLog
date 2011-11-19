@@ -1,5 +1,10 @@
-2011-06-27  David Freese  <w1hkj@w1hkj.com>
 
+
+=Version 1.1.0=
+
+2011-11-18  David Freese  <w1hkj@w1hkj.com>
+
+	3216a7d: R/W speedup
 	e4e928e: Log filename
 
 
