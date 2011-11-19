@@ -261,7 +261,13 @@ void saveLogbook()
 	cQsoDb::reverse = false;
 	qsodb.SortByDate();
 
+	txtLogFile->value("Writing log ...");
+	txtLogFile->redraw();
+	Fl::flush();
 	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
+	Fl::flush();
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -284,10 +290,11 @@ void cb_mnuNewLogbook(){
 void OpenLogbook()
 {
 	adifFile.readFile (progStatus.logbookfilename.c_str(), &qsodb);
-	qsodb.isdirty(0);
-	loadBrowser();
 	txtLogFile->value(progStatus.logbookfilename.c_str());
 	txtLogFile->redraw();
+	Fl::flush();
+	qsodb.isdirty(0);
+	loadBrowser();
 	activateButtons();
 }
 
@@ -295,6 +302,7 @@ void cb_mnuOpenLogbook()
 {
 	const char* p = FSEL::select(_("Open logbook file"), "ADIF\t*." ADIF_SUFFIX,
 					 logbook_filename.c_str());
+	Fl::flush();
 	if (p) {
 		saveLogbook();
 		qsodb.deleteRecs();
@@ -307,6 +315,7 @@ void cb_mnuOpenLogbook()
 void cb_mnuSaveLogbook() {
 	const char* p = FSEL::saveas(_("Save logbook file"), "ADIF\t*." ADIF_SUFFIX,
 					 logbook_filename.c_str());
+	Fl::flush();
 	if (p) {
 		logbook_filename = p;
 		txtLogFile->value(progStatus.logbookfilename.c_str());
@@ -315,7 +324,13 @@ void cb_mnuSaveLogbook() {
 		cQsoDb::reverse = false;
 		qsodb.SortByDate();
 
+		txtLogFile->value("Writing log ...");
+		txtLogFile->redraw();
+		Fl::flush();
 		adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+		txtLogFile->value(progStatus.logbookfilename.c_str());
+		txtLogFile->redraw();
+		Fl::flush();
 
 		qsodb.isdirty(0);
 		restore_sort();
@@ -324,8 +339,12 @@ void cb_mnuSaveLogbook() {
 
 void cb_mnuMergeADIF_log() {
 	const char* p = FSEL::select(_("Merge ADIF file"), "ADIF\t*." ADIF_SUFFIX);
+	Fl::flush();
 	if (p) {
 		adifFile.readFile (p, &qsodb);
+		txtLogFile->value(progStatus.logbookfilename.c_str());
+		txtLogFile->redraw();
+		Fl::flush();
 		loadBrowser();
 		qsodb.isdirty(1);
 	}
@@ -695,7 +714,13 @@ void saveRecord() {
 	cQsoDb::reverse = false;
 	qsodb.SortByDate();
 
+	txtLogFile->value("Writing log ...");
+	txtLogFile->redraw();
+	Fl::flush();
 	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
+	Fl::flush();
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -743,7 +768,13 @@ cQsoRec rec;
 	cQsoDb::reverse = false;
 	qsodb.SortByDate();
 
+	txtLogFile->value("Writing log ...");
+	txtLogFile->redraw();
+	Fl::flush();
 	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
+	Fl::flush();
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -761,7 +792,13 @@ void deleteRecord () {
 	cQsoDb::reverse = false;
 	qsodb.SortByDate();
 
+	txtLogFile->value("Writing log ...");
+	txtLogFile->redraw();
+	Fl::flush();
 	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	txtLogFile->value(progStatus.logbookfilename.c_str());
+	txtLogFile->redraw();
+	Fl::flush();
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -895,8 +932,8 @@ void loadBrowser(bool keep_pos)
 		else
 			wBrowser->LastRow ();
 	}
-	char szRecs[6];
-	snprintf(szRecs, sizeof(szRecs), "%5d", qsodb.nbrRecs());
+	char szRecs[10];
+	snprintf(szRecs, sizeof(szRecs), "%d", qsodb.nbrRecs());
 	txtNbrRecs_log->value(szRecs);
 	wBrowser->redraw();
 }

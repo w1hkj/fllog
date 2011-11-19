@@ -249,8 +249,6 @@ int main (int argc, char *argv[])
 
 	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
 
-	start_logbook();
-
 	mainwindow->xclass(KNAME);
 
 	Fl::add_handler(main_handler);
@@ -268,6 +266,8 @@ int main (int argc, char *argv[])
 #else
 	mainwindow->show(argc, argv);
 #endif
+
+	start_logbook();
 
 	FSEL::create();
 

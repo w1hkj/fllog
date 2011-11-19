@@ -11,6 +11,9 @@ using namespace std;
 
 enum COMPTYPE {COMPTIME, COMPDATE, COMPCALL, COMPFREQ, COMPMODE};
 
+class cQsoDb;
+class cQsoRec;
+
 class cQsoRec {
 
 friend int compareCalls (const cQsoRec &, const cQsoRec &);
@@ -30,7 +33,7 @@ public:
 	void putField (int, const char *);
 	void putField (int, const char *, int);
 	void addtoField (int, const char *);
-	const char *getField (int);
+	const char *getField (int) const;
 	void trimFields();
 	void clearRec ();
 	int  validRec();
@@ -65,6 +68,7 @@ private:
 	unsigned int epoch_minutes (const char *szdate, const char *sztime);	
 public:
 	cQsoDb ();
+	cQsoDb (cQsoDb *);
 	~cQsoDb ();
 	static bool reverse;
 	void deleteRecs();
@@ -72,6 +76,7 @@ public:
 	void isdirty(int n) {dirty = n;}
 	int  isdirty() {return dirty;}
 	void qsoNewRec (cQsoRec *);
+	cQsoRec *newrec();
 	void qsoDelRec (int);
 	void qsoUpdRec (int, cQsoRec *);
 	int qsoFindRec (cQsoRec *);
@@ -80,7 +85,7 @@ public:
 	bool qsoIsValidFile(const char *);
 	int qsoReadFile (const char *);
 	int qsoWriteFile (const char *);
-	void SortByDate();
+	void SortByDate ();
 	void SortByCall ();
 	void SortByMode ();
 	void SortByFreq ();
