@@ -1,8 +1,14 @@
 
 
-=Version 1.0.0=
+=Version 1.1.0=
 
-2011-06-19  David Freese  <w1hkj@w1hkj.com>
+2011-11-18  David Freese  <w1hkj@w1hkj.com>
+
+	ad54f1d: R/W speedup
+	f0219f7: Log filename
+
+
+=Version 1.0.0=
 
 	abfbb80: Prefs
 
