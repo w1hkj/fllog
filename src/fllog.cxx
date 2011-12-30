@@ -29,10 +29,13 @@
 
 #include <FL/filename.H>
 #ifdef __MINGW32__
-#  undef dirent
+#	if FLLOG_FLTK_API_MAJOR == 1 && FLLOG_FLTK_API_MINOR < 3
+#		undef dirent
+#		include <dirent.h>
+#	endif
+#else
+#	include <dirent.h>
 #endif
-
-#include <dirent.h>
 
 #include <FL/x.H>
 #include <FL/Fl_Pixmap.H>
