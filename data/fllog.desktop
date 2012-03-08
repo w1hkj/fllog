@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Fllog
-GenericName=Amateur Radio Data Encapsulation
+GenericName=Amateur Radio Log Database Server
 Comment=Amateur Radio Communications
 Exec=fllog
 Icon=fllog
