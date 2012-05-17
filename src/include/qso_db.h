@@ -53,6 +53,11 @@ public:
 	bool operator>(const cQsoRec &right) const {
 		return !(*this <= right);
 	}  
+
+	void checkDateTimes();
+	void setDateTime(bool dtOn);
+	void setFrequency(long long freq);
+  
 };
 
 class cQsoDb {
@@ -65,7 +70,7 @@ private:
 	static const int jdays[][13];
 	bool isleapyear( int y );
 	int dayofyear (int year, int mon, int mday);
-	unsigned int epoch_minutes (const char *szdate, const char *sztime);	
+	unsigned int epoch_dt (const char *szdate, const char *sztime);	
 public:
 	cQsoDb ();
 	cQsoDb (cQsoDb *);
@@ -85,12 +90,12 @@ public:
 	bool qsoIsValidFile(const char *);
 	int qsoReadFile (const char *);
 	int qsoWriteFile (const char *);
-	void SortByDate ();
+	void SortByDate (bool how = false);
 	void SortByCall ();
 	void SortByMode ();
 	void SortByFreq ();
 	void sort_reverse(bool rev) { reverse = rev;}
-  
+
 	bool duplicate(
 		const char *callsign, 
 		const char *date, const char *time, unsigned int interval, bool chkdatetime,

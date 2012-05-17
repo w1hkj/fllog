@@ -27,16 +27,53 @@ static const char *szEOR = "<EOR>";
 // These ADIF fields define the QSO database
 
 const char *fieldnames[] = {
-	"ADDRESS", "AGE", "ARRL_SECT", "BAND", "CALL", "CNTY", "COMMENT",
-	"CONT", "CONTEST_ID", "COUNTRY", "CQZ", "DXCC", "EXPORT", "FREQ",
-	"GRIDSQUARE", "IOTA", "ITUZ", "MODE", "STX_STRING",
-	"NAME", "NOTES", "OPERATOR", "PFX", "PROP_MODE",
-	"QSLRDATE", "QSLSDATE", "QSL_MSG", "QSL_RCVD", "QSL_SENT", "QSL_VIA", "QSO_DATE", "QSO_DATE_OFF",
-	"QTH",
-	"RST_RCVD", "RST_SENT", "RX_PWR",
-	"SAT_MODE", "SAT_NAME", "SRX",
-	"STATE", "STX", "TEN_TEN",
-	"TIME_OFF", "TIME_ON", "TX_PWR", "VE_PROV", "SRX_STRING"
+"ADDRESS",
+"AGE",
+"ARRL_SECT",
+"BAND",
+"CALL",
+"CNTY",
+"COMMENT",
+"CONT",
+"CONTEST_ID",
+"COUNTRY",
+"STATE",
+"CQZ",
+"DXCC",
+"EXPORT",
+"FREQ",
+"GRIDSQUARE",
+"IOTA",
+"ITUZ",
+"MODE",
+"MYXCHG",
+"NAME",
+"NOTES",
+"OPERATOR",
+"PFX",
+"PROP_MODE",
+"QSLRDATE",
+"QSLSDATE",
+"QSL_MSG",
+"QSL_RCVD",
+"QSL_SENT",
+"QSL_VIA",
+"QSO_DATE",
+"QSO_DATE_OFF",
+"QTH",
+"RST_RCVD",
+"RST_SENT",
+"RX_PWR",
+"SAT_MODE",
+"SAT_NAME",
+"SRX",
+"STX",
+"TEN_TEN",
+"TIME_OFF",
+"TIME_ON",
+"TX_PWR",
+"VE_PROV",
+"XCHG1"
 };
 
 // 16 chars per  position in string div 16 gives index to field name
@@ -53,6 +90,7 @@ COMMENT:        \
 CONT:           \
 CONTEST_ID:     \
 COUNTRY:        \
+STATE:          \
 CQZ:            \
 DXCC:           \
 EXPORT:         \
@@ -61,7 +99,7 @@ GRIDSQUARE:     \
 IOTA:           \
 ITUZ:           \
 MODE:           \
-STX_STRING:     \
+MYXCHG:         \
 NAME:           \
 NOTES:          \
 OPERATOR:       \
@@ -82,14 +120,13 @@ RX_PWR:         \
 SAT_MODE:       \
 SAT_NAME:       \
 SRX:            \
-STATE:          \
 STX:            \
 TEN_TEN:        \
 TIME_OFF:       \
 TIME_ON:        \
 TX_PWR:         \
 VE_PROV:        \
-SRX_STRING:     ";
+XCHG1:           ";
 
 FIELD fields[] = {
 //  TYPE, NAME, WIDGET
@@ -103,6 +140,7 @@ FIELD fields[] = {
 	{CONT,           0,  &btnSelectCONT},      // contacted stations continent
 	{CONTEST_ID,     0,  NULL},                // QSO contest identifier
 	{COUNTRY,        0,  &btnSelectCountry},   // contacted stations DXCC entity name
+	{STATE,          0,  &btnSelectState},     // contacted stations STATE
 	{CQZ,            0,  &btnSelectCQZ},       // contacted stations CQ Zone
 	{DXCC,           0,  &btnSelectDXCC},      // contacted stations Country Code
 	{EXPORT,         0,  NULL},                // used to indicate record is to be exported
@@ -132,7 +170,6 @@ FIELD fields[] = {
 	{SAT_MODE,       0,  NULL},                // satellite mode
 	{SAT_NAME,       0,  NULL},                // satellite name
 	{SRX,            0,  &btnSelectSerialIN},  // received serial number for a contest QSO
-	{STATE,          0,  &btnSelectState},     // contacted stations STATE
 	{STX,            0,  &btnSelectSerialOUT}, // QSO transmitted serial number
 	{TEN_TEN,        0,  NULL},                // ten ten # of other station
 	{TIME_OFF,       0,  &btnSelectTimeOFF},   // HHMM or HHMMSS in UTC
@@ -197,7 +234,13 @@ int fldsize;
 		}
 		p++;
 	}
-	adifqso->putField (fieldnum, p2+1, fldsize);
+	if ((fieldnum == TIME_ON || fieldnum == TIME_OFF) && fldsize < 6) {
+		string tmp = "";
+		tmp.assign(p2+1, fldsize);
+		while (tmp.length() < 6) tmp += '0';
+		adifqso->putField(fieldnum, tmp.c_str(), 6);
+	} else
+		adifqso->putField (fieldnum, p2+1, fldsize);
 }
 
 
@@ -377,16 +420,11 @@ int cAdifIO::writeLog (const char *fname, cQsoDb *db) {
 	ADIFHEADER.append(szEOL);
 	ADIFHEADER.append("<PROGRAMVERSION:%d>%s");
 	ADIFHEADER.append(szEOL);
-	ADIFHEADER.append("<DATA CHECKSUM:%d>%s");
-	ADIFHEADER.append(szEOL);
 	ADIFHEADER.append("<EOH>");
 	ADIFHEADER.append(szEOL);
-
 // open the adif file
 	string sFld;
 	cQsoRec *rec;
-	Ccrc16 checksum;
-	string s_checksum;
 
 	adiFile = fopen (fname, "w");
 	if (!adiFile) {
@@ -416,23 +454,20 @@ int cAdifIO::writeLog (const char *fname, cQsoDb *db) {
 		db->qsoUpdRec(i, rec);
 	}
 
-	s_checksum = checksum.scrc16(records);
-
 	fprintf (adiFile, ADIFHEADER.c_str(),
 		 fl_filename_name(fname),
 		 strlen(ADIF_VERS), ADIF_VERS,
 		 strlen(PACKAGE_NAME), PACKAGE_NAME,
-		 strlen(PACKAGE_VERSION), PACKAGE_VERSION,
-		 s_checksum.length(), s_checksum.c_str()
+		 strlen(PACKAGE_VERSION), PACKAGE_VERSION
 		);
 	fprintf (adiFile, "%s", records.c_str());
 
 	fclose (adiFile);
-	log_checksum = s_checksum;
 
 	return 0;
 }
 
+// not used in current version - deprecated
 void cAdifIO::do_checksum(cQsoDb &db)
 {
 	Ccrc16 checksum;

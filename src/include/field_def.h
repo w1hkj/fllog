@@ -12,6 +12,7 @@ enum ADIF_FIELD_POS {
     CONT, 
     CONTEST_ID,
     COUNTRY,
+    STATE, 
     CQZ, 
     DXCC, 
     EXPORT, // flag used internally in fldigi's logbook
@@ -41,7 +42,6 @@ enum ADIF_FIELD_POS {
     SAT_MODE,
     SAT_NAME,
     SRX, 
-    STATE, 
     STX,
     TEN_TEN, 
     TIME_OFF, 

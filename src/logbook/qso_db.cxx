@@ -30,6 +30,9 @@
 #include "field_def.h"
 #include "util.h"
 
+// following needed for localtime_r
+#include <pthread.h>
+
 using namespace std;
 
 // =====================================================================
@@ -205,6 +208,61 @@ void cQsoRec::addtoField (int n, const char *s){
 	qsofield[n].append(s);
 }
 
+void cQsoRec::checkDateTimes()
+{
+	size_t len1 = qsofield[TIME_ON].length(), len2 = qsofield[TIME_OFF].length();
+	if (len1 == 0 && len2 != 0)
+		qsofield[TIME_ON] = qsofield[TIME_OFF];
+	else if (len1 != 0 && len2 == 0)
+		qsofield[TIME_OFF] = qsofield[TIME_ON];
+	len1 = qsofield[QSO_DATE].length();
+	len2 = qsofield[QSO_DATE_OFF].length();
+	if (len1 == 0 && len2 != 0)
+		qsofield[QSO_DATE] = qsofield[QSO_DATE_OFF];
+	else if (len1 != 0 && len2 == 0)
+		qsofield[QSO_DATE_OFF] = qsofield[QSO_DATE];
+}
+
+// Sets the current time, with the right format.
+void cQsoRec::setDateTime(bool dtOn)
+{
+	time_t tmp_time = time(NULL);
+	struct tm tmp_tm ;
+	if (localtime_r(&tmp_time, &tmp_tm)) {
+
+		char buf_date[64] ;
+		snprintf( buf_date, sizeof(buf_date),
+			"%04d%02d%02d",
+			1900 + tmp_tm.tm_year,
+			1 + tmp_tm.tm_mon,
+			tmp_tm.tm_mday );
+
+		char buf_time[64] ;
+		snprintf( buf_time, sizeof(buf_time),
+			"%02d%02d%02d",
+			tmp_tm.tm_hour,
+			tmp_tm.tm_min,
+			tmp_tm.tm_sec );
+
+		if(dtOn) {
+			putField(QSO_DATE, buf_date);
+			putField(TIME_ON, buf_time);
+		} else {
+			putField(QSO_DATE_OFF, buf_date);
+			putField(TIME_OFF, buf_time);
+		}
+	}
+}
+
+// It must match a specific format. Input in Hertz.
+void cQsoRec::setFrequency(long long freq)
+{
+	double freq_dbl = freq / 1000000.0 ;
+	char buf_freq[64];
+	snprintf( buf_freq, sizeof(buf_freq), "%lf", freq_dbl );
+	putField(FREQ, buf_freq );
+}
+
 void cQsoRec::trimFields () {
 	size_t p;
 	string s;
@@ -245,78 +303,46 @@ const cQsoRec &cQsoRec::operator=(const cQsoRec &right) {
 }
 
 int compareTimes (const cQsoRec &r1, const cQsoRec &r2) {
-	if (date_off) {
-		if (r1.qsofield[TIME_OFF] < r2.qsofield[TIME_OFF])
-			return -1;
-		if (r1.qsofield[TIME_OFF] > r2.qsofield[TIME_OFF])
-			return 1;
-	} else {
-		if (r1.qsofield[TIME_ON] < r2.qsofield[TIME_ON])
-			return -1;
-		if (r1.qsofield[TIME_ON] > r2.qsofield[TIME_ON])
-			return 1;
-	}
-	return 0;
+	if (date_off)
+		return r1.qsofield[TIME_OFF].compare( r2.qsofield[TIME_OFF] );
+	return r1.qsofield[TIME_ON].compare( r2.qsofield[TIME_ON] );
 }
 
 int compareDates (const cQsoRec &r1, const cQsoRec &r2) {
-	if (date_off) {
-		if (r1.qsofield[QSO_DATE_OFF] < r2.qsofield[QSO_DATE_OFF])
-			return -1;
-		if (r1.qsofield[QSO_DATE_OFF] > r2.qsofield[QSO_DATE_OFF])
-			return 1;
-	} else {
-		if (r1.qsofield[QSO_DATE] < r2.qsofield[QSO_DATE])
-			return -1;
-		if (r1.qsofield[QSO_DATE] > r2.qsofield[QSO_DATE])
-			return 1;
-	}
-	return compareTimes (r1,r2);
+	if (date_off)
+		return r1.qsofield[QSO_DATE_OFF].compare( r2.qsofield[QSO_DATE_OFF] );
+	else
+		return r1.qsofield[QSO_DATE].compare( r2.qsofield[QSO_DATE] );
 }
 
 int compareCalls (const cQsoRec &r1, const cQsoRec &r2) {
 	int cmp = 0;
-	char *s1 = new char[r1.qsofield[CALL].length() + 1];
-	char *s2 = new char[r2.qsofield[CALL].length() + 1];
-	char *p1, *p2;
-	strcpy(s1, r1.qsofield[CALL].c_str());
-	strcpy(s2, r2.qsofield[CALL].c_str());
-	p1 = strpbrk (&s1[1], "0123456789");
-	p2 = strpbrk (&s2[1], "0123456789");
+	const char * s1 = r1.qsofield[CALL].c_str();
+	const char * s2 = r2.qsofield[CALL].c_str();
+	const char * p1 = strpbrk (s1+1, "0123456789");
+	const char * p2 = strpbrk (s2+1, "0123456789");
+
 	if (p1 && p2) {
-		cmp = (*p1 < *p2) ? -1 :(*p1 > *p2) ? 1 : 0;
+		cmp = (*p1 < *p2) ? -1 : (*p1 > *p2) ? 1 : 0;
 		if (cmp == 0) {
-			*p1 = 0; *p2 = 0;
-			cmp = strcmp (s1, s2);
+			cmp = strncmp (s1, s2, max(p1 - s1, p2 - s2));
 			if (cmp == 0)
 				cmp = strcmp(p1+1, p2+1);
 		}
 	} else
-		cmp = (r1.qsofield[CALL] == r2.qsofield[CALL]);
-	delete [] s1;
-	delete [] s2;
-	if (cmp == 0)
-		return compareDates (r1,r2);
+		cmp = strcmp(s1, s2);
 	return cmp;
 }
 
 int compareModes (const cQsoRec &r1, const cQsoRec &r2) {
-	if (r1.qsofield[MODE] < r2.qsofield[MODE])
-		return -1;
-	if (r1.qsofield[MODE] > r2.qsofield[MODE])
-		return 1;
-	return compareDates (r1,r2);
+	return r1.qsofield[MODE].compare( r2.qsofield[MODE] );
 }
 
 int compareFreqs (const cQsoRec &r1, const cQsoRec &r2) {
-	int cmp = 0;
 	double f1, f2;
 	f1 = atof(r1.qsofield[FREQ].c_str());
 	f2 = atof(r2.qsofield[FREQ].c_str());
-	if (f1 == f2) cmp = 0;
-	else if (f1 < f2) return -1;
-	else if (f1 > f2) return 1;
-	return compareDates (r1,r2);
+	return (f1 == f2 ? 0 : f1 < f2 ? -1 : 1);
 }
 
 int compareqsos (const void *p1, const void *p2) {
@@ -329,16 +355,33 @@ int compareqsos (const void *p1, const void *p2) {
 		r2 = (cQsoRec *)p2;
 	}
 
+	int cmp;
 	switch (compby) {
 		case COMPCALL :
-			return compareCalls (*r1, *r2);
+			if ((cmp = compareCalls(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareDates(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareTimes(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareModes(*r1, *r2)) != 0) return cmp;
+			return compareFreqs(*r1, *r2);
 		case COMPMODE :
-			return compareModes (*r1, *r2);
+			if ((cmp = compareModes (*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareDates(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareTimes(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareCalls(*r1, *r2)) != 0) return cmp;
+			return compareFreqs(*r1, *r2);
 		case COMPFREQ :
-			return compareFreqs (*r1, *r2);
+			if ((cmp = compareFreqs (*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareDates(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareTimes(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareCalls(*r1, *r2)) != 0) return cmp;
+			return compareModes(*r1, *r2);
 		case COMPDATE :
 		default :
-			return compareDates (*r1, *r2);
+			if ((cmp = compareDates (*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareTimes(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareCalls(*r1, *r2)) != 0) return cmp;
+			if ((cmp = compareModes (*r1, *r2)) != 0) return cmp;
+			return compareFreqs (*r1, *r2);
 	}
 }
 
@@ -369,15 +412,10 @@ ostream &operator<< (ostream &output, const cQsoRec &rec) {
 }
 
 istream &operator>> (istream &input, cQsoRec &rec ) {
-	char c;
-	int i;
-	for (i = 0; i < NUMFIELDS; i++) {
-		rec.qsofield[i].clear();
-		c = input.get();
-		while (c != delim_in && c != EOF) {
-			rec.qsofield[i] += c;
-			c = input.get();
-		}
+	static char buf[1024]; // Must be big enough for a field.
+	for (int i = 0; i < NUMFIELDS; i++) {
+		input.getline( buf, sizeof(buf), delim_in );
+		rec.qsofield[i] = buf ;
 	}
 	return input;
 }
@@ -475,7 +513,8 @@ void cQsoDb::qsoUpdRec (int rnbr, cQsoRec *updrec) {
   return;
 }
 
-void cQsoDb::SortByDate () {
+void cQsoDb::SortByDate (bool how) {
+  date_off = how;
   compby = COMPDATE;
   qsort (qsorec, nbrrecs, sizeof (cQsoRec), compareqsos);
 }
@@ -564,7 +603,7 @@ int cQsoDb::dayofyear (int year, int mon, int mday)
   return mday + jdays[isleapyear (year) ? 1 : 0][mon];
 }
 
-unsigned int cQsoDb::epoch_minutes (const char *szdate, const char *sztime)
+unsigned int cQsoDb::epoch_dt (const char *szdate, const char *sztime)
 {
   unsigned int  doe;
   int  era, cent, quad, rest;
@@ -575,7 +614,8 @@ unsigned int cQsoDb::epoch_minutes (const char *szdate, const char *sztime)
   mon  = szdate[4]*10 + szdate[5];
   mday = szdate[6]*10 + szdate[7];
   
-  mins = (sztime[0]*10 + sztime[1])*60 + sztime[2]*10 + sztime[3];
+  mins = ((sztime[0]*10 + sztime[1])*60 + sztime[2]*10 + sztime[3])*60 +
+         + sztime[4]*10 + sztime[5];
   
   /* break down the year into 400, 100, 4, and 1 year multiples */
   rest = year - 1;
@@ -606,7 +646,7 @@ bool cQsoDb::duplicate(
 	bool b_freqDUP = true, b_stateDUP = true, b_modeDUP = true,
 		 b_xchg1DUP = true,
 		 b_dtimeDUP = true;
-	unsigned int datetime = epoch_minutes(szdate, sztime);
+	unsigned int datetime = epoch_dt(szdate, sztime);
 	unsigned int qsodatetime;
 	
 	for (int i = 0; i < nbrrecs; i++) {
@@ -629,7 +669,7 @@ bool cQsoDb::duplicate(
 							 (strcasestr(qsorec[i].getField(XCHG1), xchg1) != 0);
 
 			if (chkdatetime) {
-				qsodatetime = epoch_minutes (
+				qsodatetime = epoch_dt (
 								qsorec[i].getField(QSO_DATE),
 								qsorec[i].getField(TIME_OFF));
 				if ((datetime - qsodatetime) < interval) b_dtimeDUP = true;
