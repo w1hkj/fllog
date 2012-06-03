@@ -1,8 +1,18 @@
 
 
-=Version 1.3.1=
+=Version 1.1.2=
 
-2011-12-30  David Freese  <w1hkj@w1hkj.com>
+2012-05-16  david freese (none)  <dave@dave-laptop>
+
+	a9faf0a: Log time
+
+2012-03-08  David Freese  <w1hkj@w1hkj.com>
+
+	95c11e4: Desktop
+	2ab6ba0: FLTK version
+
+
+=Version 1.1.1=
 
 	b893355: FLTK 1.3 mods
 
