@@ -739,7 +739,6 @@ void clearRecord() {
 	inpITUZ_log->value("");
 	inpTX_pwr_log->value("");
 	inpSearchString->value ("");
-	editGroup->show();
 }
 
 void saveRecord() {
@@ -922,7 +921,6 @@ void EditRecord( int i )
 	inpCQZ_log->value(editQSO->getField(CQZ));
 	inpITUZ_log->value(editQSO->getField(ITUZ));
 	inpTX_pwr_log->value(editQSO->getField(TX_PWR));
-	editGroup->show();
 }
 
 std::string sDate_on = "";

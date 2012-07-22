@@ -50,10 +50,11 @@
 #include "fileselect.h"
 #include "logbook.h"
 #include "lgbook.h"
+#include "colorsfonts.h"
 
 int parse_args(int argc, char **argv, int& idx);
 
-Fl_Double_Window *mainwindow;
+Fl_Double_Window *mainwindow = NULL;
 string LogHomeDir;
 string TempDir;
 string defFileName;
@@ -66,6 +67,186 @@ string title;
 //pthread_mutex_t mutex_xmlrpc = PTHREAD_MUTEX_INITIALIZER;
 
 bool Log_DEBUG = 0;
+
+//----------------------------------------------------------------------
+// main dialog colors, fonts & sizing
+//----------------------------------------------------------------------
+
+inline void inp_font_pos(Fl_Input2* inp, int x, int y, int w, int h)
+{
+	inp->textsize(progStatus.LOGBOOKtextsize);
+	inp->textfont(progStatus.LOGBOOKtextfont);
+	inp->textcolor(progStatus.LOGBOOKtextcolor);
+	inp->color(progStatus.LOGBOOKcolor);
+	int ls = progStatus.LOGBOOKtextsize;
+	inp->labelsize(ls < 14 ? ls : 14);
+	inp->redraw_label();
+	inp->resize(x, y, w, h);
+}
+
+inline void date_font_pos(Fl_DateInput* inp, int x, int y, int w, int h)
+{
+	inp->textsize(progStatus.LOGBOOKtextsize);
+	inp->textfont(progStatus.LOGBOOKtextfont);
+	inp->textcolor(progStatus.LOGBOOKtextcolor);
+	inp->color(progStatus.LOGBOOKcolor);
+	int ls = progStatus.LOGBOOKtextsize;
+	inp->labelsize(ls < 14 ? ls : 14);
+	inp->redraw_label();
+	inp->resize(x, y, w, h);
+}
+
+void LOGBOOK_colors_font()
+{
+	if (!mainwindow) return;
+
+// input / output / date / text fields
+	fl_font(progStatus.LOGBOOKtextfont, progStatus.LOGBOOKtextsize);
+	int wh = fl_height() + 4;// + 8;
+	int width_date = fl_width("888888888") + wh;
+	int width_time = fl_width("23:59:599");
+	int width_freq = fl_width("99.9999999");
+	int width_rst  = fl_width("5999");
+	int width_pwr  = fl_width("0000");
+	int width_loc  = fl_width("XX88XXX");
+	int width_mode = fl_width("CONTESTIA");
+
+	int dlg_width =	inpDate_log->x() + 
+					width_date + 2 + 
+					width_time + 2 +
+					width_freq + 2 + 
+					width_mode + 2 +
+					width_pwr + 2 +
+					width_rst + 2 +
+					width_date + 2;
+
+	if (progStatus.mainW > dlg_width) {
+		width_date = (int)(1.0 * width_date * progStatus.mainW / dlg_width);
+		width_time = (int)(1.0 * width_time * progStatus.mainW / dlg_width);
+		width_freq = (int)(1.0 * width_freq * progStatus.mainW / dlg_width);
+		width_rst  = (int)(1.0 * width_rst * progStatus.mainW / dlg_width);
+		width_pwr  = (int)(1.0 * width_pwr * progStatus.mainW / dlg_width);
+		width_loc  = (int)(1.0 * width_loc * progStatus.mainW / dlg_width);
+		width_mode = (int)(1.0 * width_mode * progStatus.mainW / dlg_width);
+		width_freq = (progStatus.mainW -
+						width_date - width_time - width_mode -
+						width_pwr - width_rst - width_date - 14);
+		dlg_width = progStatus.mainW;
+	}
+	
+	int newheight = 24 + 4*(wh + 20) + 3*wh + 4 + bNewSave->h() + 4 + wBrowser->h() + 2;
+
+	mainwindow->resize(mainwindow->x(), mainwindow->y(), dlg_width, newheight);
+
+// row1
+	int ypos = inpDate_log->y();
+	int xpos = inpDate_log->x();
+
+	date_font_pos(inpDate_log, xpos, ypos, width_date, wh); xpos += width_date + 2;
+	inp_font_pos(inpTimeOn_log, xpos, ypos, width_time, wh); xpos += width_time + 2;
+	inp_font_pos(inpCall_log, xpos, ypos, width_freq, wh);
+
+	date_font_pos(inpQSLrcvddate_log, 
+					dlg_width - 2 - width_date, ypos, width_date, wh);
+	inp_font_pos(inpRstR_log, 
+					inpQSLrcvddate_log->x() - 2 - width_rst, ypos, 
+					width_rst, wh);
+	inp_font_pos(inpName_log, 
+					inpCall_log->x() + width_freq + 2, ypos, 
+					inpRstR_log->x() - 2 - (inpCall_log->x() + width_freq + 2), wh);
+// row2
+	ypos += wh + 20;
+	xpos = inpDateOff_log->x();
+
+	date_font_pos(inpDateOff_log, xpos, ypos, width_date, wh); xpos += width_date + 2;
+	inp_font_pos(inpTimeOff_log, xpos, ypos, width_time, wh); xpos += width_time + 2;
+	inp_font_pos(inpFreq_log, xpos, ypos, width_freq, wh);
+
+	date_font_pos(inpQSLsentdate_log, 
+					dlg_width - 2 - width_date, ypos, width_date, wh);
+	inp_font_pos(inpRstS_log, 
+					inpQSLsentdate_log->x() - 2 - width_rst, ypos, 
+					width_rst, wh);
+	inp_font_pos(inpTX_pwr_log, 
+					inpRstS_log->x() - 2 - width_pwr, ypos, 
+					width_pwr, wh);
+	inp_font_pos(inpMode_log, 
+					inpFreq_log->x() + width_freq + 2, ypos, 
+					inpTX_pwr_log->x() - 2 - (inpFreq_log->x() + width_freq + 2), wh);
+// row 3
+	ypos += (20 + wh);
+
+	inp_font_pos(inpLoc_log,
+					dlg_width - 2 - width_loc, ypos, width_loc, wh);
+	inp_font_pos(inpCountry_log,
+					inpLoc_log->x() - 2 - inpCountry_log->w(), ypos, inpCountry_log->w(), wh);
+	inp_font_pos(inpVE_Prov_log,
+					inpCountry_log->x() - 2 - inpVE_Prov_log->w(), ypos, inpVE_Prov_log->w(), wh);
+	inp_font_pos(inpState_log,
+					inpVE_Prov_log->x() - 2 - inpState_log->w(), ypos, inpState_log->w(), wh);
+	inp_font_pos(inpQth_log,
+					inpQth_log->x(), ypos, inpState_log->x() - 2 - inpQth_log->x(), wh);
+
+	ypos += (20 + wh);
+	Fl_Input2* row4[] = {
+		inpCNTY_log, inpIOTA_log, inpCQZ_log };
+	for (size_t i = 0; i < sizeof(row4)/sizeof(*row4); i++) {
+		inp_font_pos(row4[i], row4[i]->x(), ypos, row4[i]->w(), wh);
+	}
+
+	inp_font_pos(inpNotes_log, inpNotes_log->x(), ypos, inpNotes_log->w(), 3 * wh);
+
+	ypos = inpNotes_log->y() + inpNotes_log->h() - wh;
+	Fl_Input2* row5[] = {
+		inpITUZ_log, inpCONT_log, inpDXCC_log };
+	for (size_t i = 0; i < sizeof(row5)/sizeof(*row5); i++) {
+		inp_font_pos(row5[i], row5[i]->x(), ypos, row5[i]->w(), wh);
+	}
+
+	ypos += 20 + wh;
+	Fl_Input2* row6[] = {
+		inpSerNoOut_log, inpMyXchg_log, inpSerNoIn_log, inpXchgIn_log, inpSearchString };
+	for (size_t i = 0; i < sizeof(row6)/sizeof(*row6); i++) {
+		inp_font_pos(row6[i], row6[i]->x(), ypos, row6[i]->w(), wh);
+	}
+
+	ypos += wh + 4;
+	txtNbrRecs_log->textcolor(progStatus.LOGBOOKtextcolor);
+	txtNbrRecs_log->color(progStatus.LOGBOOKcolor);
+	txtNbrRecs_log->resize(txtNbrRecs_log->x(), ypos, txtNbrRecs_log->w(), txtNbrRecs_log->h());
+	int ls = progStatus.LOGBOOKtextsize;
+	txtNbrRecs_log->labelsize(ls < 14 ? ls : 14);
+	txtNbrRecs_log->redraw_label();
+
+	Fl_Button* btns[] = { bNewSave, bUpdateCancel, bDelete, bSearchPrev, bSearchNext };
+	for (size_t i = 0; i < sizeof(btns)/sizeof(*btns); i++) {
+		btns[i]->resize(btns[i]->x(), ypos, btns[i]->w(), btns[i]->h());
+		btns[i]->redraw();
+	}
+
+// browser (table)
+	ypos += btns[0]->h() + 4;
+
+	wBrowser->color(progStatus.LOGBOOKcolor);
+	wBrowser->selection_color(FL_SELECTION_COLOR);
+	wBrowser->allowVscroll(always);
+	wBrowser->allowHscroll(never);
+
+	wBrowser->resize(wBrowser->x(), ypos, dlg_width - 2*wBrowser->x(), mainwindow->h() - 2 - ypos);
+
+	mainwindow->init_sizes();
+	mainwindow->damage();
+	mainwindow->redraw();
+
+}
+
+void setColorsFonts()
+{
+	if (!dlgColorFont) make_colorsfonts();
+	dlgColorFont->show();
+}
+
+//----------------------------------------------------------------------
 
 const char *server_addr = "127.0.0.1";
 
@@ -208,6 +389,10 @@ void exit_main(Fl_Widget *w)
 
 int main (int argc, char *argv[])
 {
+	Fl::visual(FL_RGB); // insure 24 bit color operation
+
+	Fl::set_fonts(0);
+
 	std::terminate_handler(fllog_terminate);
 
 	int arg_idx;
@@ -250,7 +435,8 @@ int main (int argc, char *argv[])
 
 	progStatus.loadLastState();
 
-	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
+	LOGBOOK_colors_font();
+//	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
 
 	mainwindow->xclass(KNAME);
 

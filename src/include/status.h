@@ -12,10 +12,16 @@ using namespace std;
 enum sorttype {NONE, SORTCALL, SORTDATE, SORTFREQ, SORTMODE};
 
 struct status {
-	int		mainX;
-	int		mainY;
-	int		mainW;
-	int		mainH;
+// dialog characteristics
+	int			mainX;
+	int			mainY;
+	int			mainW;
+	int			mainH;
+
+	int			LOGBOOKtextsize;
+	Fl_Font		LOGBOOKtextfont;
+	Fl_Color	LOGBOOKtextcolor;
+	Fl_Color	LOGBOOKcolor;
 
 // logbook entries
 	string logbookfilename;

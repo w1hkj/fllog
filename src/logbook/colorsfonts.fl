@@ -1,0 +1,122 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+i18n_type 1 
+i18n_include "gettext.h" 
+i18n_function _ 
+header_name {.h} 
+code_name {.cxx}
+decl {\#include <config.h>} {private global
+} 
+
+decl {\#include "fllog.h"} {private local
+} 
+
+decl {\#include "status.h"} {private global
+} 
+
+decl {\#include "font_browser.h"} {public global
+} 
+
+decl {\#include <FL/Fl_Color_Chooser.H>} {private local
+} 
+
+decl {\#include <FL/fl_show_colormap.H>} {private local
+} 
+
+Function {choose_color(Fl_Color & c)} {open private return_type void
+} {
+  code {unsigned char r, g, b;
+Fl::get_color(c, r, g, b);
+if (fl_color_chooser("Font color", r, g, b))
+    c = fl_rgb_color(r, g, b);} {}
+} 
+
+Function {cbLOGBOOKFontBrowser(Fl_Widget*, void*)} {open private return_type void
+} {
+  code {Fl_Font font = font_browser->fontNumber();
+    int size = font_browser->fontSize();
+    Fl_Color color = font_browser->fontColor();
+
+    progStatus.LOGBOOKtextfont = font;
+    progStatus.LOGBOOKtextsize = size;
+    progStatus.LOGBOOKtextcolor = color;
+
+    LOGBOOKdisplay->textsize(size);
+    LOGBOOKdisplay->textcolor(color);
+    LOGBOOKdisplay->textfont(font);
+    LOGBOOKdisplay->redraw();
+    
+    LOGBOOK_colors_font();
+
+    font_browser->hide();} {}
+} 
+
+Function {make_colorsfonts()} {open
+} {
+  code {font_browser = new Font_Browser;} {}
+  Fl_Window dlgColorFont {
+    label {Colors and Fonts} open
+    xywh {589 79 375 120} type Double
+    code0 {dlgColorFont->xclass(PACKAGE_TARNAME);} visible
+  } {
+    Fl_Button btnClrFntClose {
+      label Close
+      callback {o->window()->hide();}
+      xywh {292 84 75 25}
+    }
+    Fl_Group {} {
+      label {Logbook Dialog} open
+      xywh {1 7 370 65} box ENGRAVED_FRAME align 21
+    } {
+      Fl_Output LOGBOOKdisplay {selected
+        xywh {17 31 98 25}
+        code0 {o->textfont(progStatus.LOGBOOKtextfont);o->textsize(progStatus.LOGBOOKtextsize);o->textcolor(progStatus.LOGBOOKtextcolor);}
+        code1 {o->color(progStatus.LOGBOOKcolor);}
+        code2 {o->value("W3NR/4");}
+        code3 {o->redraw();}
+      }
+      Fl_Button btnLOGBOOK_color {
+        label {Bg Color}
+        callback {uchar r, g, b;
+    Fl::get_color(progStatus.LOGBOOKcolor, r, g, b);
+
+    if (!fl_color_chooser("Background", r, g, b))
+        return;
+
+    progStatus.LOGBOOKcolor = fl_rgb_color(r, g, b);
+    
+    LOGBOOKdisplay->color(progStatus.LOGBOOKcolor);
+    LOGBOOKdisplay->redraw();
+
+    LOGBOOK_colors_font();}
+        xywh {125 31 80 25}
+      }
+      Fl_Button btn_LOGBOOK_font {
+        label Font
+        callback {font_browser->fontNumber(progStatus.LOGBOOKtextfont);
+font_browser->fontSize(progStatus.LOGBOOKtextsize);
+font_browser->fontColor(progStatus.LOGBOOKtextcolor);
+font_browser->fontFilter(Font_Browser::ALL_TYPES);
+font_browser->callback(cbLOGBOOKFontBrowser);
+font_browser->show();}
+        xywh {215 31 55 25}
+      }
+      Fl_Button btnLOGBOOKdefault_colors_font {
+        label Default
+        callback {progStatus.LOGBOOKcolor = FL_BACKGROUND2_COLOR;
+progStatus.LOGBOOKtextfont = (Fl_Font)0;
+progStatus.LOGBOOKtextsize = 12;
+progStatus.LOGBOOKtextcolor = FL_BLACK;
+
+LOGBOOKdisplay->color(progStatus.LOGBOOKcolor);
+LOGBOOKdisplay->textsize(progStatus.LOGBOOKtextsize);
+LOGBOOKdisplay->textcolor(progStatus.LOGBOOKtextcolor);
+LOGBOOKdisplay->textfont(progStatus.LOGBOOKtextfont);
+LOGBOOKdisplay->redraw();
+    
+LOGBOOK_colors_font();}
+        xywh {281 31 80 25}
+      }
+    }
+  }
+} 

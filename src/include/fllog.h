@@ -33,4 +33,7 @@ extern std::string title;
 
 extern bool LOG_DEBUG;
 
+extern void LOGBOOK_colors_font();
+extern void setColorsFonts();
+
 #endif

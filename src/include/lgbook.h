@@ -7,35 +7,40 @@
 #include <FL/Fl_Double_Window.H>
 extern Fl_Double_Window *dlgLogbook;
 #include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Group.H>
-extern Fl_Group *editGroup;
+#include <FL/Fl_Output.H>
+extern Fl_Output *txtLogFile;
 #include "calendar.h"
 extern Fl_DateInput *inpDate_log;
 extern Fl_Input2 *inpTimeOn_log;
+extern Fl_Input2 *inpCall_log;
+extern Fl_Input2 *inpName_log;
+extern Fl_Input2 *inpRstR_log;
+extern Fl_DateInput *inpQSLrcvddate_log;
 extern Fl_DateInput *inpDateOff_log;
 extern Fl_Input2 *inpTimeOff_log;
-#include <FL/Fl_Input.H>
-extern Fl_Input *inpCall_log;
-extern Fl_Input2 *inpName_log;
 extern Fl_Input2 *inpFreq_log;
 extern Fl_Input2 *inpMode_log;
-extern Fl_Input2 *inpRstR_log;
-extern Fl_Input2 *inpRstS_log;
 extern Fl_Input2 *inpTX_pwr_log;
-extern Fl_DateInput *inpQSLrcvddate_log;
+extern Fl_Input2 *inpRstS_log;
 extern Fl_DateInput *inpQSLsentdate_log;
 extern Fl_Input2 *inpQth_log;
 extern Fl_Input2 *inpState_log;
 extern Fl_Input2 *inpVE_Prov_log;
 extern Fl_Input2 *inpCountry_log;
 extern Fl_Input2 *inpLoc_log;
+extern Fl_Input2 *inpNotes_log;
 extern Fl_Input2 *inpCNTY_log;
 extern Fl_Input2 *inpIOTA_log;
 extern Fl_Input2 *inpCQZ_log;
 extern Fl_Input2 *inpITUZ_log;
 extern Fl_Input2 *inpCONT_log;
 extern Fl_Input2 *inpDXCC_log;
-extern Fl_Input2 *inpNotes_log;
+extern Fl_Input2 *inpSerNoOut_log;
+extern Fl_Input2 *inpMyXchg_log;
+extern Fl_Input2 *inpSerNoIn_log;
+extern Fl_Input2 *inpXchgIn_log;
+extern Fl_Input2 *inpSearchString;
+extern Fl_Input2 *txtNbrRecs_log;
 #include <FL/Fl_Button.H>
 extern void cb_btnNewSave(Fl_Button*, void*);
 extern Fl_Button *bNewSave;
@@ -43,20 +48,13 @@ extern void cb_btnUpdateCancel(Fl_Button*, void*);
 extern Fl_Button *bUpdateCancel;
 extern void cb_btnDelete(Fl_Button*, void*);
 extern Fl_Button *bDelete;
-extern Fl_Input2 *txtNbrRecs_log;
-extern Fl_Input2 *inpSerNoOut_log;
-extern Fl_Input2 *inpMyXchg_log;
-extern Fl_Input2 *inpSerNoIn_log;
-extern Fl_Input2 *inpXchgIn_log;
-extern Fl_Input2 *inpSearchString;
 extern void cb_search(Fl_Button*, void*);
 extern Fl_Button *bSearchPrev;
 extern Fl_Button *bSearchNext;
 #include "table.h"
 extern Table *wBrowser;
-#include <FL/Fl_Output.H>
-extern Fl_Output *txtLogFile;
 extern Fl_Double_Window *wExport;
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;
 extern Fl_Button *btnClearAll;
@@ -134,4 +132,5 @@ extern Fl_Menu_Item menu_[];
 #define mnu_export_logbook_csv (menu_+7)
 #define mnu_export_cabrillo (menu_+8)
 #define mnu_exit (menu_+9)
+#define mnuColorsFonts (menu_+11)
 #endif

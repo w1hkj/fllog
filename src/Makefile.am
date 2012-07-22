@@ -11,7 +11,7 @@ fllog_LDADD = @FLLOG_BUILD_LDADD@
 MINGW32_SRC = \
 	fllog-rc.rc \
 	include/fllogrc.h \
-	mingw.c \
+	misc/mingw.c \
 	compat/regex.c \
 	include/compat.h
 
@@ -66,7 +66,7 @@ uninstall-local:
 	rm -f $(DESTDIR)/$(datadir)/pixmaps/fllog.xpm
 	rm -f $(DESTDIR)/$(datadir)/applications/fllog.desktop
 
-FLLOG_FL_SRC = logbook/lgbook.fl
+FLLOG_FL_SRC = logbook/lgbook.fl logbook/colorsfonts.fl
 
 if HAVE_FLUID
 flgen: $(FLLOG_FL_SRC)
@@ -116,29 +116,31 @@ clean-local:
 
 # Sources that we build. It is OK to have headers here.
 fllog_SOURCES += \
-	combo.cxx \
-	debug.cxx \
-	flslider2.cxx \
 	fllog.cxx \
-	status.cxx \
-	support.cxx \
-	util.cxx \
-	ValueSlider.cxx \
-	Fl_Native_File_Chooser.cxx \
-	flinput2.cxx \
-	pixmaps.cxx \
-	icons.cxx \
-	fileselect.cxx \
 	logbook/adif_io.cxx \
-	logbook/date.cxx \
+	logbook/colorsfonts.cxx \
 	logbook/logsupport.cxx \
-	logbook/table.cxx \
-	logbook/calendar.cxx \
 	logbook/lgbook.cxx \
 	logbook/logbook.cxx \
 	logbook/qso_db.cxx \
+	logbook/support.cxx \
 	logbook/textio.cxx \
-	re.cxx \
+	widgets/calendar.cxx \
+	widgets/combo.cxx \
+	widgets/date.cxx \
+	widgets/fileselect.cxx \
+	widgets/flinput2.cxx \
+	widgets/flslider2.cxx \
+	widgets/Fl_Native_File_Chooser.cxx \
+	widgets/icons.cxx \
+	widgets/pixmaps.cxx \
+	widgets/table.cxx \
+	widgets/ValueSlider.cxx \
+	misc/debug.cxx \
+	misc/font_browser.cxx \
+	misc/re.cxx \
+	misc/status.cxx \
+	misc/util.cxx \
 	xmlrpccpp/XmlRpcClient.cpp \
 	xmlrpccpp/XmlRpcServer.cpp \
 	xmlrpccpp/XmlRpcThread.cpp \
@@ -155,19 +157,22 @@ fllog_SOURCES += \
 # Additional source files that are distributed
 EXTRA_DIST = \
 	config.h \
-	flnfc_common.cxx \
 	compat/regex.c \
 	compat/regex.h \
-	Fl_Native_File_Chooser_FLTK.cxx \
-	Fl_Native_File_Chooser_MAC.cxx \
-	Fl_Native_File_Chooser_WIN32.cxx \
+	widgets/flnfc_common.cxx \
+	widgets/Fl_Native_File_Chooser_FLTK.cxx \
+	widgets/Fl_Native_File_Chooser_MAC.cxx \
+	widgets/Fl_Native_File_Chooser_WIN32.cxx \
 	fllog_icon.cxx \
 	logbook/lgbook.fl \
 	include/adif_def.h \
 	include/adif_io.h \
+	include/colorsfonts.h \
 	include/calendar.h \
 	include/date.h \
 	include/field_def.h \
+	include/font_browser.h \
+	include/fontdef.h \
 	include/lgbook.h \
 	include/log.h \
 	include/logbook.h \

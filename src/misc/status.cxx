@@ -22,11 +22,17 @@
 #include "logsupport.h"
 
 status progStatus = {
-	50,			// int mainX;
-	50,			// int mainY;
-	580,		// int mainW;
-	385,		// int mainH;
-	"",			// string	logbookfilename
+	50,						// int mainX;
+	50,						// int mainY;
+	580,					// int mainW;
+	385,					// int mainH;
+
+	14,						// text size
+	FL_HELVETICA,			// text font
+	FL_BLACK,				// text color
+	FL_BACKGROUND2_COLOR,	// text background
+
+	"",						// logbookfilename
 	SORTDATE,
 	true,
 	true,
@@ -54,6 +60,10 @@ void status::saveLastState()
 	spref.set("mainy", mY);
 	spref.set("mainw", mW);
 	spref.set("mainh", mH);
+	spref.set("textsize", LOGBOOKtextsize);
+	spref.set("textfont", (void *)&LOGBOOKtextfont, sizeof(Fl_Font));
+	spref.set("textcolor", (void *)&LOGBOOKtextcolor, sizeof(Fl_Color));
+	spref.set("bkcolor", (void *)&LOGBOOKcolor, sizeof(Fl_Color));
 	spref.set("logbook_filename", logbookfilename.c_str());
 	spref.set("lastsort", lastsort);
 	spref.set("callfwd", callfwd);
@@ -68,12 +78,24 @@ void status::loadLastState()
 	Fl_Preferences spref(LogHomeDir.c_str(), "w1hkj.com", PACKAGE_TARNAME);
 
 	if (spref.entryExists("version")) {
+		void *variable;
 		char defbuffer[200];
 		int i = lastsort;
 		spref.get("mainx", mainX, mainX);
 		spref.get("mainy", mainY, mainY);
 		spref.get("mainw", mainW, mainW);
 		spref.get("mainh", mainH, mainH);
+		spref.get("textsize", LOGBOOKtextsize, LOGBOOKtextsize);
+		spref.get("textfont", (void *&)variable, (void *)&LOGBOOKtextfont, sizeof(Fl_Font));
+		LOGBOOKtextfont = *(Fl_Font *)variable;
+		free(variable);
+		spref.get("textcolor", (void *&)variable, (void *)&LOGBOOKtextcolor, sizeof(Fl_Color));
+		LOGBOOKtextcolor = *(Fl_Color *)variable;
+		free(variable);
+		spref.get("bkcolor", (void *&)variable, (void *)&LOGBOOKcolor, sizeof(Fl_Color));
+		LOGBOOKcolor = *(Fl_Color *)variable;
+		free(variable);
+
 		spref.get("logbook_filename", defbuffer, logbookfilename.c_str(), 199); logbookfilename = defbuffer;
 		if (spref.get("lastsort", i, i)) lastsort = (sorttype) i;
 		if (spref.get("callfwd", i, i)) callfwd = i;
