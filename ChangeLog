@@ -1,10 +1,16 @@
 
 
+=Version 1.1.5=
+
+2012-08-04  David Freese  <w1hkj@w1hkj.com>
+
+	1b6ac7e: Main Dialog Size
+	c9c6aa8: License headers
+
+
 =Version 1.1.4=
 
-2012-07-22  David Freese  <w1hkj@w1hkj.com>
-
-	cb2f7df: Colors-fonts-resizing
+	16320f0: Colors-fonts-resizing
 
 
 =Version 1.1.3=
