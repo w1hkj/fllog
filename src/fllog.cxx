@@ -160,7 +160,16 @@ void LOGBOOK_colors_font()
 	
 	int newheight = 24 + 4*(wh + 20) + 3*wh + 4 + bNewSave->h() + 4 + wBrowser->h() + 2;
 
-	mainwindow->resize(mainwindow->x(), mainwindow->y(), dlg_width, newheight);
+	if (dlg_width > progStatus.mainW)
+		progStatus.mainW = dlg_width;
+	else
+		dlg_width = progStatus.mainW;
+	if (newheight > progStatus.mainH)
+		progStatus.mainH = newheight;
+	else
+		newheight = progStatus.mainH;
+	mainwindow->resize(progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
+//	mainwindow->resize(mainwindow->x(), mainwindow->y(), dlg_width, newheight);
 
 // row1
 	int ypos = inpDate_log->y();
@@ -460,7 +469,6 @@ int main (int argc, char *argv[])
 	progStatus.loadLastState();
 
 	LOGBOOK_colors_font();
-//	mainwindow->resize( progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
 
 	mainwindow->xclass(KNAME);
 
