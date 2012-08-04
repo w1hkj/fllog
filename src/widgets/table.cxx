@@ -1,5 +1,6 @@
 /*
  Copyright (c) 2004 Markus Niemistö
+          mods 2012 Dave Freese, W1HKJ
 
  Permission is hereby granted, free of charge, to any person
  obtaining a copy of this software and associated documentation

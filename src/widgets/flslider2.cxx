@@ -1,12 +1,11 @@
 // ----------------------------------------------------------------------------
 // flslider2.cxx
 //
-// Copyright (C) 2010
-//		Stelios Bounanos, M0GLD
+// Copyright (C) 2011
+//               Stelios Bounanos, M0GLD
+//               Dave Freese, W1HKJ
 //
-// This file is part of fldigi.
-//
-// Fldigi is free software: you can redistribute it and/or modify
+// This library is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.

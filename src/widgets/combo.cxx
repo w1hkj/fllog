@@ -1,12 +1,8 @@
 // ----------------------------------------------------------------------------
 //
-// Digital Modem Program for the Fast Light Toolkit
+// Copyright 2007-2012, Dave Freese, W1HKJ
 //
-// Copyright 2007-2008, Dave Freese, W1HKJ
-//
-// This file is part of fldigi.
-//
-// Fldigi is free software: you can redistribute it and/or modify
+// This is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
