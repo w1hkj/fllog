@@ -1,8 +1,14 @@
 
 
-=Version 1.1.5=
+=Version 1.1.6=
 
-2012-08-04  David Freese  <w1hkj@w1hkj.com>
+2013-01-06  David Freese  <w1hkj@w1hkj.com>
+
+	48ef102: fltk m4 script
+	91a7865: Combo update
+
+
+=Version 1.1.5=
 
 	1b6ac7e: Main Dialog Size
 	c9c6aa8: License headers
