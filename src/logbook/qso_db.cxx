@@ -35,6 +35,7 @@
 
 // following needed for localtime_r
 #include <pthread.h>
+#include "timeops.h"
 
 using namespace std;
 

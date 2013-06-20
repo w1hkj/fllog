@@ -1,15 +1,24 @@
 # build file to generate the distribution binary tarball
+myscripts/cleanup
 
-make clean
+autoreconf
+
 ./configure --prefix=/tmp/fllog-build --enable-static
 make install-strip
-tar czf fllog-$1.bin.tgz -C /tmp/fllog-build/bin fllog
+tar czf fllog-$1.bin.tgz -C /tmp/fllog-build .
 
 make clean
 
-./configure $CROSSCFG $PKGCFG FLTK_CONFIG=$PREFIX/bin/fltk-config --with-ptw32=$PREFIX/ptw32 XMLRPC_C_CONFIG=$PREFIX/bin/xmlrpc-c-config
+./configure \
+  $PKGCFG \
+  $CROSSCFG \
+  --with-ptw32=/opt/mxe/usr/i686-pc-mingw32 \
+  --enable-static \
+  PTW32_LIBS="-lpthread -lpcreposix -lpcre -lregex" \
+  FLTK_CONFIG=$PREFIX/bin/i686-pc-mingw32-fltk-config \
+
 make
-i586-mingw32msvc-strip src/fllog.exe
+$PREFIX/bin/i686-pc-mingw32-strip src/fllog.exe
 make nsisinst
 mv src/*setup*exe .
 

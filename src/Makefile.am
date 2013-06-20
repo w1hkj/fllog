@@ -140,6 +140,7 @@ fllog_SOURCES += \
 	misc/font_browser.cxx \
 	misc/re.cxx \
 	misc/status.cxx \
+	misc/timeops.cxx \
 	misc/util.cxx \
 	xmlrpccpp/XmlRpcClient.cpp \
 	xmlrpccpp/XmlRpcServer.cpp \
@@ -193,6 +194,7 @@ EXTRA_DIST = \
 	include/status.h \
 	include/support.h \
 	include/threads.h \
+	include/timeops.h \
 	include/re.h \
 	include/util.h \
 	include/ValueSlider.h \

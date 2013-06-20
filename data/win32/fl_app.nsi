@@ -104,7 +104,6 @@ Section "FLLOG"
 	SectionIn RO
 	SetOutPath $INSTDIR
 	File "${FLLOG_BINARY}"
-	File /nonfatal "${MINGWM_DLL}" "${PTW32_DLL}"
 SectionEnd
 
 # Start Menu path
@@ -115,8 +114,6 @@ SectionEnd
 Section "Start Menu Shortcuts"
     CreateDirectory "${SM_PATH}"
 	CreateShortCut "${SM_PATH}\${FLLOG_NAME}.lnk" "$INSTDIR\${FLLOG_BINARY}" "" "$INSTDIR\${FLLOG_BINARY}" 0
-#	CreateShortCut "${SM_PATH}\${FLLOG_NAME} Beginners' Guide.lnk" "${GUIDE_URL}"
-#	CreateShortCut "${SM_PATH}\${FLLOG_NAME} Documentation.lnk" "${FLLOG_DOCS_URL}"
     CreateShortCut "${SM_PATH}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
 SectionEnd
 
