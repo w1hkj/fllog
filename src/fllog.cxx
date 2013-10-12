@@ -135,14 +135,14 @@ void LOGBOOK_colors_font()
 	int width_loc  = fl_width("XX88XXX");
 	int width_mode = fl_width("CONTESTIA");
 
-	int dlg_width =	inpDate_log->x() + 
-					width_date + 2 + 
+	int dlg_width =	inpDate_log->x() +
+					width_date + 2 +
 					width_time + 2 +
-					width_freq + 2 + 
+					width_freq + 2 +
 					width_mode + 2 +
 					width_pwr + 2 +
-					width_rst + 2 +
-					width_date + 2;
+					width_rst + 2;
+//					+ width_date + 2;
 
 	if (progStatus.mainW > dlg_width) {
 		width_date = (int)(1.0 * width_date * progStatus.mainW / dlg_width);
@@ -154,10 +154,10 @@ void LOGBOOK_colors_font()
 		width_mode = (int)(1.0 * width_mode * progStatus.mainW / dlg_width);
 		width_freq = (progStatus.mainW -
 						width_date - width_time - width_mode -
-						width_pwr - width_rst - width_date - 14);
+						width_pwr - width_rst - 14);
 		dlg_width = progStatus.mainW;
 	}
-	
+
 	int newheight = 24 + 4*(wh + 20) + 3*wh + 4 + bNewSave->h() + 4 + wBrowser->h() + 2;
 
 	if (dlg_width > progStatus.mainW)
@@ -174,84 +174,113 @@ void LOGBOOK_colors_font()
 // row1
 	int ypos = inpDate_log->y();
 	int xpos = inpDate_log->x();
+	int xwidth = width_date;
 
-	date_font_pos(inpDate_log, xpos, ypos, width_date, wh); xpos += width_date + 2;
-	inp_font_pos(inpTimeOn_log, xpos, ypos, width_time, wh); xpos += width_time + 2;
+	date_font_pos(inpDate_log, xpos, ypos, xwidth, wh);
+
+	xpos += width_date + 2;
+	xwidth = width_time;
+	inp_font_pos(inpTimeOn_log, xpos, ypos, width_time, wh);
+
+	xpos += width_time + 2;
+	xwidth = width_freq;
 	inp_font_pos(inpCall_log, xpos, ypos, width_freq, wh);
 
-	date_font_pos(inpQSLrcvddate_log, 
-					dlg_width - 2 - width_date, ypos, width_date, wh);
-	inp_font_pos(inpRstR_log, 
-					inpQSLrcvddate_log->x() - 2 - width_rst, ypos, 
-					width_rst, wh);
-	inp_font_pos(inpName_log, 
-					inpCall_log->x() + width_freq + 2, ypos, 
-					inpRstR_log->x() - 2 - (inpCall_log->x() + width_freq + 2), wh);
+	xpos = dlg_width - 2 - width_rst;
+	xwidth = width_rst;
+	inp_font_pos(inpRstR_log, xpos, ypos, width_rst, wh);
+
+	xpos = inpCall_log->x() + width_freq + 2;
+	xwidth = inpRstR_log->x() - 2 - xpos;
+	inp_font_pos(inpName_log, xpos, ypos, xwidth, wh);
+
 // row2
 	ypos += wh + 20;
 	xpos = inpDateOff_log->x();
 
-	date_font_pos(inpDateOff_log, xpos, ypos, width_date, wh); xpos += width_date + 2;
-	inp_font_pos(inpTimeOff_log, xpos, ypos, width_time, wh); xpos += width_time + 2;
+	date_font_pos(inpDateOff_log, xpos, ypos, width_date, wh);
+
+	xpos += width_date + 2;
+	inp_font_pos(inpTimeOff_log, xpos, ypos, width_time, wh);
+
+	xpos += width_time + 2;
 	inp_font_pos(inpFreq_log, xpos, ypos, width_freq, wh);
 
-	date_font_pos(inpQSLsentdate_log, 
-					dlg_width - 2 - width_date, ypos, width_date, wh);
-	inp_font_pos(inpRstS_log, 
-					inpQSLsentdate_log->x() - 2 - width_rst, ypos, 
-					width_rst, wh);
-	inp_font_pos(inpTX_pwr_log, 
-					inpRstS_log->x() - 2 - width_pwr, ypos, 
-					width_pwr, wh);
-	inp_font_pos(inpMode_log, 
-					inpFreq_log->x() + width_freq + 2, ypos, 
-					inpTX_pwr_log->x() - 2 - (inpFreq_log->x() + width_freq + 2), wh);
+	xpos = dlg_width - 2 - width_rst;
+	inp_font_pos(inpRstS_log, xpos, ypos, width_rst, wh);
+
+	xpos = inpRstS_log->x() - 2 - width_pwr;
+	inp_font_pos(inpTX_pwr_log, xpos, ypos, width_pwr, wh);
+
+	xpos = inpFreq_log->x() + width_freq + 2;
+	xwidth = inpTX_pwr_log->x() - 2 - xpos;
+	inp_font_pos(inpMode_log, xpos, ypos, xwidth, wh);
+
 // row 3
-	ypos += (20 + wh);
-
-	inp_font_pos(inpLoc_log,
-					dlg_width - 2 - width_loc, ypos, width_loc, wh);
-	inp_font_pos(inpCountry_log,
-					inpLoc_log->x() - 2 - inpCountry_log->w(), ypos, inpCountry_log->w(), wh);
-	inp_font_pos(inpVE_Prov_log,
-					inpCountry_log->x() - 2 - inpVE_Prov_log->w(), ypos, inpVE_Prov_log->w(), wh);
-	inp_font_pos(inpState_log,
-					inpVE_Prov_log->x() - 2 - inpState_log->w(), ypos, inpState_log->w(), wh);
-	inp_font_pos(inpQth_log,
-					inpQth_log->x(), ypos, inpState_log->x() - 2 - inpQth_log->x(), wh);
-
-	ypos += (20 + wh);
-	Fl_Input2* row4[] = {
-		inpCNTY_log, inpIOTA_log, inpCQZ_log };
-	for (size_t i = 0; i < sizeof(row4)/sizeof(*row4); i++) {
-		inp_font_pos(row4[i], row4[i]->x(), ypos, row4[i]->w(), wh);
-	}
-
-	inp_font_pos(inpNotes_log, inpNotes_log->x(), ypos, inpNotes_log->w(), 3 * wh);
-
-	ypos = inpNotes_log->y() + inpNotes_log->h() - wh;
-	Fl_Input2* row5[] = {
-		inpITUZ_log, inpCONT_log, inpDXCC_log };
-	for (size_t i = 0; i < sizeof(row5)/sizeof(*row5); i++) {
-		inp_font_pos(row5[i], row5[i]->x(), ypos, row5[i]->w(), wh);
-	}
-
 	ypos += 20 + wh;
-	Fl_Input2* row6[] = {
-		inpSerNoOut_log, inpMyXchg_log, inpSerNoIn_log, inpXchgIn_log, inpSearchString };
-	for (size_t i = 0; i < sizeof(row6)/sizeof(*row6); i++) {
-		inp_font_pos(row6[i], row6[i]->x(), ypos, row6[i]->w(), wh);
-	}
+	xpos = dlg_width - 2 - width_loc;
+	inp_font_pos(inpLoc_log, xpos, ypos, width_loc, wh);
+
+	xpos = inpLoc_log->x() - 2 - inpCountry_log->w();
+	inp_font_pos(inpCountry_log, xpos, ypos, inpCountry_log->w(), wh);
+
+	xpos = inpCountry_log->x() - 2 - inpVE_Prov_log->w();
+	inp_font_pos(inpVE_Prov_log, xpos, ypos, inpVE_Prov_log->w(), wh);
+
+	xpos = inpVE_Prov_log->x() - 2 - inpState_log->w();
+	inp_font_pos(inpState_log, xpos, ypos, inpState_log->w(), wh);
+
+	xpos = inpQth_log->x();
+	xwidth = inpState_log->x() - 2 - inpQth_log->x();
+	inp_font_pos(inpQth_log, xpos, ypos, xwidth, wh);
 
 	ypos += wh + 4;
+	xpos = Tabs->x();
+	Tabs->resize(xpos, ypos, Tabs->w(), Tabs->h());
+
+	Fl_Input2* extras[] = {
+		inpCNTY_log, inpIOTA_log, inpCQZ_log, 
+		inpITUZ_log, inpCONT_log, inpDXCC_log,
+		inpSerNoOut_log, inpMyXchg_log, inpSerNoIn_log, 
+		inpXchgIn_log, inpSearchString 
+	};
+	for (size_t i = 0; i < sizeof(extras)/sizeof(*extras); i++) {
+		extras[i]->resize(extras[i]->x(), extras[i]->y(), extras[i]->w(), wh);
+	}
+	Fl_DateInput* dates[] = {
+		inpQSLrcvddate_log, inpEQSLrcvddate_log, inpLOTWrcvddate_log,
+		inpQSLsentdate_log, inpEQSLsentdate_log, inpLOTWsentdate_log,
+	};
+	for (size_t i = 0; i < sizeof(dates)/sizeof(*dates); i++) {
+		dates[i]->resize(dates[i]->x(), dates[i]->y(), dates[i]->w(), wh);
+	}
+	Fl_Choice* choices[] = {
+		statusQSLrcvd, statusEQSLrcvd, statusLOTWrcvd,
+		statusQSLsent, statusEQSLsent, statusLOTWsent
+	};
+	for (size_t i = 0; i < sizeof(choices)/sizeof(*choices); i++) {
+		choices[i]->resize(choices[i]->x(), choices[i]->y(), choices[i]->w(), wh);
+	}
+
+	int srchwidth = dlg_width - 8 - Tabs->w();
+	int srchx = dlg_width - srchwidth - 2;
+
 	txtNbrRecs_log->textcolor(progStatus.LOGBOOKtextcolor);
 	txtNbrRecs_log->color(progStatus.LOGBOOKcolor);
-	txtNbrRecs_log->resize(txtNbrRecs_log->x(), ypos, txtNbrRecs_log->w(), txtNbrRecs_log->h());
-	int ls = progStatus.LOGBOOKtextsize;
-	txtNbrRecs_log->labelsize(ls < 14 ? ls : 14);
-	txtNbrRecs_log->redraw_label();
 
-	Fl_Button* btns[] = { bNewSave, bUpdateCancel, bDelete, bSearchPrev, bSearchNext };
+	txtNbrRecs_log->resize(srchx, ypos + 22, srchwidth, wh);
+
+	int srchy = Tabs->y() + Tabs->h() - 2* wh - 2;
+	inp_font_pos(inpSearchString, srchx, srchy, srchwidth, wh);
+
+	int srchbtnwidth = (srchwidth - 2) / 2;
+	srchy += wh + 2;
+	bSearchPrev->resize( srchx, srchy, srchbtnwidth, wh);
+	bSearchNext->resize( srchx + 2 + srchbtnwidth, srchy, srchbtnwidth, wh);
+
+	ypos = Tabs->y() + Tabs->h() + 4;
+
+	Fl_Button* btns[] = { bNewSave, bUpdateCancel, bDelete };
 	for (size_t i = 0; i < sizeof(btns)/sizeof(*btns); i++) {
 		btns[i]->resize(btns[i]->x(), ypos, btns[i]->w(), btns[i]->h());
 		btns[i]->redraw();
@@ -505,7 +534,7 @@ int parse_args(int argc, char **argv, int& idx)
   --config-dir [pathname]\n\
   --debug\n");
 		exit(0);
-	} 
+	}
 	if (strcasecmp("--version", argv[1]) == 0) {
 		printf("Version: "VERSION"\n");
 		exit (0);

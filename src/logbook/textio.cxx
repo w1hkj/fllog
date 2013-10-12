@@ -87,6 +87,10 @@ void cTextFile::writeCSVHeader(FILE *txtFile)
 	if (btnSelectLOC->value())       fprintf (txtFile, "%s", ",\"GRIDSQUARE\"");
 	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%s", ",\"QSL_RCVD\"");
 	if (btnSelectQSLsent->value())   fprintf (txtFile, "%s", ",\"QSL_SENT\"");
+	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%s", ",\"EQSL_QSL_RCVD\"");
+	if (btnSelectQSLsent->value())   fprintf (txtFile, "%s", ",\"EQSL_QSL_SENT\"");
+	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%s", ",\"LOTW_QSL_RCVD\"");
+	if (btnSelectQSLsent->value())   fprintf (txtFile, "%s", ",\"LOTWQSL_SENT\"");
 	if (btnSelectNotes->value())     fprintf (txtFile, "%s", ",\"NOTES\"");
 	if (btnSelectSerialIN->value())  fprintf (txtFile, "%s", ",\"SERIAL RCVD\"");
 	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%s", ",\"SERIAL_SENT\"");
@@ -153,6 +157,14 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, ",\"%s\"", pRec->getField(QSLRDATE));
 				if (btnSelectQSLsent->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(QSLSDATE));
+				if (btnSelectQSLrcvd->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLRDATE));
+				if (btnSelectQSLsent->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLSDATE));
+				if (btnSelectQSLrcvd->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLRDATE));
+				if (btnSelectQSLsent->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLSDATE));
 				if (btnSelectNotes->value()) {
 					string temp = pRec->getField(NOTES);
 					for (size_t n = 0; n < temp.length(); n++)
@@ -190,7 +202,6 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectFreq->value())      fprintf (txtFile, "%-12s", "FREQ");
 	if (btnSelectMode->value())      fprintf (txtFile, "%-8s", "MODE");
 	if (btnSelectTX_pwr->value())    fprintf (txtFile, "%-8s", "TX_PWR");
-	
 	if (btnSelectRSTsent->value())   fprintf (txtFile, "%-6s", "RSTX");
 	if (btnSelectRSTrcvd->value())   fprintf (txtFile, "%-6s", "RSTR");
 	if (btnSelectQth->value())       fprintf (txtFile, "%-20s", "QTH");
@@ -203,9 +214,12 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectCONT->value())      fprintf (txtFile, "%-8s",  "CONT");
 	if (btnSelectITUZ->value())      fprintf (txtFile, "%-8s",  "ITUZ");
 	if (btnSelectLOC->value())       fprintf (txtFile, "%-15s", "GRIDSQUARE");
-
 	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%-10s", "QSLR");
 	if (btnSelectQSLsent->value())   fprintf (txtFile, "%-10s", "QSLS");
+	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%-10s", "EQSL_QSLR");
+	if (btnSelectQSLsent->value())   fprintf (txtFile, "%-10s", "EQSL_QSLS");
+	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%-10s", "LOTW_QSLR");
+	if (btnSelectQSLsent->value())   fprintf (txtFile, "%-10s", "LOTW_QSLS");
 	if (btnSelectNotes->value())     fprintf (txtFile, "%-80s", "NOTES");
 	if (btnSelectSerialIN->value())  fprintf (txtFile, "%-7s", "SRX");
 	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%-7s", "STX");
@@ -272,6 +286,14 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, "%-10s", pRec->getField(QSLRDATE));
 				if (btnSelectQSLsent->value())
 					fprintf (txtFile, "%-10s", pRec->getField(QSLSDATE));
+				if (btnSelectQSLrcvd->value())
+					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLRDATE));
+				if (btnSelectQSLsent->value())
+					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLSDATE));
+				if (btnSelectQSLrcvd->value())
+					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLRDATE));
+				if (btnSelectQSLsent->value())
+					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLSDATE));
 				if (btnSelectNotes->value()) {
 					string temp = pRec->getField(NOTES);
 				for (size_t n = 0; n < temp.length(); n++)

@@ -79,9 +79,21 @@ const char *fieldnames[] = {
 "PROP_MODE",
 "QSLRDATE",
 "QSLSDATE",
-"QSL_MSG",
 "QSL_RCVD",
 "QSL_SENT",
+"QSLRDATE",
+"QSLSDATE",
+"EQSL_QSL_RCVD",
+"EQSL_QSL_SENT",
+"EQSL_QSLRDATE",
+"EQSL_QSLSDATE",
+"EQSL_RCVD",
+"EQSL_SENT",
+"LOTW_QSLRDATE",
+"LOTW_QSLSDATE",
+"LOTW_QSL_RCVD",
+"LOTW_QSL_SENT",
+"QSL_MSG",
 "QSL_VIA",
 "QSO_DATE",
 "QSO_DATE_OFF",
@@ -132,9 +144,17 @@ PFX:            \
 PROP_MODE:      \
 QSLRDATE:       \
 QSLSDATE:       \
-QSL_MSG:        \
 QSL_RCVD:       \
 QSL_SENT:       \
+EQSL_QSLRDATE:  \
+EQSL_QSLSDATE:  \
+EQSL_RCVD:      \
+EQSL_SENT:      \
+LOTW_QSLRDATE:  \
+LOTW_QSLSDATE:  \
+LOTW_RCVD:      \
+LOTW_SENT:      \
+QSL_MSG:        \
 QSL_VIA:        \
 QSO_DATE:       \
 QSO_DATE_OFF:   \
@@ -182,9 +202,17 @@ FIELD fields[] = {
 	{PROP_MODE,      0,  NULL},                // propogation mode
 	{QSLRDATE,       0,  &btnSelectQSLrcvd},   // QSL received date
 	{QSLSDATE,       0,  &btnSelectQSLsent},   // QSL sent date
-	{QSL_MSG,        0,  NULL},                // personal message to appear on qsl card
 	{QSL_RCVD,       0,  NULL},                // QSL received status
 	{QSL_SENT,       0,  NULL},                // QSL sent status
+	{EQSL_QSLRDATE,  0,  NULL},                // EQSL received date
+	{EQSL_QSLSDATE,  0,  NULL},                // EQSL sent date
+	{EQSL_RCVD,      0,  NULL},                // EQSL received status
+	{EQSL_SENT,      0,  NULL},                // EQSL sent status
+	{LOTW_QSLRDATE,  0,  NULL},                // LOTW received date
+	{LOTW_QSLSDATE,  0,  NULL},                // LOTW sent date
+	{LOTW_RCVD,      0,  NULL},                // LOTW received status
+	{LOTW_SENT,      0,  NULL},                // LOTW sent status
+	{QSL_MSG,        0,  NULL},                // personal message to appear on qsl card
 	{QSL_VIA,        0,  NULL},
 	{QSO_DATE,       0,  &btnSelectQSOdateOn}, // QSO data
 	{QSO_DATE_OFF,   0,  &btnSelectQSOdateOff},// QSO data OFF, according to ADIF 2.2.6

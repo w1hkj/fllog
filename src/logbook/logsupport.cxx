@@ -183,50 +183,50 @@ char *szDate(int fmt)
 	switch (fmt & 0x7F) {
 		case 1 :
 			snprintf (szDt, sizeof(szDt), "%02d/%02d/%02d",
-				sTime.tm_mon + 1, 
-				sTime.tm_mday, 
+				sTime.tm_mon + 1,
+				sTime.tm_mday,
 				sTime.tm_year > 100 ? sTime.tm_year - 100 : sTime.tm_year);
 			break;
 		case 2 :
-			snprintf (szDt, sizeof(szDt), "%4d-%02d-%02d", 
+			snprintf (szDt, sizeof(szDt), "%4d-%02d-%02d",
 				sTime.tm_year + 1900,
-				sTime.tm_mon + 1, 
+				sTime.tm_mon + 1,
 				sTime.tm_mday);
 			break;
-		case 3 :  
+		case 3 :
 			snprintf (szDt, sizeof(szDt), "%s %2d, %4d",
-				month_name[sTime.tm_mon], 
-				sTime.tm_mday, 
+				month_name[sTime.tm_mon],
+				sTime.tm_mday,
 				sTime.tm_year + 1900);
 			break;
 		case 4 :
 			strcpy (szMonth, month_name [sTime.tm_mon]);
-			szMonth[3] = 0; 
-			snprintf (szDt, sizeof(szDt), "%s %2d, %4d", 
+			szMonth[3] = 0;
+			snprintf (szDt, sizeof(szDt), "%s %2d, %4d",
 				szMonth,
-				sTime.tm_mday, 
+				sTime.tm_mday,
 				sTime.tm_year + 1900);
 			break;
 		case 5 :
 			strcpy (szMonth, month_name [sTime.tm_mon]);
 			szMonth[3] = 0;
 			for (int i = 0; i < 3; i++) szMonth[i] = toupper(szMonth[i]);
-			snprintf (szDt, sizeof(szDt), "%s %d", 
-				szMonth, 
+			snprintf (szDt, sizeof(szDt), "%s %d",
+				szMonth,
 				sTime.tm_mday);
 			break;
 		case 6 :
-			snprintf (szDt, sizeof(szDt), "%4d%02d%02d", 
+			snprintf (szDt, sizeof(szDt), "%4d%02d%02d",
 				sTime.tm_year + 1900,
-				sTime.tm_mon + 1, 
+				sTime.tm_mon + 1,
 				sTime.tm_mday);
 			break;
 		case 0 :
 		default :
 			snprintf (szDt, sizeof(szDt), "%02d/%02d/%04d",
-				sTime.tm_mon + 1, 
+				sTime.tm_mon + 1,
 				sTime.tm_mday,
-				sTime.tm_year + 1900); 
+				sTime.tm_year + 1900);
 		break;
 	}
 	return szDt;
@@ -465,7 +465,7 @@ void cb_mnuShowLogbook()
 enum State {VIEWREC, NEWREC};
 static State logState = VIEWREC;
 
-void activateButtons() 
+void activateButtons()
 {
 	if (logState == NEWREC) {
 		bNewSave->label(_("Save"));
@@ -729,6 +729,17 @@ void clearRecord() {
 	inpLoc_log->value ("");
 	inpQSLrcvddate_log->value ("");
 	inpQSLsentdate_log->value ("");
+	statusQSLrcvd->value(1);
+	statusQSLsent->value(1);
+	inpEQSLrcvddate_log->value ("");
+	inpEQSLsentdate_log->value ("");
+	statusEQSLrcvd->value(1);
+	statusEQSLsent->value(1);
+	inpLOTWrcvddate_log->value ("");
+	inpLOTWsentdate_log->value ("");
+	statusLOTWrcvd->value(1);
+	statusLOTWsent->value(1);
+	statusQSLrcvd->value(1);
 	inpSerNoOut_log->value ("");
 	inpSerNoIn_log->value ("");
 	inpXchgIn_log->value("");
@@ -771,6 +782,13 @@ void saveRecord() {
 	rec.putField(NOTES, inpNotes_log->value());
 	rec.putField(QSLRDATE, inpQSLrcvddate_log->value());
 	rec.putField(QSLSDATE, inpQSLsentdate_log->value());
+
+	rec.putField(EQSL_QSLRDATE, inpEQSLrcvddate_log->value());
+	rec.putField(EQSL_QSLSDATE, inpEQSLsentdate_log->value());
+
+	rec.putField(LOTW_QSLRDATE, inpLOTWrcvddate_log->value());
+	rec.putField(LOTW_QSLSDATE, inpLOTWsentdate_log->value());
+
 	rec.putField(RST_RCVD, inpRstR_log->value ());
 	rec.putField(RST_SENT, inpRstS_log->value ());
 	rec.putField(SRX, inpSerNoIn_log->value());
@@ -808,6 +826,7 @@ void saveRecord() {
 
 void updateRecord() {
 cQsoRec rec;
+const char *sz_status[] = {"N", "Y", "R"};
 
 	if (qsodb.nbrRecs() == 0) return;
 	rec.putField(CALL, inpCall_log->value());
@@ -831,8 +850,28 @@ cQsoRec rec;
 	rec.putField(COUNTRY, inpCountry_log->value());
 	rec.putField(GRIDSQUARE, inpLoc_log->value());
 	rec.putField(NOTES, inpNotes_log->value());
+
 	rec.putField(QSLRDATE, inpQSLrcvddate_log->value());
 	rec.putField(QSLSDATE, inpQSLsentdate_log->value());
+	int cval = statusQSLrcvd->value();
+	rec.putField(QSL_RCVD, sz_status[cval]);
+	cval = statusQSLsent->value();
+	rec.putField(QSL_SENT, sz_status[cval]);
+
+	rec.putField(EQSL_QSLRDATE, inpEQSLrcvddate_log->value());
+	rec.putField(EQSL_QSLSDATE, inpEQSLsentdate_log->value());
+	cval = statusEQSLrcvd->value();
+	rec.putField(EQSL_RCVD, sz_status[cval]);
+	cval = statusEQSLsent->value();
+	rec.putField(EQSL_SENT, sz_status[cval]);
+
+	rec.putField(LOTW_QSLRDATE, inpLOTWrcvddate_log->value());
+	rec.putField(LOTW_QSLSDATE, inpLOTWsentdate_log->value());
+	cval = statusLOTWrcvd->value();
+	rec.putField(LOTW_RCVD, sz_status[cval]);
+	cval = statusLOTWsent->value();
+	rec.putField(LOTW_SENT, sz_status[cval]);
+
 	rec.putField(RST_RCVD, inpRstR_log->value ());
 	rec.putField(RST_SENT, inpRstS_log->value ());
 	rec.putField(SRX, inpSerNoIn_log->value());
@@ -912,6 +951,46 @@ void EditRecord( int i )
 	inpLoc_log->value (editQSO->getField(GRIDSQUARE));
 	inpQSLrcvddate_log->value (editQSO->getField(QSLRDATE));
 	inpQSLsentdate_log->value (editQSO->getField(QSLSDATE));
+	switch (editQSO->getField(QSL_RCVD)[0]) {
+		default :
+		case 'N' : statusQSLrcvd->value(0); break;
+		case 'Y' : statusQSLrcvd->value(1); break;
+		case 'R' : statusQSLrcvd->value(2); break;
+	}
+	switch (editQSO->getField(QSL_SENT)[0]) {
+		default :
+		case 'N' : statusQSLsent->value(0); break;
+		case 'Y' : statusQSLsent->value(1); break;
+		case 'R' : statusQSLsent->value(2); break;
+	}
+	inpEQSLrcvddate_log->value (editQSO->getField(EQSL_QSLRDATE));
+	inpEQSLsentdate_log->value (editQSO->getField(EQSL_QSLSDATE));
+	switch (editQSO->getField(EQSL_RCVD)[0]) {
+		default :
+		case 'N' : statusEQSLrcvd->value(0); break;
+		case 'Y' : statusEQSLrcvd->value(1); break;
+		case 'R' : statusEQSLrcvd->value(2); break;
+	}
+	switch (editQSO->getField(EQSL_SENT)[0]) {
+		default :
+		case 'N' : statusEQSLsent->value(0); break;
+		case 'Y' : statusEQSLsent->value(1); break;
+		case 'R' : statusEQSLsent->value(2); break;
+	}
+	inpLOTWrcvddate_log->value (editQSO->getField(LOTW_QSLRDATE));
+	inpLOTWsentdate_log->value (editQSO->getField(LOTW_QSLSDATE));
+	switch (editQSO->getField(LOTW_RCVD)[0]) {
+		default:
+		case 'N' : statusLOTWrcvd->value(0); break;
+		case 'Y' : statusLOTWrcvd->value(1); break;
+		case 'R' : statusLOTWrcvd->value(2); break;
+	}
+	switch (editQSO->getField(LOTW_SENT)[0]) {
+		default:
+		case 'N' : statusLOTWsent->value(0); break;
+		case 'Y' : statusLOTWsent->value(1); break;
+		case 'R' : statusLOTWsent->value(2); break;
+	}
 	inpNotes_log->value (editQSO->getField(NOTES));
 	inpSerNoIn_log->value(editQSO->getField(SRX));
 	inpSerNoOut_log->value(editQSO->getField(STX));
