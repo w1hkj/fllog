@@ -1,4 +1,13 @@
-2013-10-12  David Freese  <w1hkj@w1hkj.com>
+
+
+=Version 1.1.8=
+
+2014-02-04  David Freese  <w1hkj@w1hkj.com>
+
+	1acc45a: Write database
+
+
+=Version 1.1.7=
 
 	27e602c: QSL fields
 	47eb064: MXE build
