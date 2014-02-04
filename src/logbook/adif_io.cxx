@@ -81,10 +81,6 @@ const char *fieldnames[] = {
 "QSLSDATE",
 "QSL_RCVD",
 "QSL_SENT",
-"QSLRDATE",
-"QSLSDATE",
-"EQSL_QSL_RCVD",
-"EQSL_QSL_SENT",
 "EQSL_QSLRDATE",
 "EQSL_QSLSDATE",
 "EQSL_RCVD",
@@ -171,7 +167,7 @@ TIME_OFF:       \
 TIME_ON:        \
 TX_PWR:         \
 VE_PROV:        \
-XCHG1:           ";
+XCHG1:          ";
 
 FIELD fields[] = {
 //  TYPE, NAME, WIDGET
