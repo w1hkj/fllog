@@ -1,0 +1,290 @@
+/******************************************************************************
+ * Copyright (C) 2014 Robert Stiles, KK5VD.
+ *
+ * Permission to use, copy, modify, and distribute this software and its
+ * documentation under the terms of the GNU General Public License is hereby
+ * granted. No representations are made about the suitability of this software
+ * for any purpose. It is provided "as is" without express or implied warranty.
+ * See the GNU General Public License for more details.
+ *
+ * Documents produced by Doxygen are derivative works derived from the
+ * input used in their production; they are not affected by this license.
+ *
+ * Requires Doxygen for HTML output
+ * plus LiveTeX (LaTeX) for PDF output
+ *
+ */
+
+
+/*!
+
+\mainpage FLLog Users Manual - Version 1.1
+
+\tableofcontents
+
+<center>
+\image latex flloglogo.eps "" width=0.5in
+\image html flloglogo.png ""
+</center>
+
+<!--FLKEY User Manual-->
+\section sFllogDesc Logbook Server
+
+The logbook server maintains a large set of QSO logbook fields that will
+probably be sufficient for casual operating, contesting and some certificate
+logging.  All of the fields that are captured in the logbook are maintained
+in an ADIF database that can be read by any logbook program that can read the
+ADIF text format.  The server can open any logbook adif file, including those
+created by fldigi.  You should NOT open an adif logbook file by more than one
+program at a time.  The database uses "flat files" and simultaneous use by
+more than a single program may corrupt the file.
+
+The complete set of logbook fields are:
+<center>
+
+| ADIF FIELD        |  USE                                            |
+|:-----------------:|:----------------------------------------------- |
+| BAND              | QSO band (computed from frequency)              |
+| <b>CALL</b>       | contacted stations call sign                    |
+| CNTY              | county                                          |
+| <b>COMMENT</b>    | comment field for QSO                           |
+| <b>COUNTRY</b>    | contacted stations DXCC entity name             |
+| CQZ               | CQ zone                                         |
+| DXCC              | contacted stations DXCC country code            |
+| <b>FREQ</b>       | QSO frequency in MHz                            |
+| <b>GRIDSQUARE</b> | contacted stations Maidenhead Grid Square (Loc) |
+| IOTA              | Islands On The Air                              |
+| IOTA              | Islands-On-The-Air designator                   |
+| ITUZ              | ITU zone                                        |
+| MODE              | QSO mode                                        |
+| MYXCHG            | sent contest exchange                           |
+| <b>NAME</b>       | contacted operators name                        |
+| QSLRDATE          | QSL received date                               |
+| QSLSDATE          | QSL sent date                                   |
+| QSLSDATE          | QSL sent date                                   |
+| <b>QSO_DATE</b>   | QSO data at start of contact                    |
+| <b>QTH</b>        | contacted stations city                         |
+| <b>RST_RCVD</b>   | received signal report                          |
+| <b>RST_SENT</b>   | sent signal report                              |
+| <b>SRX</b>        | QSO received serial number                      |
+| <b>STATE</b>      | contacted stations state                        |
+| <b>STX</b>        | QSO transmitted serial number                   |
+| <b>TIME_OFF</b>   | end time of QSO in HHMM format                  |
+| <b>TIME_ON</b>    | start time of QSO in HHMM format                |
+| <b>TX_PWR</b>     | power transmitted by this station               |
+| <b>VE_PROV</b>    | 2 letter abbreviation for Canadian Province     |
+| <b>XCHG1</b>      | received contest exchange                       |
+
+<br>
+</center>
+
+These fields (<b>BOLD</b>) are sent to fllog by the client program, which
+may be fldigi.
+
+The data in the fllog logbook can be exported to external text files; ADIF,
+text, and CSV (comma separated value).   The ADIF can be read by any ADIF
+compatible logbook program.  The text output is suitable for use in a
+wordprocessor and for printing.  The CSV can be read into many spreadsheet
+programs such as Excel, Open Office or Gnumeric.
+
+Fllog will respond to a both duplicate and last contact queries from the
+client program
+
+If you have previously worked a station the logbook will be searched for
+the most recent qso and fill the Name, Qth and other fields from the
+logbook.  This data is then passed back to the client program.
+
+You open the logbook by selecting from the View menu; View/Logbook.
+The logbook title bar will show you which logbook you currently have open.
+FLlogi can maintain an unlimited (except for disk space) number of logbooks.
+
+The full pathname of the open log file will appear in the File: control.
+The file name will be on the title bar.
+
+<center>
+\image latex logbook.eps "Logbook Server" width=5.5in
+\image html logbook.png "Logbook Server"
+</center>
+
+You can resize the dialog to suit your screen size and operating needs.
+FLlog will remember the placement and size for subsequent use.
+
+You can create new entries, update existing entries, and delete entries
+using this dialog.  You can also search for an entry by callsign.  The
+browser can be sorted by Date, Callsign, Frequency or Mode.  The sort can
+be forward or backward with the most recent being the default selected
+entry after each sort.  You execute the sort by clicking on the column
+button at the top of the column to be sorted.  Each click causes the sort
+to reverse.  I like to view my log with the most recent at the top.  You
+might want to view it with the most recent on the bottom.
+
+There are no frills such as keeping track of DXCC worked, fancy printouts
+etc.  FLlog's logbook is primarily a capture function.  You can export
+your data for use with an external database or for uploading to LOTW or
+eQSL.  Data from those sources can also be used for importing into the
+logbook.
+
+\ref sFllogDesc "Top of Page"
+
+\section sLogExport Exporting Logbook Data
+
+
+The user may export all or selected records consisting of all or selected
+fields.  Access to this export function of available from the menu
+"File/Log/Export ADIF", "File/Log/Export Text", and
+"File/Log/Export CSV".
+
+\subsection ssExportADIF Export ADIF
+
+Selecting the Export ADIF menu item opens the following dialog:
+
+<center>
+\image latex export-setup.eps "Export Setup" width=5.5in
+\image html export-setup.png "Export Setup"
+</center>
+<br>
+
+If you want to export every record press the "Check All" in the left panel.
+You can also select and deselect individual records.  Choose which fields
+you want to export with the right panel controls.  Press the OK button to
+continue or Cancel to abort the operation.  A file chooser dialog will open
+which allows you to specify the name and location of the exported file.  Use
+the extension ".adi" on Windows and ".adif" on the other OS'.
+
+\subsection ssExportTextCSV Export Text / CSV
+
+The same Export Setup dialog is used for Text and CSV exports.
+
+The Text export produces a simple space delimited file with columns set at
+locations dictated by the field size for each field that is exported.  It is
+suitable for use with a word processing program or for printing a hardcopy
+of your activities.
+
+The CSV is a "Character Separated Value" file with the TAB character used as
+the field separator.  This type of file can be imported into nearly all
+spreadsheet programs such as Gnumeric, Open Office or MS Excel.
+
+\ref sFllogDesc "Top of Page"
+
+\section sCabrilloReport Creating a Cabrillo Report
+
+<center>
+\image latex cabrillo-setup.eps "Cabrillo Setup" width=5.5in
+\image html cabrillo-setup.png "Cabrillo Setup"
+</center>
+<br>
+
+If you want to export every record press the "Check All" in the left panel.
+
+Select the Contest type from the pull down menu in the right panel.  FLlog
+knows how to format the various fields for each contest.  When satisfied
+with the setup press OK.  You will then have the opportunity to specify the
+location and name of the cabrillo output file.
+
+You should be careful not to duplicate the data in the Cabrillo report.
+
+For example:
+
+You captured outgoing exchange data in fldigi as 
+\verbatim
+<XBEG><RST> <CNTR><XEND>
+\endverbatim
+Do not enable the "RST sent" and "Serial # out" check boxes as this info is 
+already contained in the "Exchange in" field.
+
+You captured incoming exchange data into the Exch field as RST SER# TIME.
+Do not enable the "RST rcvd" or the "Serial # in" check boxes.
+
+You must then open the file with a plain text editor and modify the
+appropriate entries.  Check with each contest sponsor to see what their
+requirements are.
+
+Here is an example of a generated Cabrillo report format before being edited:
+
+\verbatim
+
+START-OF-LOG: 3.0
+CREATED-BY: fldigi 3.11
+
+# The callsign used during the contest.
+CALLSIGN: W1HKJ
+
+# ASSISTED or NON-ASSISTED
+CATEGORY-ASSISTED:
+
+# Band: ALL, 160M, 80M, 40M, 20M, 15M, 10M, 6M, 2M, 222, 432, 902, 1.2G
+CATEGORY-BAND:
+
+# Mode: SSB, CW, RTTY, MIXED
+CATEGORY-MODE:
+
+# Operator: SINGLE-OP, MULTI-OP, CHECKLOG
+CATEGORY-OPERATOR:
+
+# Power: HIGH, LOW, QRP
+CATEGORY-POWER:
+
+# Station: FIXED, MOBILE, PORTABLE, ROVER, EXPEDITION, HQ, SCHOOL
+CATEGORY-STATION:
+
+# Time: 6-HOURS, 12-HOURS, 24-HOURS
+CATEGORY-TIME:
+
+# Transmitter: ONE, TWO, LIMITED, UNLIMITED, SWL
+CATEGORY-TRANSMITTER:
+
+# Overlay: ROOKIE, TB-WIRES, NOVICE-TECH, OVER-50
+CATEGORY-OVERLAY:
+
+# Integer number
+CLAIMED-SCORE:
+
+# Name of the radio club with which the score should be aggregated.
+CLUB:
+
+# Contest: AP-SPRINT, ARRL-10, ARRL-160, ARRL-DX-CW, ARRL-DX-SSB, ARRL-SS-CW,
+# ARRL-SS-SSB, ARRL-UHF-AUG, ARRL-VHF-JAN, ARRL-VHF-JUN, ARRL-VHF-SEP,
+# ARRL-RTTY, BARTG-RTTY, CQ-160-CW, CQ-160-SSB, CQ-WPX-CW, CQ-WPX-RTTY,
+# CQ-WPX-SSB, CQ-VHF, CQ-WW-CW, CQ-WW-RTTY, CQ-WW-SSB, DARC-WAEDC-CW,
+# DARC-WAEDC-RTTY, DARC-WAEDC-SSB, FCG-FQP, IARU-HF, JIDX-CW, JIDX-SSB,
+# NAQP-CW, NAQP-RTTY, NAQP-SSB, NA-SPRINT-CW, NA-SPRINT-SSB, NCCC-CQP,
+# NEQP, OCEANIA-DX-CW, OCEANIA-DX-SSB, RDXC, RSGB-IOTA, SAC-CW, SAC-SSB,
+# STEW-PERRY, TARA-RTTY
+CONTEST: ARRL-RTTY
+
+# Optional email address
+EMAIL:
+
+LOCATION:
+
+# Operator name
+NAME:
+
+# Maximum 4 address lines.
+ADDRESS:
+ADDRESS:
+ADDRESS:
+ADDRESS:
+
+# A space-delimited list of operator callsign(s).
+OPERATORS:
+
+# Offtime yyyy-mm-dd nnnn yyyy-mm-dd nnnn
+# OFFTIME:
+
+# Soapbox comments.
+SOAPBOX:
+SOAPBOX:
+SOAPBOX:
+
+QSO: 14095 RY 2009-01-04 1952 W1HKJ         599 GA 12345   ND2T          599 CA 67890
+QSO: 14098 RY 2009-01-04 1949 W1HKJ         599 GA         W0SD          599 SD
+QSO: 14099 RY 2009-01-04 1948 W1HKJ         599 1234567890 KB7Q          599 1234567890
+QSO: 14100 RY 2009-01-04 1948 W1HKJ         599 GA         N6WS          599 CA
+QSO: 14103 RY 2009-01-04 1946 W1HKJ         599 GA         VE6AO         599 AB
+END-OF-LOG:
+
+\endverbatim
+
+\ref sFllogDesc "Top of Page"
+*/
