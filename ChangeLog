@@ -1,8 +1,21 @@
 
 
-=Version 1.1.8=
+=Version 1.1.9=
 
-2014-02-04  David Freese  <w1hkj@w1hkj.com>
+2014-11-14  David Freese  <iam_w1hkj@w1hkj.com>
+
+	792f006: fltk 1.3.3
+
+2014-09-07  w1hkj.mint  <w1hkj.mint@bellsouth.net>
+
+	6600b5a: build fix
+
+2014-06-11  David Freese  <w1hkj@w1hkj.com>
+
+	d47eef4: doxygen docs
+
+
+=Version 1.1.8=
 
 	1acc45a: Write database
 
