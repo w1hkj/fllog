@@ -7,8 +7,6 @@
 #include <FL/Fl_Double_Window.H>
 extern Fl_Double_Window *dlgLogbook;
 #include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Output.H>
-extern Fl_Output *txtLogFile;
 #include "calendar.h"
 extern Fl_DateInput *inpDate_log;
 extern Fl_Input2 *inpTimeOn_log;
@@ -29,12 +27,6 @@ extern Fl_Input2 *inpLoc_log;
 extern Fl_Input2 *txtNbrRecs_log;
 extern Fl_Input2 *inpSearchString;
 #include <FL/Fl_Button.H>
-extern void cb_btnNewSave(Fl_Button*, void*);
-extern Fl_Button *bNewSave;
-extern void cb_btnUpdateCancel(Fl_Button*, void*);
-extern Fl_Button *bUpdateCancel;
-extern void cb_btnDelete(Fl_Button*, void*);
-extern Fl_Button *bDelete;
 extern void cb_search(Fl_Button*, void*);
 extern Fl_Button *bSearchPrev;
 extern Fl_Button *bSearchNext;
@@ -71,6 +63,14 @@ extern Fl_Input2 *inpITUZ_log;
 extern Fl_Input2 *inpDXCC_log;
 extern Fl_Group *tab_log_notes;
 extern Fl_Input2 *inpNotes_log;
+#include <FL/Fl_Output.H>
+extern Fl_Output *txtLogFile;
+extern void cb_btnNewSave(Fl_Button*, void*);
+extern Fl_Button *bNewSave;
+extern void cb_btnUpdateCancel(Fl_Button*, void*);
+extern Fl_Button *bUpdateCancel;
+extern void cb_btnDelete(Fl_Button*, void*);
+extern Fl_Button *bDelete;
 extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;

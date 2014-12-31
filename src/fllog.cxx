@@ -280,6 +280,8 @@ void LOGBOOK_colors_font()
 
 	ypos = Tabs->y() + Tabs->h() + 4;
 
+	txtLogFile->resize(txtLogFile->x(), ypos, txtLogFile->w(), txtLogFile->h());
+
 	Fl_Button* btns[] = { bNewSave, bUpdateCancel, bDelete };
 	for (size_t i = 0; i < sizeof(btns)/sizeof(*btns); i++) {
 		btns[i]->resize(btns[i]->x(), ypos, btns[i]->w(), btns[i]->h());

@@ -80,8 +80,6 @@ Fl_Menu_Item menu_[] = {
  {0,0,0,0,0,0,0,0,0}
 };
 
-Fl_Output *txtLogFile=(Fl_Output *)0;
-
 Fl_DateInput *inpDate_log=(Fl_DateInput *)0;
 
 Fl_Input2 *inpTimeOn_log=(Fl_Input2 *)0;
@@ -117,12 +115,6 @@ Fl_Input2 *inpLoc_log=(Fl_Input2 *)0;
 Fl_Input2 *txtNbrRecs_log=(Fl_Input2 *)0;
 
 Fl_Input2 *inpSearchString=(Fl_Input2 *)0;
-
-Fl_Button *bNewSave=(Fl_Button *)0;
-
-Fl_Button *bUpdateCancel=(Fl_Button *)0;
-
-Fl_Button *bDelete=(Fl_Button *)0;
 
 Fl_Button *bSearchPrev=(Fl_Button *)0;
 
@@ -185,6 +177,14 @@ Fl_Input2 *inpDXCC_log=(Fl_Input2 *)0;
 Fl_Group *tab_log_notes=(Fl_Group *)0;
 
 Fl_Input2 *inpNotes_log=(Fl_Input2 *)0;
+
+Fl_Output *txtLogFile=(Fl_Output *)0;
+
+Fl_Button *bNewSave=(Fl_Button *)0;
+
+Fl_Button *bUpdateCancel=(Fl_Button *)0;
+
+Fl_Button *bDelete=(Fl_Button *)0;
 
 Fl_Double_Window *wExport=(Fl_Double_Window *)0;
 
@@ -471,9 +471,9 @@ btnCabRSTrcvd->value(1);
 }
 
 void create_logbook_dialogs() {
-  { dlgLogbook = new Fl_Double_Window(590, 515, _("Logbook"));
+  { dlgLogbook = new Fl_Double_Window(590, 500, _("Logbook"));
     dlgLogbook->color(FL_DARK1);
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(2, 0, 165, 24);
+    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 590, 24);
       if (!menu__i18n_done) {
         int i=0;
         for ( ; i<15; i++)
@@ -483,10 +483,7 @@ void create_logbook_dialogs() {
       }
       o->menu(menu_);
     } // Fl_Menu_Bar* o
-    { txtLogFile = new Fl_Output(206, 0, 379, 24, _("File:"));
-      txtLogFile->color(FL_LIGHT3);
-    } // Fl_Output* txtLogFile
-    { inpDate_log = new Fl_DateInput(4, 42, 100, 24, _("Date On"));
+    { inpDate_log = new Fl_DateInput(5, 45, 100, 24, _("Date On"));
       inpDate_log->tooltip(_("Date QSO started"));
       inpDate_log->box(FL_DOWN_BOX);
       inpDate_log->color(FL_BACKGROUND2_COLOR);
@@ -499,7 +496,7 @@ void create_logbook_dialogs() {
       inpDate_log->when(FL_WHEN_RELEASE);
       inpDate_log->format(2);
     } // Fl_DateInput* inpDate_log
-    { inpTimeOn_log = new Fl_Input2(106, 42, 70, 24, _("Time On"));
+    { inpTimeOn_log = new Fl_Input2(107, 45, 70, 24, _("Time On"));
       inpTimeOn_log->tooltip(_("Time QSO started"));
       inpTimeOn_log->box(FL_DOWN_BOX);
       inpTimeOn_log->color(FL_BACKGROUND2_COLOR);
@@ -511,7 +508,7 @@ void create_logbook_dialogs() {
       inpTimeOn_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpTimeOn_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpTimeOn_log
-    { inpCall_log = new Fl_Input2(178, 42, 152, 24, _("Call"));
+    { inpCall_log = new Fl_Input2(179, 45, 152, 24, _("Call"));
       inpCall_log->tooltip(_("Call sign worked"));
       inpCall_log->box(FL_DOWN_BOX);
       inpCall_log->color(FL_BACKGROUND2_COLOR);
@@ -523,7 +520,7 @@ void create_logbook_dialogs() {
       inpCall_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpCall_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpCall_log
-    { inpName_log = new Fl_Input2(334, 42, 212, 24, _("Name"));
+    { inpName_log = new Fl_Input2(335, 45, 212, 24, _("Name"));
       inpName_log->tooltip(_("Operator worked"));
       inpName_log->box(FL_DOWN_BOX);
       inpName_log->color(FL_BACKGROUND2_COLOR);
@@ -535,7 +532,7 @@ void create_logbook_dialogs() {
       inpName_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpName_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpName_log
-    { inpRstR_log = new Fl_Input2(550, 42, 36, 24, _("In"));
+    { inpRstR_log = new Fl_Input2(550, 45, 36, 24, _("In"));
       inpRstR_log->tooltip(_("Rst received"));
       inpRstR_log->box(FL_DOWN_BOX);
       inpRstR_log->color(FL_BACKGROUND2_COLOR);
@@ -547,7 +544,7 @@ void create_logbook_dialogs() {
       inpRstR_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpRstR_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpRstR_log
-    { inpDateOff_log = new Fl_DateInput(4, 86, 100, 24, _("Date Off"));
+    { inpDateOff_log = new Fl_DateInput(5, 87, 100, 24, _("Date Off"));
       inpDateOff_log->tooltip(_("Date QSO Ended"));
       inpDateOff_log->box(FL_DOWN_BOX);
       inpDateOff_log->color(FL_BACKGROUND2_COLOR);
@@ -560,7 +557,7 @@ void create_logbook_dialogs() {
       inpDateOff_log->when(FL_WHEN_RELEASE);
       inpDateOff_log->format(2);
     } // Fl_DateInput* inpDateOff_log
-    { inpTimeOff_log = new Fl_Input2(106, 86, 70, 24, _("Time Off"));
+    { inpTimeOff_log = new Fl_Input2(107, 87, 70, 24, _("Time Off"));
       inpTimeOff_log->tooltip(_("Time QSO ended"));
       inpTimeOff_log->box(FL_DOWN_BOX);
       inpTimeOff_log->color(FL_BACKGROUND2_COLOR);
@@ -572,7 +569,7 @@ void create_logbook_dialogs() {
       inpTimeOff_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpTimeOff_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpTimeOff_log
-    { inpFreq_log = new Fl_Input2(178, 86, 152, 24, _("Freq."));
+    { inpFreq_log = new Fl_Input2(179, 87, 152, 24, _("Freq."));
       inpFreq_log->tooltip(_("Frequency in MHz"));
       inpFreq_log->box(FL_DOWN_BOX);
       inpFreq_log->color(FL_BACKGROUND2_COLOR);
@@ -584,7 +581,7 @@ void create_logbook_dialogs() {
       inpFreq_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpFreq_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpFreq_log
-    { inpMode_log = new Fl_Input2(334, 86, 158, 24, _("Mode"));
+    { inpMode_log = new Fl_Input2(335, 87, 158, 24, _("Mode"));
       inpMode_log->tooltip(_("Mode in use"));
       inpMode_log->box(FL_DOWN_BOX);
       inpMode_log->color(FL_BACKGROUND2_COLOR);
@@ -596,7 +593,7 @@ void create_logbook_dialogs() {
       inpMode_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpMode_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpMode_log
-    { inpTX_pwr_log = new Fl_Input2(496, 86, 50, 24, _("Pwr"));
+    { inpTX_pwr_log = new Fl_Input2(497, 87, 50, 24, _("Pwr"));
       inpTX_pwr_log->tooltip(_("Transmit power used"));
       inpTX_pwr_log->box(FL_DOWN_BOX);
       inpTX_pwr_log->color(FL_BACKGROUND2_COLOR);
@@ -608,7 +605,7 @@ void create_logbook_dialogs() {
       inpTX_pwr_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpTX_pwr_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpTX_pwr_log
-    { inpRstS_log = new Fl_Input2(550, 86, 36, 24, _("Out"));
+    { inpRstS_log = new Fl_Input2(551, 87, 36, 24, _("Out"));
       inpRstS_log->tooltip(_("Rst sent"));
       inpRstS_log->box(FL_DOWN_BOX);
       inpRstS_log->color(FL_BACKGROUND2_COLOR);
@@ -620,7 +617,7 @@ void create_logbook_dialogs() {
       inpRstS_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpRstS_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpRstS_log
-    { inpQth_log = new Fl_Input2(4, 130, 232, 24, _("Qth"));
+    { inpQth_log = new Fl_Input2(5, 129, 232, 24, _("Qth"));
       inpQth_log->tooltip(_("City of station worked"));
       inpQth_log->box(FL_DOWN_BOX);
       inpQth_log->color(FL_BACKGROUND2_COLOR);
@@ -632,7 +629,7 @@ void create_logbook_dialogs() {
       inpQth_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpQth_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpQth_log
-    { inpState_log = new Fl_Input2(240, 130, 44, 24, _("St"));
+    { inpState_log = new Fl_Input2(241, 129, 44, 24, _("St"));
       inpState_log->tooltip(_("US state of station worked"));
       inpState_log->box(FL_DOWN_BOX);
       inpState_log->color(FL_BACKGROUND2_COLOR);
@@ -644,7 +641,7 @@ void create_logbook_dialogs() {
       inpState_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpState_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpState_log
-    { inpVE_Prov_log = new Fl_Input2(287, 130, 44, 24, _("Pr"));
+    { inpVE_Prov_log = new Fl_Input2(288, 129, 44, 24, _("Pr"));
       inpVE_Prov_log->tooltip(_("Province of station worked"));
       inpVE_Prov_log->box(FL_DOWN_BOX);
       inpVE_Prov_log->color(FL_BACKGROUND2_COLOR);
@@ -656,7 +653,7 @@ void create_logbook_dialogs() {
       inpVE_Prov_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpVE_Prov_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpVE_Prov_log
-    { inpCountry_log = new Fl_Input2(334, 130, 166, 24, _("Country"));
+    { inpCountry_log = new Fl_Input2(335, 129, 166, 24, _("Country"));
       inpCountry_log->tooltip(_("Country of station worked"));
       inpCountry_log->box(FL_DOWN_BOX);
       inpCountry_log->color(FL_BACKGROUND2_COLOR);
@@ -668,7 +665,7 @@ void create_logbook_dialogs() {
       inpCountry_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpCountry_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpCountry_log
-    { inpLoc_log = new Fl_Input2(506, 130, 80, 24, _("Loc"));
+    { inpLoc_log = new Fl_Input2(507, 129, 80, 24, _("Loc"));
       inpLoc_log->tooltip(_("Stations grid square"));
       inpLoc_log->box(FL_DOWN_BOX);
       inpLoc_log->color(FL_BACKGROUND2_COLOR);
@@ -680,7 +677,7 @@ void create_logbook_dialogs() {
       inpLoc_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpLoc_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpLoc_log
-    { txtNbrRecs_log = new Fl_Input2(481, 178, 105, 24, _("# Records"));
+    { txtNbrRecs_log = new Fl_Input2(482, 175, 105, 24, _("# Records"));
       txtNbrRecs_log->tooltip(_("# Records in logbook"));
       txtNbrRecs_log->box(FL_DOWN_BOX);
       txtNbrRecs_log->color(FL_BACKGROUND2_COLOR);
@@ -692,7 +689,7 @@ void create_logbook_dialogs() {
       txtNbrRecs_log->align(Fl_Align(FL_ALIGN_TOP));
       txtNbrRecs_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* txtNbrRecs_log
-    { inpSearchString = new Fl_Input2(481, 241, 105, 24, _("Call Search"));
+    { inpSearchString = new Fl_Input2(482, 219, 105, 24, _("Call Search"));
       inpSearchString->tooltip(_("Search for this callsign"));
       inpSearchString->box(FL_DOWN_BOX);
       inpSearchString->color(FL_BACKGROUND2_COLOR);
@@ -704,28 +701,7 @@ void create_logbook_dialogs() {
       inpSearchString->align(Fl_Align(FL_ALIGN_TOP));
       inpSearchString->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpSearchString
-    { bNewSave = new Fl_Button(174, 302, 75, 22, _("New"));
-      bNewSave->tooltip(_("New record / Save record"));
-      bNewSave->shortcut(0x8004e);
-      bNewSave->color(FL_LIGHT1);
-      bNewSave->selection_color((Fl_Color)48);
-      bNewSave->callback((Fl_Callback*)cb_btnNewSave);
-    } // Fl_Button* bNewSave
-    { bUpdateCancel = new Fl_Button(261, 302, 75, 22, _("Update"));
-      bUpdateCancel->tooltip(_("Update the current record"));
-      bUpdateCancel->shortcut(0x80055);
-      bUpdateCancel->color(FL_LIGHT1);
-      bUpdateCancel->selection_color((Fl_Color)48);
-      bUpdateCancel->callback((Fl_Callback*)cb_btnUpdateCancel);
-    } // Fl_Button* bUpdateCancel
-    { bDelete = new Fl_Button(349, 302, 75, 22, _("Delete"));
-      bDelete->tooltip(_("Delete the current record"));
-      bDelete->shortcut(0x80044);
-      bDelete->color(FL_LIGHT1);
-      bDelete->selection_color((Fl_Color)48);
-      bDelete->callback((Fl_Callback*)cb_btnDelete);
-    } // Fl_Button* bDelete
-    { bSearchPrev = new Fl_Button(495, 273, 24, 22);
+    { bSearchPrev = new Fl_Button(496, 251, 24, 22);
       bSearchPrev->tooltip(_("Find previous"));
       bSearchPrev->color(FL_LIGHT1);
       bSearchPrev->selection_color((Fl_Color)48);
@@ -733,7 +709,7 @@ void create_logbook_dialogs() {
       bSearchPrev->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
       bSearchPrev->image(new Fl_Pixmap(left_arrow_icon));
     } // Fl_Button* bSearchPrev
-    { bSearchNext = new Fl_Button(547, 273, 24, 22);
+    { bSearchNext = new Fl_Button(548, 251, 24, 22);
       bSearchNext->tooltip(_("Find next"));
       bSearchNext->color(FL_LIGHT1);
       bSearchNext->selection_color((Fl_Color)48);
@@ -741,7 +717,7 @@ void create_logbook_dialogs() {
       bSearchNext->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
       bSearchNext->image(new Fl_Pixmap(right_arrow_icon));
     } // Fl_Button* bSearchNext
-    { wBrowser = new Table(2, 330, 586, 186);
+    { wBrowser = new Table(2, 310, 586, 186);
       wBrowser->box(FL_DOWN_FRAME);
       wBrowser->color(FL_BACKGROUND2_COLOR);
       wBrowser->selection_color(FL_SELECTION_COLOR);
@@ -752,11 +728,10 @@ void create_logbook_dialogs() {
       wBrowser->align(Fl_Align(FL_ALIGN_TOP));
       wBrowser->when(FL_WHEN_RELEASE);
       wBrowser->end();
-      Fl_Group::current()->resizable(wBrowser);
     } // Table* wBrowser
-    { Tabs = new Fl_Tabs(4, 158, 474, 138);
-      { tab_log_qsl = new Fl_Group(4, 180, 474, 114, _("QSL"));
-        { Fl_DateInput* o = inpQSLrcvddate_log = new Fl_DateInput(8, 207, 100, 24, _("QSL-rcvd"));
+    { Tabs = new Fl_Tabs(5, 155, 474, 120);
+      { tab_log_qsl = new Fl_Group(5, 177, 474, 94, _("QSL"));
+        { Fl_DateInput* o = inpQSLrcvddate_log = new Fl_DateInput(9, 198, 100, 24, _("QSL-rcvd"));
           inpQSLrcvddate_log->tooltip(_("QSL received on this date"));
           inpQSLrcvddate_log->box(FL_DOWN_BOX);
           inpQSLrcvddate_log->color(FL_BACKGROUND2_COLOR);
@@ -769,12 +744,12 @@ void create_logbook_dialogs() {
           inpQSLrcvddate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpQSLrcvddate_log
-        { Fl_Choice* o = statusQSLrcvd = new Fl_Choice(111, 207, 50, 24, _("Status"));
+        { Fl_Choice* o = statusQSLrcvd = new Fl_Choice(112, 198, 50, 24, _("Status"));
           statusQSLrcvd->down_box(FL_BORDER_BOX);
           statusQSLrcvd->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusQSLrcvd
-        { Fl_DateInput* o = inpEQSLrcvddate_log = new Fl_DateInput(164, 207, 100, 24, _("EQSL-rcvd"));
+        { Fl_DateInput* o = inpEQSLrcvddate_log = new Fl_DateInput(165, 198, 100, 24, _("EQSL-rcvd"));
           inpEQSLrcvddate_log->tooltip(_("QSL received on this date"));
           inpEQSLrcvddate_log->box(FL_DOWN_BOX);
           inpEQSLrcvddate_log->color(FL_BACKGROUND2_COLOR);
@@ -787,12 +762,12 @@ void create_logbook_dialogs() {
           inpEQSLrcvddate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpEQSLrcvddate_log
-        { Fl_Choice* o = statusEQSLrcvd = new Fl_Choice(268, 207, 50, 24, _("Status"));
+        { Fl_Choice* o = statusEQSLrcvd = new Fl_Choice(269, 198, 50, 24, _("Status"));
           statusEQSLrcvd->down_box(FL_BORDER_BOX);
           statusEQSLrcvd->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusEQSLrcvd
-        { Fl_DateInput* o = inpLOTWrcvddate_log = new Fl_DateInput(321, 207, 100, 24, _("LOTW-rcvd"));
+        { Fl_DateInput* o = inpLOTWrcvddate_log = new Fl_DateInput(322, 198, 100, 24, _("LOTW-rcvd"));
           inpLOTWrcvddate_log->tooltip(_("QSL received on this date"));
           inpLOTWrcvddate_log->box(FL_DOWN_BOX);
           inpLOTWrcvddate_log->color(FL_BACKGROUND2_COLOR);
@@ -805,12 +780,12 @@ void create_logbook_dialogs() {
           inpLOTWrcvddate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpLOTWrcvddate_log
-        { Fl_Choice* o = statusLOTWrcvd = new Fl_Choice(425, 207, 50, 24, _("Status"));
+        { Fl_Choice* o = statusLOTWrcvd = new Fl_Choice(426, 198, 50, 24, _("Status"));
           statusLOTWrcvd->down_box(FL_BORDER_BOX);
           statusLOTWrcvd->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusLOTWrcvd
-        { Fl_DateInput* o = inpQSLsentdate_log = new Fl_DateInput(8, 257, 100, 24, _("QSL-sent"));
+        { Fl_DateInput* o = inpQSLsentdate_log = new Fl_DateInput(9, 244, 100, 24, _("QSL-sent"));
           inpQSLsentdate_log->tooltip(_("QSL sent on this date"));
           inpQSLsentdate_log->box(FL_DOWN_BOX);
           inpQSLsentdate_log->color(FL_BACKGROUND2_COLOR);
@@ -823,12 +798,12 @@ void create_logbook_dialogs() {
           inpQSLsentdate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpQSLsentdate_log
-        { Fl_Choice* o = statusQSLsent = new Fl_Choice(111, 257, 50, 24, _("Status"));
+        { Fl_Choice* o = statusQSLsent = new Fl_Choice(112, 244, 50, 24, _("Status"));
           statusQSLsent->down_box(FL_BORDER_BOX);
           statusQSLsent->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusQSLsent
-        { Fl_DateInput* o = inpEQSLsentdate_log = new Fl_DateInput(164, 257, 100, 24, _("EQSL-sent"));
+        { Fl_DateInput* o = inpEQSLsentdate_log = new Fl_DateInput(165, 244, 100, 24, _("EQSL-sent"));
           inpEQSLsentdate_log->tooltip(_("QSL sent on this date"));
           inpEQSLsentdate_log->box(FL_DOWN_BOX);
           inpEQSLsentdate_log->color(FL_BACKGROUND2_COLOR);
@@ -841,12 +816,12 @@ void create_logbook_dialogs() {
           inpEQSLsentdate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpEQSLsentdate_log
-        { Fl_Choice* o = statusEQSLsent = new Fl_Choice(268, 257, 50, 24, _("Status"));
+        { Fl_Choice* o = statusEQSLsent = new Fl_Choice(269, 244, 50, 24, _("Status"));
           statusEQSLsent->down_box(FL_BORDER_BOX);
           statusEQSLsent->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusEQSLsent
-        { Fl_DateInput* o = inpLOTWsentdate_log = new Fl_DateInput(321, 257, 100, 24, _("LOTW-sent"));
+        { Fl_DateInput* o = inpLOTWsentdate_log = new Fl_DateInput(322, 244, 100, 24, _("LOTW-sent"));
           inpLOTWsentdate_log->tooltip(_("QSL sent on this date"));
           inpLOTWsentdate_log->box(FL_DOWN_BOX);
           inpLOTWsentdate_log->color(FL_BACKGROUND2_COLOR);
@@ -859,16 +834,16 @@ void create_logbook_dialogs() {
           inpLOTWsentdate_log->when(FL_WHEN_RELEASE);
           o->format(2);
         } // Fl_DateInput* inpLOTWsentdate_log
-        { Fl_Choice* o = statusLOTWsent = new Fl_Choice(425, 257, 50, 24, _("Status"));
+        { Fl_Choice* o = statusLOTWsent = new Fl_Choice(426, 244, 50, 24, _("Status"));
           statusLOTWsent->down_box(FL_BORDER_BOX);
           statusLOTWsent->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           o->add("N");o->add("Y");o->add("R");
         } // Fl_Choice* statusLOTWsent
         tab_log_qsl->end();
       } // Fl_Group* tab_log_qsl
-      { tab_log_contest = new Fl_Group(4, 180, 474, 114, _("Contest"));
+      { tab_log_contest = new Fl_Group(5, 177, 474, 94, _("Contest"));
         tab_log_contest->hide();
-        { inpSerNoOut_log = new Fl_Input2(90, 206, 55, 24, _("Ser out"));
+        { inpSerNoOut_log = new Fl_Input2(72, 198, 55, 24, _("Ser out"));
           inpSerNoOut_log->tooltip(_("Contest seral # sent"));
           inpSerNoOut_log->box(FL_DOWN_BOX);
           inpSerNoOut_log->color(FL_BACKGROUND2_COLOR);
@@ -877,10 +852,10 @@ void create_logbook_dialogs() {
           inpSerNoOut_log->labelfont(0);
           inpSerNoOut_log->labelsize(14);
           inpSerNoOut_log->labelcolor(FL_FOREGROUND_COLOR);
-          inpSerNoOut_log->align(Fl_Align(FL_ALIGN_TOP));
+          inpSerNoOut_log->align(Fl_Align(FL_ALIGN_LEFT));
           inpSerNoOut_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpSerNoOut_log
-        { inpMyXchg_log = new Fl_Input2(149, 206, 263, 24, _("Exchange Out"));
+        { inpMyXchg_log = new Fl_Input2(200, 198, 263, 24, _("Exch Out"));
           inpMyXchg_log->tooltip(_("Contest exchange sent"));
           inpMyXchg_log->box(FL_DOWN_BOX);
           inpMyXchg_log->color(FL_BACKGROUND2_COLOR);
@@ -889,10 +864,10 @@ void create_logbook_dialogs() {
           inpMyXchg_log->labelfont(0);
           inpMyXchg_log->labelsize(14);
           inpMyXchg_log->labelcolor(FL_FOREGROUND_COLOR);
-          inpMyXchg_log->align(Fl_Align(FL_ALIGN_TOP));
+          inpMyXchg_log->align(Fl_Align(FL_ALIGN_LEFT));
           inpMyXchg_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpMyXchg_log
-        { inpSerNoIn_log = new Fl_Input2(90, 251, 55, 24, _("Ser in"));
+        { inpSerNoIn_log = new Fl_Input2(72, 230, 55, 24, _("Ser in"));
           inpSerNoIn_log->tooltip(_("Contest serial # received"));
           inpSerNoIn_log->box(FL_DOWN_BOX);
           inpSerNoIn_log->color(FL_BACKGROUND2_COLOR);
@@ -901,10 +876,10 @@ void create_logbook_dialogs() {
           inpSerNoIn_log->labelfont(0);
           inpSerNoIn_log->labelsize(14);
           inpSerNoIn_log->labelcolor(FL_FOREGROUND_COLOR);
-          inpSerNoIn_log->align(Fl_Align(FL_ALIGN_TOP));
+          inpSerNoIn_log->align(Fl_Align(FL_ALIGN_LEFT));
           inpSerNoIn_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpSerNoIn_log
-        { inpXchgIn_log = new Fl_Input2(149, 251, 263, 24, _("Exchange In"));
+        { inpXchgIn_log = new Fl_Input2(200, 230, 263, 24, _("Exch In"));
           inpXchgIn_log->tooltip(_("Contest exchange received"));
           inpXchgIn_log->box(FL_DOWN_BOX);
           inpXchgIn_log->color(FL_BACKGROUND2_COLOR);
@@ -913,14 +888,14 @@ void create_logbook_dialogs() {
           inpXchgIn_log->labelfont(0);
           inpXchgIn_log->labelsize(14);
           inpXchgIn_log->labelcolor(FL_FOREGROUND_COLOR);
-          inpXchgIn_log->align(Fl_Align(FL_ALIGN_TOP));
+          inpXchgIn_log->align(Fl_Align(FL_ALIGN_LEFT));
           inpXchgIn_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpXchgIn_log
         tab_log_contest->end();
       } // Fl_Group* tab_log_contest
-      { tab_log_other = new Fl_Group(4, 180, 474, 114, _("Other"));
+      { tab_log_other = new Fl_Group(5, 177, 474, 94, _("Other"));
         tab_log_other->hide();
-        { inpCNTY_log = new Fl_Input2(15, 208, 240, 24, _("County"));
+        { inpCNTY_log = new Fl_Input2(16, 197, 240, 24, _("County"));
           inpCNTY_log->tooltip(_("County"));
           inpCNTY_log->box(FL_DOWN_BOX);
           inpCNTY_log->color(FL_BACKGROUND2_COLOR);
@@ -932,7 +907,7 @@ void create_logbook_dialogs() {
           inpCNTY_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpCNTY_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpCNTY_log
-        { inpIOTA_log = new Fl_Input2(269, 208, 90, 24, _("IOTA"));
+        { inpIOTA_log = new Fl_Input2(270, 197, 90, 24, _("IOTA"));
           inpIOTA_log->tooltip(_("Islands on the air"));
           inpIOTA_log->box(FL_DOWN_BOX);
           inpIOTA_log->color(FL_BACKGROUND2_COLOR);
@@ -944,7 +919,7 @@ void create_logbook_dialogs() {
           inpIOTA_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpIOTA_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpIOTA_log
-        { inpCQZ_log = new Fl_Input2(376, 208, 90, 24, _("CQZ"));
+        { inpCQZ_log = new Fl_Input2(377, 197, 90, 24, _("CQZ"));
           inpCQZ_log->tooltip(_("CQ zone"));
           inpCQZ_log->box(FL_DOWN_BOX);
           inpCQZ_log->color(FL_BACKGROUND2_COLOR);
@@ -956,7 +931,7 @@ void create_logbook_dialogs() {
           inpCQZ_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpCQZ_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpCQZ_log
-        { inpCONT_log = new Fl_Input2(15, 251, 240, 24, _("CONT"));
+        { inpCONT_log = new Fl_Input2(16, 237, 240, 24, _("CONT"));
           inpCONT_log->tooltip(_("Continent"));
           inpCONT_log->box(FL_DOWN_BOX);
           inpCONT_log->color(FL_BACKGROUND2_COLOR);
@@ -968,7 +943,7 @@ void create_logbook_dialogs() {
           inpCONT_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpCONT_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpCONT_log
-        { inpITUZ_log = new Fl_Input2(270, 251, 90, 24, _("ITUZ"));
+        { inpITUZ_log = new Fl_Input2(271, 237, 90, 24, _("ITUZ"));
           inpITUZ_log->tooltip(_("ITU zone"));
           inpITUZ_log->box(FL_DOWN_BOX);
           inpITUZ_log->color(FL_BACKGROUND2_COLOR);
@@ -980,7 +955,7 @@ void create_logbook_dialogs() {
           inpITUZ_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpITUZ_log->when(FL_WHEN_RELEASE);
         } // Fl_Input2* inpITUZ_log
-        { inpDXCC_log = new Fl_Input2(376, 251, 90, 24, _("DXCC"));
+        { inpDXCC_log = new Fl_Input2(377, 237, 90, 24, _("DXCC"));
           inpDXCC_log->tooltip(_("DXCC designator"));
           inpDXCC_log->box(FL_DOWN_BOX);
           inpDXCC_log->color(FL_BACKGROUND2_COLOR);
@@ -994,9 +969,9 @@ void create_logbook_dialogs() {
         } // Fl_Input2* inpDXCC_log
         tab_log_other->end();
       } // Fl_Group* tab_log_other
-      { tab_log_notes = new Fl_Group(4, 180, 474, 114, _("Notes"));
+      { tab_log_notes = new Fl_Group(5, 177, 474, 94, _("Notes"));
         tab_log_notes->hide();
-        { inpNotes_log = new Fl_Input2(9, 184, 464, 108);
+        { inpNotes_log = new Fl_Input2(10, 181, 464, 85);
           inpNotes_log->tooltip(_("Interesting notes"));
           inpNotes_log->type(4);
           inpNotes_log->box(FL_DOWN_BOX);
@@ -1013,6 +988,30 @@ void create_logbook_dialogs() {
       } // Fl_Group* tab_log_notes
       Tabs->end();
     } // Fl_Tabs* Tabs
+    { txtLogFile = new Fl_Output(38, 279, 350, 22, _("File:"));
+      txtLogFile->color(FL_LIGHT3);
+    } // Fl_Output* txtLogFile
+    { bNewSave = new Fl_Button(393, 279, 61, 22, _("New"));
+      bNewSave->tooltip(_("New record / Save record"));
+      bNewSave->shortcut(0x8004e);
+      bNewSave->color(FL_LIGHT1);
+      bNewSave->selection_color((Fl_Color)48);
+      bNewSave->callback((Fl_Callback*)cb_btnNewSave);
+    } // Fl_Button* bNewSave
+    { bUpdateCancel = new Fl_Button(459, 279, 61, 22, _("Update"));
+      bUpdateCancel->tooltip(_("Update the current record"));
+      bUpdateCancel->shortcut(0x80055);
+      bUpdateCancel->color(FL_LIGHT1);
+      bUpdateCancel->selection_color((Fl_Color)48);
+      bUpdateCancel->callback((Fl_Callback*)cb_btnUpdateCancel);
+    } // Fl_Button* bUpdateCancel
+    { bDelete = new Fl_Button(526, 279, 61, 22, _("Delete"));
+      bDelete->tooltip(_("Delete the current record"));
+      bDelete->shortcut(0x80044);
+      bDelete->color(FL_LIGHT1);
+      bDelete->selection_color((Fl_Color)48);
+      bDelete->callback((Fl_Callback*)cb_btnDelete);
+    } // Fl_Button* bDelete
     dlgLogbook->end();
   } // Fl_Double_Window* dlgLogbook
   wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);
