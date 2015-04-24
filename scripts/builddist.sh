@@ -1,12 +1,6 @@
 # build file to generate the distribution binary tarball
-myscripts/cleanup
-
 autoreconf
-
-./configure --prefix=/tmp/fllog-build --enable-static
-make install-strip
-tar czf fllog-$1.bin.tgz -C /tmp/fllog-build .
-
+./configure
 make clean
 
 ./configure \

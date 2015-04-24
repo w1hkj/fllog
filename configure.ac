@@ -11,8 +11,8 @@ AC_PREREQ([2.63])
 dnl major and minor must be integers; patch may
 dnl contain other characters or be empty
 m4_define(FLLOG_MAJOR,  [1])
-m4_define(FLLOG_MINOR,  [1])
-m4_define(FLLOG_PATCH,  [.9])
+m4_define(FLLOG_MINOR,  [2])
+m4_define(FLLOG_PATCH,  [.0])
 
 AC_INIT([FLLOG], FLLOG_MAJOR.FLLOG_MINOR[]FLLOG_PATCH, [w1hkj AT w1hkj DOT com])
 
