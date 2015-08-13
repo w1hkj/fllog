@@ -3,15 +3,18 @@
 //
 // Copyright (C) 2007-2009
 //		Stelios Bounanos, M0GLD
+// ----------------------------------------------------------------------------
+// Copyright (C) 2014
+//              David Freese, W1HKJ
 //
-// This file is part of fldigi.
+// This file is part of flmsg
 //
-// fldigi is free software; you can redistribute it and/or modify
+// flrig is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation; either version 3 of the License, or
 // (at your option) any later version.
 //
-// fldigi is distributed in the hope that it will be useful,
+// flrig is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
@@ -46,7 +49,7 @@ int clock_gettime(clockid_t clock_id, struct timespec* tp)
 	}
 	else if (clock_id == CLOCK_MONOTONIC) {
 #if defined(__WOE32__)
-		int32_t msec = GetTickCount();
+		int msec = GetTickCount();
 		tp->tv_sec = msec / 1000;
 		tp->tv_nsec = (msec % 1000) * 1000000;
 #elif defined(__APPLE__)
@@ -175,7 +178,7 @@ bool operator==(const struct timeval &t0, const struct timeval &t1)
 }
 
 
-#ifndef HAVE_GMTIME_R
+#if !HAVE_GMTIME_R
 #include <pthread.h>
 
 static pthread_mutex_t gmtime_r_mutex = PTHREAD_MUTEX_INITIALIZER;

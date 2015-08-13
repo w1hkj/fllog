@@ -1,5 +1,4 @@
-# build file to generate the distribution binary tarball
-autoreconf
+#!/bin/sh
 
 ./configure \
   $PKGCFG \
@@ -14,10 +13,3 @@ make
 $PREFIX/bin/i686-w64-mingw32.static-strip src/fllog.exe
 make nsisinst
 mv src/*setup*exe .
-
-make clean
-
-# build the distribution tarball
-./configure
-make distcheck
-make clean

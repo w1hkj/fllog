@@ -34,7 +34,6 @@ fi
 
 set -e
 
-test "x$NOSTRIP" = "x" && $STRIP -S "$fllog_bin"
 def="-Dfllog_NAME=$fllog_name -Dfllog_BINARY=$fllog_bin -Dfllog_VERSION=$PACKAGE_VERSION"
 
 $MAKENSIS -V2 -NOCD -D"INSTALLER_FILE=$INSTALLER_FILE" -D"LICENSE_FILE=$data/../COPYING" \

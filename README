@@ -1,8 +1,7 @@
-Fllog is a transceiver control program for Amateur Radio use.  It does
-not use any 3rd party transceiver control libraries.  It is a c++ pro-
-gram that encapsulates each transceiver in it's own class.  Where ever
-possible the transceiver class(s) use polymorphism to reuse code that
-is portable across a series of transceivers.
+Fllog is a logbook application for Amateur Radio use.  It supports the
+identical adif logbook in fldigi.  fllog can act as a server to multiple
+clients over LAN/WAN tcpip connections.  Multiple fldigi / flwkey clients
+may connect to the fllog server.
 
 The latest version can always be found at:
 
