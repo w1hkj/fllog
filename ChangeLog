@@ -1,10 +1,22 @@
 
 
+=Version 1.2.1=
+
+2015-08-13  David Freese  <iam_w1hkj@w1hkj.com>
+
+	1b3f80a: MXE update
+
+2015-06-08  Kamal Mostafa  <kamal@whence.com>
+
+	f453b69: BUILD_{DATE,USER,HOST}
+
+
 =Version 1.2.0=
+
 
 2015-04-17  David Freese  <iam_w1hkj@w1hkj.com>
 
-	27286e7: xmlrpc
+	42220db: xmlrpc
 	bd151dd: FSF address
 	ef9421c: User interface
 
