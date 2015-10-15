@@ -1,5 +1,5 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0302 
+version 1.0303 
 i18n_type 1 
 i18n_include "gettext.h" 
 i18n_function _ 
@@ -30,9 +30,9 @@ Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
     label Logbook open
-    xywh {504 30 590 500} type Double color 47 visible
+    xywh {504 30 590 500} type Double color 47 resizable visible
   } {
-    Fl_Menu_Bar {} {open selected
+    Fl_Menu_Bar {} {open
       xywh {0 0 590 24}
     } {
       Submenu {} {
@@ -210,8 +210,8 @@ Function {create_logbook_dialogs()} {open return_type void
       tooltip {Find next} xywh {548 251 24 22} color 50 selection_color 48 align 16
       code0 {bSearchNext->image(new Fl_Pixmap(right_arrow_icon));}
     }
-    Fl_Group wBrowser {
-      xywh {2 310 586 186} box DOWN_FRAME color 7 selection_color 15
+    Fl_Group wBrowser {selected
+      xywh {2 310 586 186} box DOWN_FRAME color 7 selection_color 15 resizable
       code0 {\#include "table.h"}
       class Table
     } {}

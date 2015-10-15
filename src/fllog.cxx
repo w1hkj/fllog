@@ -291,6 +291,8 @@ void LOGBOOK_colors_font()
 // browser (table)
 	ypos += btns[0]->h() + 4;
 
+	wBrowser->rowSize(wh - 6);
+	wBrowser->headerSize(wh - 6);
 	wBrowser->color(progStatus.LOGBOOKcolor);
 	wBrowser->selection_color(FL_SELECTION_COLOR);
 	wBrowser->allowVscroll(always);
