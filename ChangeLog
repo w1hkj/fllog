@@ -1,8 +1,13 @@
 
 
-=Version 1.2.1=
+=Version 1.2.2=
 
-2015-08-13  David Freese  <iam_w1hkj@w1hkj.com>
+2015-10-14  David Freese  <iam_w1hkj@w1hkj.com>
+
+	a3be952: Resizable dialog
+
+
+=Version 1.2.1=
 
 	1b3f80a: MXE update
 
