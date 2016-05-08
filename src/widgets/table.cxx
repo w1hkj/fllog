@@ -1321,19 +1321,23 @@ if (this->header[pushed].comparator != NULL) {
  */
 void Table::scrollTo(int pos) {
 
-  if (vScroll->visible() || nRows > (iH / rowHeight)) {
-    int max = rowHeight * nRows - iH;
-    if (pos < 0 || max < 0) pos = 0;
-    if (pos > max) pos = max;
+//	if (vScroll->visible() || nRows > (iH / rowHeight)) {
+	if (nRows > (iH / rowHeight)) {
+		vScroll->show();
+		int max = rowHeight * nRows - iH;
+		if (pos < 0 || max < 0) pos = 0;
+		if (pos > max) pos = max;
 
-    vScroll->Fl_Valuator::value(1.0*pos);
-    vScroll->damage (FL_DAMAGE_ALL);
-    vScroll->redraw ();
-    scrolled();
-  }
-  damage(DAMAGE_ROWS);
-  if (when() & FL_WHEN_CHANGED)
-    do_callback();
+		vScroll->Fl_Valuator::value(1.0*pos);
+		vScroll->damage (FL_DAMAGE_ALL);
+		vScroll->redraw ();
+		scrolled();
+	} else {
+		vScroll->hide();
+	}
+	damage(DAMAGE_ROWS);
+	if (when() & FL_WHEN_CHANGED)
+		do_callback();
 
 }
 

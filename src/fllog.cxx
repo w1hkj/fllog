@@ -295,7 +295,7 @@ void LOGBOOK_colors_font()
 	wBrowser->headerSize(wh - 6);
 	wBrowser->color(progStatus.LOGBOOKcolor);
 	wBrowser->selection_color(FL_SELECTION_COLOR);
-	wBrowser->allowVscroll(always);
+//	wBrowser->allowVscroll(always);
 	wBrowser->allowHscroll(never);
 
 	wBrowser->resize(wBrowser->x(), ypos, dlg_width - 2*wBrowser->x(), mainwindow->h() - 2 - ypos);

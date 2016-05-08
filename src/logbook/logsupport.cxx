@@ -1087,7 +1087,9 @@ void loadBrowser(bool keep_pos)
 			rec->getField(MODE),
 			sNbr);
 	}
-	if (keep_pos && row >= 0) {
+	if (qsodb.nbrRecs() < 9) {
+		wBrowser->FirstRow();
+	} else if (keep_pos && row >= 0) {
 		wBrowser->value(row);
 		wBrowser->scrollTo(pos);
 	}
