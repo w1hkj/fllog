@@ -72,7 +72,7 @@ const char *fieldnames[] = {
 "IOTA",
 "ITUZ",
 "MODE",
-"MYXCHG",
+"STX_STRING",
 "NAME",
 "NOTES",
 "OPERATOR",
@@ -107,7 +107,7 @@ const char *fieldnames[] = {
 "TIME_ON",
 "TX_PWR",
 "VE_PROV",
-"XCHG1"
+"SRX_STRING"
 };
 
 // 16 chars per  position in string div 16 gives index to field name
@@ -133,7 +133,7 @@ GRIDSQUARE:     \
 IOTA:           \
 ITUZ:           \
 MODE:           \
-MYXCHG:         \
+STX_STRING:     \
 NAME:           \
 NOTES:          \
 OPERATOR:       \
@@ -168,7 +168,7 @@ TIME_OFF:       \
 TIME_ON:        \
 TX_PWR:         \
 VE_PROV:        \
-XCHG1:          ";
+SRX_STRING:     ";
 
 FIELD fields[] = {
 //  TYPE, NAME, WIDGET
@@ -241,17 +241,26 @@ static int findfield( char *p )
 	if (strncasecmp (p, "EOR>", 4) == 0)
 		return -1;
 
+// backward compatibility to MYXCHG, XCHG1 field names in older fllog
+// adif file structure
+//----------------------------------------------------------------------
+	if (strncasecmp (p, "MYXCHG:", 7) == 0) return MYXCHG;
+	if (strncasecmp (p, "XCHG1:", 6) == 0) return XCHG1;
+//----------------------------------------------------------------------
+
 	char *p1, *p2;
 	char *pos;
 	char *fl = (char *)fastlookup;
+	char teststr[17];
 	int n;
+
 	p1 = strchr(p, ':');
 	p2 = strchr(p, '>');
 	if (p1 && p2) {
 		if (p1 < p2) {
-			*p1 = 0;
-			pos = strstr(fl, p);
-			*p1 = ':';
+			memset(teststr, 0, 16);
+			strncpy(teststr, p, p1 - p + 1);
+			pos = strcasestr(fl, teststr);
 			if (pos) {
 				n = (pos - fastlookup) / 16;
 				if (n > 0 && n < NUMFIELDS)

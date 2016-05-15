@@ -95,8 +95,8 @@ void cTextFile::writeCSVHeader(FILE *txtFile)
 	if (btnSelectNotes->value())     fprintf (txtFile, "%s", ",\"NOTES\"");
 	if (btnSelectSerialIN->value())  fprintf (txtFile, "%s", ",\"SERIAL RCVD\"");
 	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%s", ",\"SERIAL_SENT\"");
-	if (btnSelectXchgIn->value())    fprintf (txtFile, "%s", ",\"XCHG1\"");
-	if (btnSelectMyXchg->value())    fprintf (txtFile, "%s", ",\"MYXCHG\"");
+	if (btnSelectXchgIn->value())    fprintf (txtFile, "%s", ",\"SRX_STRING\"");
+	if (btnSelectMyXchg->value())    fprintf (txtFile, "%s", ",\"STX_STRING\"");
 	fprintf (txtFile, "%s", szEOL);
 }
 
@@ -224,8 +224,8 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectNotes->value())     fprintf (txtFile, "%-80s", "NOTES");
 	if (btnSelectSerialIN->value())  fprintf (txtFile, "%-7s", "SRX");
 	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%-7s", "STX");
-	if (btnSelectXchgIn->value())    fprintf (txtFile, "%-15s", "XCHG1");
-	if (btnSelectMyXchg->value())    fprintf (txtFile, "%-15s", "MYXCHG");
+	if (btnSelectXchgIn->value())    fprintf (txtFile, "%-15s", "SRX_STRING");
+	if (btnSelectMyXchg->value())    fprintf (txtFile, "%-15s", "STX_STRING");
 	fprintf (txtFile, "%s", szEOL);
 }
 
