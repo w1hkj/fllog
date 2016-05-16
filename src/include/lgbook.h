@@ -71,6 +71,7 @@ extern void cb_btnUpdateCancel(Fl_Button*, void*);
 extern Fl_Button *bUpdateCancel;
 extern void cb_btnDelete(Fl_Button*, void*);
 extern Fl_Button *bDelete;
+extern Fl_Input2 *inp_mycall;
 extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;

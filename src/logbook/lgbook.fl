@@ -30,10 +30,10 @@ Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
     label Logbook open
-    xywh {504 30 590 500} type Double color 47 resizable visible
+    xywh {880 155 590 500} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
-      xywh {0 0 590 24}
+      xywh {0 0 427 24}
     } {
       Submenu {} {
         label File
@@ -81,7 +81,7 @@ Function {create_logbook_dialogs()} {open return_type void
         }
         MenuItem mnu_exit {
           label {E&xit}
-          callback {cbExit();}
+          callback {cbExit();} selected
           xywh {0 0 36 21}
         }
       }
@@ -210,7 +210,7 @@ Function {create_logbook_dialogs()} {open return_type void
       tooltip {Find next} xywh {548 251 24 22} color 50 selection_color 48 align 16
       code0 {bSearchNext->image(new Fl_Pixmap(right_arrow_icon));}
     }
-    Fl_Group wBrowser {selected
+    Fl_Group wBrowser {
       xywh {2 310 586 186} box DOWN_FRAME color 7 selection_color 15 resizable
       code0 {\#include "table.h"}
       class Table
@@ -220,7 +220,7 @@ Function {create_logbook_dialogs()} {open return_type void
     } {
       Fl_Group tab_log_qsl {
         label QSL open
-        xywh {5 177 474 94}
+        xywh {5 177 474 94} hide
       } {
         Fl_Input inpQSLrcvddate_log {
           label {QSL-rcvd}
@@ -316,7 +316,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
       Fl_Group tab_log_other {
         label Other open
-        xywh {5 177 474 94} hide
+        xywh {5 177 474 94}
       } {
         Fl_Input inpCNTY_log {
           label County
@@ -377,6 +377,16 @@ Function {create_logbook_dialogs()} {open return_type void
       label Delete
       callback cb_btnDelete
       tooltip {Delete the current record} xywh {526 279 61 22} shortcut 0x80044 color 50 selection_color 48
+    }
+    Fl_Input inp_mycall {
+      label {My Call}
+      callback {progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());}
+      tooltip {My station call sign} xywh {486 0 100 24}
+      code0 {o->value(progStatus.mycall.c_str());}
+      class Fl_Input2
     }
   }
   code {wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);

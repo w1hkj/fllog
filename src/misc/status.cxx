@@ -50,6 +50,7 @@ status progStatus = {
 	FL_BACKGROUND2_COLOR,	// text background
 
 	"",						// logbookfilename
+	"",						// mycall
 	SORTDATE,
 	true,
 	true,
@@ -82,6 +83,7 @@ void status::saveLastState()
 	spref.set("textcolor", (void *)&LOGBOOKtextcolor, sizeof(Fl_Color));
 	spref.set("bkcolor", (void *)&LOGBOOKcolor, sizeof(Fl_Color));
 	spref.set("logbook_filename", logbookfilename.c_str());
+	spref.set("mycall", mycall.c_str());
 	spref.set("lastsort", lastsort);
 	spref.set("callfwd", callfwd);
 	spref.set("datefwd", datefwd);
@@ -113,7 +115,12 @@ void status::loadLastState()
 		LOGBOOKcolor = *(Fl_Color *)variable;
 		free(variable);
 
-		spref.get("logbook_filename", defbuffer, logbookfilename.c_str(), 199); logbookfilename = defbuffer;
+		spref.get("logbook_filename", defbuffer, logbookfilename.c_str(), 199);
+		logbookfilename = defbuffer;
+
+		spref.get("mycall", defbuffer, mycall.c_str(), 199);
+		mycall = defbuffer;
+
 		if (spref.get("lastsort", i, i)) lastsort = (sorttype) i;
 		if (spref.get("callfwd", i, i)) callfwd = i;
 		if (spref.get("datefwd", i, i)) datefwd = i;

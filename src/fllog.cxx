@@ -500,6 +500,7 @@ int main (int argc, char *argv[])
 #endif
 
 	progStatus.loadLastState();
+	inp_mycall->value(progStatus.mycall.c_str());
 
 	LOGBOOK_colors_font();
 

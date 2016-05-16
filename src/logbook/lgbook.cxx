@@ -186,6 +186,15 @@ Fl_Button *bUpdateCancel=(Fl_Button *)0;
 
 Fl_Button *bDelete=(Fl_Button *)0;
 
+Fl_Input2 *inp_mycall=(Fl_Input2 *)0;
+
+static void cb_inp_mycall(Fl_Input2* o, void*) {
+  progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());
+}
+
 Fl_Double_Window *wExport=(Fl_Double_Window *)0;
 
 Fl_Check_Browser *chkExportBrowser=(Fl_Check_Browser *)0;
@@ -473,7 +482,7 @@ btnCabRSTrcvd->value(1);
 void create_logbook_dialogs() {
   { dlgLogbook = new Fl_Double_Window(590, 500, _("Logbook"));
     dlgLogbook->color(FL_DARK1);
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 590, 24);
+    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 427, 24);
       if (!menu__i18n_done) {
         int i=0;
         for ( ; i<15; i++)
@@ -732,6 +741,7 @@ void create_logbook_dialogs() {
     } // Table* wBrowser
     { Tabs = new Fl_Tabs(5, 155, 474, 120);
       { tab_log_qsl = new Fl_Group(5, 177, 474, 94, _("QSL"));
+        tab_log_qsl->hide();
         { Fl_DateInput* o = inpQSLrcvddate_log = new Fl_DateInput(9, 198, 100, 24, _("QSL-rcvd"));
           inpQSLrcvddate_log->tooltip(_("QSL received on this date"));
           inpQSLrcvddate_log->box(FL_DOWN_BOX);
@@ -895,7 +905,6 @@ void create_logbook_dialogs() {
         tab_log_contest->end();
       } // Fl_Group* tab_log_contest
       { tab_log_other = new Fl_Group(5, 177, 474, 94, _("Other"));
-        tab_log_other->hide();
         { inpCNTY_log = new Fl_Input2(16, 197, 240, 24, _("County"));
           inpCNTY_log->tooltip(_("County"));
           inpCNTY_log->box(FL_DOWN_BOX);
@@ -1013,6 +1022,20 @@ void create_logbook_dialogs() {
       bDelete->selection_color((Fl_Color)48);
       bDelete->callback((Fl_Callback*)cb_btnDelete);
     } // Fl_Button* bDelete
+    { Fl_Input2* o = inp_mycall = new Fl_Input2(486, 0, 100, 24, _("My Call"));
+      inp_mycall->tooltip(_("My station call sign"));
+      inp_mycall->box(FL_DOWN_BOX);
+      inp_mycall->color(FL_BACKGROUND2_COLOR);
+      inp_mycall->selection_color(FL_SELECTION_COLOR);
+      inp_mycall->labeltype(FL_NORMAL_LABEL);
+      inp_mycall->labelfont(0);
+      inp_mycall->labelsize(14);
+      inp_mycall->labelcolor(FL_FOREGROUND_COLOR);
+      inp_mycall->callback((Fl_Callback*)cb_inp_mycall);
+      inp_mycall->align(Fl_Align(FL_ALIGN_LEFT));
+      inp_mycall->when(FL_WHEN_RELEASE);
+      o->value(progStatus.mycall.c_str());
+    } // Fl_Input2* inp_mycall
     dlgLogbook->end();
   } // Fl_Double_Window* dlgLogbook
   wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);

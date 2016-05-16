@@ -1289,6 +1289,7 @@ void cabrillo_append_qso (FILE *fp, cQsoRec *rec)
 		qsoline.append(time); qsoline.append(" ");
 	}
 
+	mycall = progStatus.mycall;
 	if (mycall.length() > 13) mycall = mycall.substr(0,13);
 	if ((len = mycall.length()) < 13) mycall.append(13 - len, ' ');
 	qsoline.append(mycall); qsoline.append(" ");
