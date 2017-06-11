@@ -30,7 +30,7 @@ Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
     label Logbook open
-    xywh {880 155 590 500} type Double color 47 resizable visible
+    xywh {637 165 590 500} type Double color 47 hide resizable
   } {
     Fl_Menu_Bar {} {open
       xywh {0 0 427 24}
@@ -81,7 +81,7 @@ Function {create_logbook_dialogs()} {open return_type void
         }
         MenuItem mnu_exit {
           label {E&xit}
-          callback {cbExit();} selected
+          callback {cbExit();}
           xywh {0 0 36 21}
         }
       }
@@ -316,7 +316,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
       Fl_Group tab_log_other {
         label Other open
-        xywh {5 177 474 94}
+        xywh {5 177 474 94} hide
       } {
         Fl_Input inpCNTY_log {
           label County
@@ -351,7 +351,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
       Fl_Group tab_log_notes {
         label Notes open
-        xywh {5 177 474 94} hide
+        xywh {5 177 474 94}
       } {
         Fl_Input inpNotes_log {
           tooltip {Interesting notes} xywh {10 181 464 85} type Multiline align 21
@@ -360,7 +360,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
     }
     Fl_Output txtLogFile {
-      label {File:}
+      label {File:} selected
       xywh {38 279 350 22} color 54
     }
     Fl_Button bNewSave {
