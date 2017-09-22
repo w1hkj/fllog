@@ -541,7 +541,7 @@ int parse_args(int argc, char **argv, int& idx)
 		exit(0);
 	}
 	if (strcasecmp("--version", argv[1]) == 0) {
-		printf("Version: "VERSION"\n");
+		printf("Version: " VERSION "\n");
 		exit (0);
 	}
 	if (strcasecmp("--debug", argv[1]) == 0) {

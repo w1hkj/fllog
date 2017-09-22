@@ -201,6 +201,7 @@ EXTRA_DIST = \
 	include/logbook.h \
 	include/logger.h \
 	include/logsupport.h \
+	include/mingw.h \
 	include/textio.h \
 	include/qso_db.h \
 	include/table.h \
@@ -211,7 +212,6 @@ EXTRA_DIST = \
 	include/flslider2.h \
 	include/font_browser.h \
 	include/gettext.h \
-	include/mingw.h \
 	include/fllog.h \
 	include/status.h \
 	include/support.h \
