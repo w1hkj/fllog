@@ -165,7 +165,6 @@ fllog_SOURCES += \
 	widgets/fileselect.cxx \
 	widgets/flinput2.cxx \
 	widgets/flslider2.cxx \
-	widgets/Fl_Native_File_Chooser.cxx \
 	widgets/icons.cxx \
 	widgets/pixmaps.cxx \
 	widgets/table.cxx \
@@ -183,9 +182,6 @@ EXTRA_DIST = \
 	compat/regex.c \
 	compat/regex.h \
 	widgets/flnfc_common.cxx \
-	widgets/Fl_Native_File_Chooser_FLTK.cxx \
-	widgets/Fl_Native_File_Chooser_MAC.cxx \
-	widgets/Fl_Native_File_Chooser_WIN32.cxx \
 	fllog_icon.cxx \
 	logbook/lgbook.fl \
 	include/adif_def.h \
@@ -223,12 +219,7 @@ EXTRA_DIST = \
 	include/flinput2.h \
 	include/pixmaps.h \
 	include/icons.h \
-	include/fileselect.h \
-	include/FL/Fl_Native_File_Chooser.H \
-	include/FL/Fl_Native_File_Chooser_FLTK.H \
-	include/FL/Fl_Native_File_Chooser_MAC.H \
-	include/FL/Fl_Native_File_Chooser_WIN32.H 
-
+	include/fileselect.h
 # Additional non-source files that are distributed
 # Additional source files that support non-Linux cross compilation
 EXTRA_DIST += \
