@@ -26,6 +26,7 @@ struct status {
 // logbook entries
 	string logbookfilename;
 	string mycall;
+
 	sorttype	lastsort;
 	bool callfwd;
 	bool datefwd;

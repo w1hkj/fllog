@@ -171,8 +171,10 @@ fllog_SOURCES += \
 	widgets/ValueSlider.cxx \
 	misc/debug.cxx \
 	misc/font_browser.cxx \
+	misc/globals.cxx \
 	misc/re.cxx \
 	misc/status.cxx \
+	misc/threads.cxx \
 	misc/timeops.cxx \
 	misc/util.cxx 
 
@@ -190,8 +192,10 @@ EXTRA_DIST = \
 	include/calendar.h \
 	include/date.h \
 	include/field_def.h \
+	include/fl_lock.h \
 	include/font_browser.h \
 	include/fontdef.h \
+	include/globals.h \
 	include/lgbook.h \
 	include/log.h \
 	include/logbook.h \

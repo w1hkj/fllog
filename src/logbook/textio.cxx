@@ -2,7 +2,7 @@
 //
 // textio.cxx
 //
-// Copyright (C) 2008-2012
+// Copyright (C) 2008-2018
 //               Dave Freese, W1HKJ
 //
 // This library is free software; you can redistribute it and/or modify
@@ -158,14 +158,14 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, ",\"%s\"", pRec->getField(QSLRDATE));
 				if (btnSelectQSLsent->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(QSLSDATE));
-				if (btnSelectQSLrcvd->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLRDATE));
-				if (btnSelectQSLsent->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLSDATE));
-				if (btnSelectQSLrcvd->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLRDATE));
-				if (btnSelectQSLsent->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLSDATE));
+//				if (btnSelectQSLrcvd->value())
+//					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLRDATE));
+//				if (btnSelectQSLsent->value())
+//					fprintf (txtFile, ",\"%s\"", pRec->getField(EQSL_QSLSDATE));
+//				if (btnSelectQSLrcvd->value())
+//					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLRDATE));
+//				if (btnSelectQSLsent->value())
+//					fprintf (txtFile, ",\"%s\"", pRec->getField(LOTW_QSLSDATE));
 				if (btnSelectNotes->value()) {
 					string temp = pRec->getField(NOTES);
 					for (size_t n = 0; n < temp.length(); n++)
@@ -283,18 +283,18 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, "%-8s", pRec->getField(ITUZ));
 				if (btnSelectLOC->value())
 					fprintf (txtFile, "%-15s", pRec->getField(GRIDSQUARE));
-				if (btnSelectQSLrcvd->value())
-					fprintf (txtFile, "%-10s", pRec->getField(QSLRDATE));
-				if (btnSelectQSLsent->value())
-					fprintf (txtFile, "%-10s", pRec->getField(QSLSDATE));
-				if (btnSelectQSLrcvd->value())
-					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLRDATE));
-				if (btnSelectQSLsent->value())
-					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLSDATE));
-				if (btnSelectQSLrcvd->value())
-					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLRDATE));
-				if (btnSelectQSLsent->value())
-					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLSDATE));
+//				if (btnSelectQSLrcvd->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(QSLRDATE));
+//				if (btnSelectQSLsent->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(QSLSDATE));
+//				if (btnSelectQSLrcvd->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLRDATE));
+//				if (btnSelectQSLsent->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(EQSL_QSLSDATE));
+//				if (btnSelectQSLrcvd->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLRDATE));
+//				if (btnSelectQSLsent->value())
+//					fprintf (txtFile, "%-10s", pRec->getField(LOTW_QSLSDATE));
 				if (btnSelectNotes->value()) {
 					string temp = pRec->getField(NOTES);
 				for (size_t n = 0; n < temp.length(); n++)

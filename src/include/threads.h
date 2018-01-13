@@ -1,7 +1,33 @@
+// ----------------------------------------------------------------------------
+// Copyright (C) 2014...2018
+//              David Freese, W1HKJ
+//
+// This file is part of fllog.
+//
+// flrig is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 3 of the License, or
+// (at your option) any later version.
+//
+// flrig is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <http://www.gnu.org/licenses/>.
+// ----------------------------------------------------------------------------
+
 #ifndef THREADS_H_
 #define THREADS_H_
 
 #include <config.h>
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <fcntl.h>
 
 #include <pthread.h>
 #include <stdint.h>
@@ -74,6 +100,9 @@ bool thread_in_list(int id, const int* list);
 // which will also interrupt blocking calls.  On woe32 we use
 // pthread_cancel and there is no good/sane way to interrupt.
 #ifndef __WOE32__
+
+#include <signal.h>
+
 #  define SET_THREAD_CANCEL()					\
 	do {							\
 		sigset_t usr2;					\
@@ -90,6 +119,15 @@ bool thread_in_list(int id, const int* list);
 #  define CANCEL_THREAD(t__) pthread_cancel(t__);
 #endif
 
-#include "fl_lock.h"
+/// This ensures that a mutex is always unlocked when leaving a function or block.
+
+class guard_lock
+{
+public:
+	guard_lock(pthread_mutex_t* m);
+	~guard_lock(void);
+private:
+	pthread_mutex_t* mutex;
+};
 
 #endif // !THREADS_H_

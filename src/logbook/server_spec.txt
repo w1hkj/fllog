@@ -1,0 +1,115 @@
+// ---------------------------------------------------------------------
+//
+//			fldigi compatible logbook xml_server
+//
+//
+// Copyright (C) 2015
+//							 Dave Freese, W1HKJ
+//
+// This document describes the interface requirements for a logbook server
+// that supports a tcpip / xmlrpc interface for operating with fldigi.
+
+fllog is a program written in C++ and compiled for all of the fldigi target
+operating systems.  It is identical to fldigi's built-in logbook and uses the
+same comma-separated-value flat database files.  It's purpose is act as a tcpip
+server that supports multiple running instances of fldigi, flwkey or any other
+tcpip client with the correct xmlrpc support.  fllog can reside on the same,
+another computer on a LAN, or a computer accessible on a WAN.
+
+Any program can act as the fldigi logbook with automatic log entry from fldigi.
+A side benefit is that a WinKeyer user with flwkey acting as the computer interface
+can also use the same logbook, simultaneously with fldigi.
+
+The logbook program, hereafter referred to as LGP, only needs to incorporate an
+xmlrpc server with a very small set of xmlrpc commands/queries.
+
+//==============================================================================
+fldigi tests for access to the server using
+
+system.listMethods
+
+The return should be similar to:
+
+log.add_record ADIF RECORD
+log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)
+log.get_record CALL
+
+The listMethods should be a part of the xmlrpc library.
+
+//==============================================================================
+// Request record if it exists else return "NO_RECORD"
+// Returns ADIF record
+
+log.get_record		log.get_record CALL
+
+If found the return string is an ADIF record formated iaw the current ADIF spec.
+
+Example of return strings as fldigi operator enters the call N3FJP into the CALL
+control on fldigi's log entry:
+
+NO_RECORD
+NO_RECORD
+<CALL:5>N3FJP<COUNTRY:13>United States<STATE:2>MD<FREQ:8>3.081500
+<GRIDSQUARE:6>FM19tm<NAME:5>Glenn
+<NOTES:39>a new record
+for N3FJP
+with added notes
+<QSO_DATE:8>20150721<QSO_DATE_OFF:8>20150721<QTH:7>Bel Air
+<TIME_OFF:6>133830<TIME_ON:6>133300
+
+<eor> terminator is optional.
+
+//==============================================================================
+// Add a record to the logbook database
+
+log.add_record		log.add_record ADIF_RECORD
+
+where ADIF_RECORD is a valid string record iaw with current ADIF specification.
+
+No reply from logbook server.
+
+example of ADIF_RECORD passed by fldigi:
+
+<QSO_DATE:8>20150721<QSO_DATE_OFF:8>20150721<TIME_ON:4>1333<TIME_OFF:6>133436
+<CALL:5>N3FJP<FREQ:8>3.081500<MODE:0><RST_SENT:0><RST_RCVD:0><TX_PWR:0>
+<NAME:5>Glenn<QTH:7>Bel Air<STATE:2>MD<VE_PROV:0><COUNTRY:13>United States
+<GRIDSQUARE:6>FM19tm<STX:0><SRX:0><SRX_STRING:0><STX_STRING:0><NOTES:0>
+<IOTA:0><DXCC:0><QSL_VIA:0><QSLRDATE:0><QSLSDATE:0><eor>
+
+The record may include linefeed (0x0A) characters between fields (but they are
+not necessary).  Linefeed characters may be included with the field and they are
+included in the field count.  i.e.
+
+<NOTES:39>a new record
+for N3FJP
+with added notes
+<IOTA ...
+
+//==============================================================================
+// Request a check for a duplicate record
+// Arguments: CALLSIGN MODE TIME_SPAN FREQ
+
+log.check_dup		log.check_dup CALLSIGN MODE TIME_SPAN FREQ
+
+CALLSIGN - amateur callsign
+MODE - ADIF type mode specifier
+TIME_SPAN - time in minutes from current time back
+FREQ - frequency in Hertz
+
+returns "true" if a duplicate is found OR "false" if not found
+
+//==============================================================================
+// XmlRpc server address/port: 
+
+   default values: 127.0.0.1 / 8421
+
+fldigi can be configured to use a server on any valid socket address / port pair
+
+192.168.1.69  / 8900
+
+dave-acer / 8910
+
+Note that a local domain-name-server must be present to use a "named" address
+rather than the quad URL address specifier.
+
+//==============================================================================

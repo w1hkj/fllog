@@ -16,4 +16,6 @@ extern std::string log_checksum;
 
 extern void start_logbook();
 
+extern void saveLogbook();
+
 #endif

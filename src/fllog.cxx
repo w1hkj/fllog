@@ -108,6 +108,18 @@ inline void inp_font_pos(Fl_Input2* inp, int x, int y, int w, int h)
 	inp->resize(x, y, w, h);
 }
 
+inline void out_font_pos(Fl_Output* wid, int x, int y, int w, int h)
+{
+	wid->textsize(progStatus.LOGBOOKtextsize);
+	wid->textfont(progStatus.LOGBOOKtextfont);
+	wid->textcolor(progStatus.LOGBOOKtextcolor);
+	wid->color(progStatus.LOGBOOKcolor);
+	int ls = progStatus.LOGBOOKtextsize;
+	wid->labelsize(ls < 14 ? ls : 14);
+	wid->redraw_label();
+	wid->resize(x, y, w, h);
+}
+
 inline void date_font_pos(Fl_DateInput* inp, int x, int y, int w, int h)
 {
 	inp->textsize(progStatus.LOGBOOKtextsize);
@@ -169,7 +181,6 @@ void LOGBOOK_colors_font()
 	else
 		newheight = progStatus.mainH;
 	mainwindow->resize(progStatus.mainX, progStatus.mainY, progStatus.mainW, progStatus.mainH);
-//	mainwindow->resize(mainwindow->x(), mainwindow->y(), dlg_width, newheight);
 
 // row1
 	int ypos = inpDate_log->y();
@@ -239,36 +250,40 @@ void LOGBOOK_colors_font()
 	Tabs->resize(xpos, ypos, Tabs->w(), Tabs->h());
 
 	Fl_Input2* extras[] = {
-		inpCNTY_log, inpIOTA_log, inpCQZ_log, 
-		inpITUZ_log, inpCONT_log, inpDXCC_log,
-		inpSerNoOut_log, inpMyXchg_log, inpSerNoIn_log, 
-		inpXchgIn_log, inpSearchString 
+		inpCNTY_log, inpIOTA_log, inpCQZ_log,
+		inpCONT_log, inpITUZ_log, inpDXCC_log,
+		inp_log_sta_call,
+		inp_log_op_call, inp_log_sta_qth,
+		inp_log_sta_loc, inpSerNoOut_log,
+		inpMyXchg_log, inpSerNoIn_log,
+		inpXchgIn_log, inp_FD_class_log,
+		inp_FD_section_log, inpBand_log,
+		inp_log_cwss_serno, inp_log_cwss_sec,
+		inp_log_cwss_prec, inp_log_cwss_chk,
+		inp_mycall,
+		inpSearchString 
 	};
 	for (size_t i = 0; i < sizeof(extras)/sizeof(*extras); i++) {
-		extras[i]->resize(extras[i]->x(), extras[i]->y(), extras[i]->w(), wh);
+		inp_font_pos(extras[i], extras[i]->x(), extras[i]->y(), extras[i]->w(), wh);
 	}
+	inp_font_pos(inpNotes_log, inpNotes_log->x(), inpNotes_log->y(),
+				inpNotes_log->w(), inpNotes_log->h());
+	inp_font_pos(inpQSL_VIA_log, inpQSL_VIA_log->x(), inpQSL_VIA_log->y(),
+				inpQSL_VIA_log->w(), inpQSL_VIA_log->h());
+
 	Fl_DateInput* dates[] = {
 		inpQSLrcvddate_log, inpEQSLrcvddate_log, inpLOTWrcvddate_log,
 		inpQSLsentdate_log, inpEQSLsentdate_log, inpLOTWsentdate_log,
 	};
 	for (size_t i = 0; i < sizeof(dates)/sizeof(*dates); i++) {
-		dates[i]->resize(dates[i]->x(), dates[i]->y(), dates[i]->w(), wh);
-	}
-	Fl_Choice* choices[] = {
-		statusQSLrcvd, statusEQSLrcvd, statusLOTWrcvd,
-		statusQSLsent, statusEQSLsent, statusLOTWsent
-	};
-	for (size_t i = 0; i < sizeof(choices)/sizeof(*choices); i++) {
-		choices[i]->resize(choices[i]->x(), choices[i]->y(), choices[i]->w(), wh);
+		date_font_pos(dates[i], dates[i]->x(), dates[i]->y(),
+					dates[i]->w(), wh);
 	}
 
 	int srchwidth = dlg_width - 8 - Tabs->w();
 	int srchx = dlg_width - srchwidth - 2;
 
-	txtNbrRecs_log->textcolor(progStatus.LOGBOOKtextcolor);
-	txtNbrRecs_log->color(progStatus.LOGBOOKcolor);
-
-	txtNbrRecs_log->resize(srchx, ypos + 22, srchwidth, wh);
+	inp_font_pos(txtNbrRecs_log, srchx, ypos + 22, srchwidth, wh);
 
 	int srchy = Tabs->y() + Tabs->h() - 2* wh - 2;
 	inp_font_pos(inpSearchString, srchx, srchy, srchwidth, wh);
@@ -280,7 +295,7 @@ void LOGBOOK_colors_font()
 
 	ypos = Tabs->y() + Tabs->h() + 4;
 
-	txtLogFile->resize(txtLogFile->x(), ypos, txtLogFile->w(), txtLogFile->h());
+	out_font_pos(txtLogFile, txtLogFile->x(), ypos, txtLogFile->w(), txtLogFile->h());
 
 	Fl_Button* btns[] = { bNewSave, bUpdateCancel, bDelete };
 	for (size_t i = 0; i < sizeof(btns)/sizeof(*btns); i++) {

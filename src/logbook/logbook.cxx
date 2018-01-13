@@ -54,9 +54,10 @@ void start(void *)
 	} else
 		logbook_filename = progStatus.logbookfilename;
 
-	adifFile.readFile (logbook_filename.c_str(), &qsodb);
+	adifFile.readFile (logbook_filename, &qsodb);
+
 	if (qsodb.nbrRecs() == 0)
-		adifFile.writeFile(logbook_filename.c_str(), &qsodb);
+		adifFile.writeFile(logbook_filename, &qsodb);
 
 	txtLogFile->value(progStatus.logbookfilename.c_str());
 	txtLogFile->redraw();

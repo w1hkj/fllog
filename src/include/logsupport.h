@@ -69,4 +69,6 @@ extern void WriteCabrillo();
 extern void dxcc_entity_cache_enable(bool v);
 bool qsodb_dxcc_entity_find(const char* country);
 
+extern void cb_export_date_select();
+
 #endif
