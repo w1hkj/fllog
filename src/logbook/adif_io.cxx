@@ -27,11 +27,9 @@
 #include <FL/filename.H>
 #include <FL/fl_ask.H>
 
-//#include "signal.h"
 #include "threads.h"
 #include "adif_io.h"
 #include "config.h"
-//#include "configuration.h"
 #include "lgbook.h"
 #include "icons.h"
 #include "gettext.h"
@@ -39,7 +37,7 @@
 #include "util.h"
 #include "date.h"
 #include "logsupport.h"
-//#include "qrunner.h"
+#include "support.h"
 #include "timeops.h"
 
 using namespace std;
@@ -140,13 +138,6 @@ FIELD fields[] = {
 
 static string read_errors;
 static int    num_read_errors;
-
-static void write_status(std::string s)
-{
-	LOG_INFO("%s", s.c_str());
-//	std::cout << s << std::endl;
-//	ReceiveText->addstr(s);
-}
 
 static char *fastlookup = 0;
 
@@ -696,5 +687,12 @@ void cAdifIO::add_record(const char *buffer, cQsoDb &db)
 		p = strchr(p + 1,'<');
 	}
 	db.SortByDate();
-
+	std::string status = buffer;
+	size_t ptr = status.find("<CALL:");
+	if (ptr != std::string::npos) ptr = status.find(">", ptr);
+	status.erase(0, ptr + 1);
+	ptr = status.find("<");
+	status.erase(ptr);
+	status.insert(0, "Add record: ").append("\n");
+	write_status(status);
 }

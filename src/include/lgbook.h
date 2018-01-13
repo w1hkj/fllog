@@ -30,8 +30,6 @@ extern Fl_Input2 *inpSearchString;
 extern void cb_search(Fl_Button*, void*);
 extern Fl_Button *bSearchPrev;
 extern Fl_Button *bSearchNext;
-#include "table.h"
-extern Table *wBrowser;
 #include <FL/Fl_Tabs.H>
 extern Fl_Tabs *Tabs;
 #include <FL/Fl_Group.H>
@@ -79,6 +77,11 @@ extern Fl_Button *bUpdateCancel;
 extern void cb_btnDelete(Fl_Button*, void*);
 extern Fl_Button *bDelete;
 extern Fl_Input2 *inp_mycall;
+extern Fl_Group *browser_group;
+#include "table.h"
+extern Table *wBrowser;
+#include <FL/Fl_Text_Display.H>
+extern Fl_Text_Display *status_display;
 extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;

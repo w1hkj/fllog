@@ -97,8 +97,16 @@ public:
   void execute(XmlRpcValue& params, XmlRpcValue& result)
   {
 	std::string callsign = std::string(params[0]);
-    std::string resultString = fetch_record(callsign.c_str());
+	std::string resultString = fetch_record(callsign.c_str());
+
 	result = resultString;
+
+	if (resultString.find(callsign) != std::string::npos) {
+		std::string status = "Found record for: ";
+		status.append(callsign).append("\n");
+		write_status(status);
+	}
+
   }
 
   std::string help() { return std::string("log.get_record CALL"); }
@@ -109,35 +117,43 @@ public:
 class log_check_dup : public XmlRpcServerMethod
 {
 public:
-  log_check_dup(XmlRpcServer* s) : XmlRpcServerMethod("log.check_dup", s) {}
+	log_check_dup(XmlRpcServer* s) : XmlRpcServerMethod("log.check_dup", s) {}
 
-  void execute(XmlRpcValue& params, XmlRpcValue& result)
-  {
-	if (params.size() != 6) {
-		result = "Wrong # parameters";
-		return;
-	}
-	std::string callsign = std::string(params[0]);
-	std::string mode = std::string(params[1]);
-	std::string spn = std::string(params[2]);
-	std::string freq = std::string(params[3]);
-	std::string state = std::string(params[4]);
-	std::string xchg_in = std::string(params[5]);
-	int ispn = atoi(spn.c_str());
-	int ifreq = atoi(freq.c_str());
-	bool bspn = (ispn > 0);
-	bool bfreq = (ifreq > 0);
-	bool bmode = (mode != "0");
-	bool bstate = (state != "0");
-	bool bxchg = (xchg_in != "0");
-	bool res = qsodb.duplicate(
+	void execute(XmlRpcValue& params, XmlRpcValue& result)
+	{
+		if (params.size() != 6) {
+			result = "Wrong # parameters";
+			write_status("log_check_dup: wrong number of parameters\n");
+			return;
+		}
+		std::string callsign = std::string(params[0]);
+		std::string mode = std::string(params[1]);
+		std::string spn = std::string(params[2]);
+		std::string freq = std::string(params[3]);
+		std::string state = std::string(params[4]);
+		std::string xchg_in = std::string(params[5]);
+		int ispn = atoi(spn.c_str());
+		int ifreq = atoi(freq.c_str());
+		bool bspn = (ispn > 0);
+		bool bfreq = (ifreq > 0);
+		bool bmode = (mode != "0");
+		bool bstate = (state != "0");
+		bool bxchg = (xchg_in != "0");
+		bool res = qsodb.duplicate(
 			callsign.c_str(),
 			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, bspn,
 			freq.c_str(), bfreq,
 			state.c_str(), bstate,
 			mode.c_str(), bmode,
 			xchg_in.c_str(), bxchg);
-	result = (res ? "true" : "false");
+		result = (res ? "true" : "false");
+
+		if (res) {
+			std::string status = "Duplicate: ";
+			status.append(callsign).append("\n");
+			write_status(status);
+		}
+
 	}
 
 	std::string help() { 
@@ -155,14 +171,14 @@ void updateBrowser(void *)
 class log_add_record : public XmlRpcServerMethod
 {
 public:
-  log_add_record(XmlRpcServer* s) : XmlRpcServerMethod("log.add_record", s) {}
+	log_add_record(XmlRpcServer* s) : XmlRpcServerMethod("log.add_record", s) {}
 
-  void execute(XmlRpcValue& params, XmlRpcValue& result)
-  {
-    std::string adif_record = std::string(params[0]);
-	xml_adif.add_record(adif_record.c_str(), qsodb);
-	Fl::awake(updateBrowser);
-  }
+	void execute(XmlRpcValue& params, XmlRpcValue& result)
+	{
+		std::string adif_record = std::string(params[0]);
+		xml_adif.add_record(adif_record.c_str(), qsodb);
+		Fl::awake(updateBrowser);
+	}
 	std::string help() { return std::string("log.add_record ADIF RECORD"); }
 
 } log_add_record(&s);
@@ -197,6 +213,22 @@ void start_server(int port)
 void exit_server()
 {
 	s.exit();
+}
+
+static std::string status_string;
+static void status_update(void *)
+{
+	status_display->insert(status_string.c_str());
+	status_display->show_insert_position();
+	status_display->redraw();
+	mainwindow->redraw();
+}
+
+void write_status(std::string s)
+{
+	LOG_INFO("%s", s.c_str());
+	status_string = s;
+	Fl::awake(status_update);
 }
 
 

@@ -313,7 +313,10 @@ void LOGBOOK_colors_font()
 //	wBrowser->allowVscroll(always);
 	wBrowser->allowHscroll(never);
 
-	wBrowser->resize(wBrowser->x(), ypos, dlg_width - 2*wBrowser->x(), mainwindow->h() - 2 - ypos);
+	browser_group->resize(
+		browser_group->x(), ypos, 
+		dlg_width - 2*browser_group->x(), mainwindow->h() - 2 - ypos);
+//	wBrowser->resize(wBrowser->x(), ypos, dlg_width - 2*wBrowser->x(), mainwindow->h() - 2 - ypos);
 
 	mainwindow->init_sizes();
 	mainwindow->damage();

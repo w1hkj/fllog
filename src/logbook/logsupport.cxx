@@ -1445,12 +1445,24 @@ string sFld;
 	return (const char *)szrec;
 }
 
+static std::string fetch_callsign;
+void update_fetch(void *)
+{
+	int row = 0, col = 2;
+	wBrowser->search(row, col, false, fetch_callsign.c_str());
+	wBrowser->GotoRow(row);
+	wBrowser->redraw();
+	mainwindow->redraw();
+}
+
 const char *fetch_record(const char *callsign)
 {
 	cQsoRec *rec = SearchLog(callsign);
-	if (rec)
+	if (rec) {
+		fetch_callsign = callsign;
+		Fl::awake(update_fetch);
 		return adif_record(rec);
-	else
+	} else
 		return "NO_RECORD";
 }
 

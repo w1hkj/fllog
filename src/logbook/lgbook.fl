@@ -29,8 +29,8 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook
-    xywh {637 165 590 500} type Double color 47 hide resizable
+    label Logbook open
+    xywh {547 44 590 515} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
       xywh {0 0 427 24}
@@ -210,16 +210,11 @@ Function {create_logbook_dialogs()} {open return_type void
       tooltip {Find next} xywh {548 251 24 22} color 50 selection_color 48 align 16
       code0 {bSearchNext->image(new Fl_Pixmap(right_arrow_icon));}
     }
-    Fl_Group wBrowser {
-      xywh {2 310 586 186} box DOWN_FRAME color 7 selection_color 15 resizable
-      code0 {\#include "table.h"}
-      class Table
-    } {}
-    Fl_Tabs Tabs {open
+    Fl_Tabs Tabs {
       xywh {5 155 475 120}
     } {
       Fl_Group tab_log_qsl {
-        label QSL open
+        label QSL
         xywh {5 179 475 96}
       } {
         Fl_Input inpQSLrcvddate_log {
@@ -427,6 +422,21 @@ o->value(progStatus.mycall.c_str());}
       tooltip {My station call sign} xywh {486 0 100 24}
       code0 {o->value(progStatus.mycall.c_str());}
       class Fl_Input2
+    }
+    Fl_Group browser_group {open
+      xywh {2 310 586 205} resizable
+    } {
+      Fl_Group wBrowser {
+        xywh {2 310 586 120} box DOWN_FRAME color 7 selection_color 15 resizable
+        code0 {\#include "table.h"}
+        class Table
+      } {}
+      Fl_Text_Display status_display {selected
+        xywh {2 432 586 80}
+        code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
+        code1 {txtbuffer->text("");}
+        code2 {o->buffer(txtbuffer);}
+      }
     }
   }
   code {wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);
@@ -836,8 +846,8 @@ btnSelectStaCity->value(0);}
     }
   }
   Fl_Window wCabrillo {
-    label {Cabrillo Setup} selected
-    xywh {450 161 675 340} type Double visible
+    label {Cabrillo Setup}
+    xywh {450 161 675 340} type Double hide
   } {
     Fl_Group {} {
       label {Select Records to Export} open

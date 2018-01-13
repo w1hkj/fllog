@@ -120,8 +120,6 @@ Fl_Button *bSearchPrev=(Fl_Button *)0;
 
 Fl_Button *bSearchNext=(Fl_Button *)0;
 
-Table *wBrowser=(Table *)0;
-
 Fl_Tabs *Tabs=(Fl_Tabs *)0;
 
 Fl_Group *tab_log_qsl=(Fl_Group *)0;
@@ -210,6 +208,12 @@ for (size_t n = 0; n < progStatus.mycall.length(); n++)
 progStatus.mycall[n] = toupper(progStatus.mycall[n]);
 o->value(progStatus.mycall.c_str());
 }
+
+Fl_Group *browser_group=(Fl_Group *)0;
+
+Table *wBrowser=(Table *)0;
+
+Fl_Text_Display *status_display=(Fl_Text_Display *)0;
 
 Fl_Double_Window *wExport=(Fl_Double_Window *)0;
 
@@ -596,7 +600,7 @@ btnCabRSTrcvd->value(1);
 }
 
 void create_logbook_dialogs() {
-  { dlgLogbook = new Fl_Double_Window(590, 500, _("Logbook"));
+  { dlgLogbook = new Fl_Double_Window(590, 515, _("Logbook"));
     dlgLogbook->color(FL_DARK1);
     { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 427, 24);
       if (!menu__i18n_done) {
@@ -842,19 +846,6 @@ void create_logbook_dialogs() {
       bSearchNext->align(Fl_Align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE));
       bSearchNext->image(new Fl_Pixmap(right_arrow_icon));
     } // Fl_Button* bSearchNext
-    { wBrowser = new Table(2, 310, 586, 186);
-      wBrowser->box(FL_DOWN_FRAME);
-      wBrowser->color(FL_BACKGROUND2_COLOR);
-      wBrowser->selection_color(FL_SELECTION_COLOR);
-      wBrowser->labeltype(FL_NORMAL_LABEL);
-      wBrowser->labelfont(0);
-      wBrowser->labelsize(14);
-      wBrowser->labelcolor(FL_FOREGROUND_COLOR);
-      wBrowser->align(Fl_Align(FL_ALIGN_TOP));
-      wBrowser->when(FL_WHEN_RELEASE);
-      wBrowser->end();
-      Fl_Group::current()->resizable(wBrowser);
-    } // Table* wBrowser
     { Tabs = new Fl_Tabs(5, 155, 475, 120);
       { tab_log_qsl = new Fl_Group(5, 179, 475, 96, _("QSL"));
         { Fl_DateInput* o = inpQSLrcvddate_log = new Fl_DateInput(9, 198, 100, 24, _("QSL-rcvd"));
@@ -1277,6 +1268,28 @@ void create_logbook_dialogs() {
       inp_mycall->when(FL_WHEN_RELEASE);
       o->value(progStatus.mycall.c_str());
     } // Fl_Input2* inp_mycall
+    { browser_group = new Fl_Group(2, 310, 586, 205);
+      { wBrowser = new Table(2, 310, 586, 120);
+        wBrowser->box(FL_DOWN_FRAME);
+        wBrowser->color(FL_BACKGROUND2_COLOR);
+        wBrowser->selection_color(FL_SELECTION_COLOR);
+        wBrowser->labeltype(FL_NORMAL_LABEL);
+        wBrowser->labelfont(0);
+        wBrowser->labelsize(14);
+        wBrowser->labelcolor(FL_FOREGROUND_COLOR);
+        wBrowser->align(Fl_Align(FL_ALIGN_TOP));
+        wBrowser->when(FL_WHEN_RELEASE);
+        wBrowser->end();
+        Fl_Group::current()->resizable(wBrowser);
+      } // Table* wBrowser
+      { Fl_Text_Display* o = status_display = new Fl_Text_Display(2, 432, 586, 80);
+        Fl_Text_Buffer * txtbuffer = new Fl_Text_Buffer();
+        txtbuffer->text("");
+        o->buffer(txtbuffer);
+      } // Fl_Text_Display* status_display
+      browser_group->end();
+      Fl_Group::current()->resizable(browser_group);
+    } // Fl_Group* browser_group
     dlgLogbook->end();
   } // Fl_Double_Window* dlgLogbook
   wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);
