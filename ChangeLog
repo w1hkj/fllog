@@ -1,6 +1,27 @@
 
 
+=Version 1.2.5=
+
+2018-01-13  David Freese  <w1hkj@bellsouth.net>
+
+	3cbfc7c: status log
+	f2a3c28: db update
+	2019450: Native File Chooser
+	1756254: xmlrpc update
+	4cfb5cf: win mingw
+	3992e49: flxmlrpc config
+
+2016-07-10  Kamal Mostafa  <kamal@whence.com>
+
+	21f9d43: fix XmlRpc tm_mday comparison typo
+
+2016-07-04  Robert Cunnings  <nw8l@whitemesa.com>
+
+	41f12d1: mxe update
+
+
 =Version 1.2.4=
+
 
 2016-05-16  David Freese  <iam_w1hkj@w1hkj.com>
 
