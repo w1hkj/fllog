@@ -1095,11 +1095,15 @@ void cb_mnuMergeADIF_log() {
 	const char* p = FSEL::select(_("Merge ADIF file"), "ADIF\t*." ADIF_SUFFIX);
 	Fl::flush();
 	if (p) {
+
 		adifFile.readFile (p, &qsodb);
 		txtLogFile->value(progStatus.logbookfilename.c_str());
 		txtLogFile->redraw();
 		Fl::flush();
+
+		restore_sort();
 		loadBrowser();
+
 		qsodb.isdirty(1);
 	}
 }
