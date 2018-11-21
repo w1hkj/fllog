@@ -10,11 +10,15 @@ extern Fl_Double_Window *dlgLogbook;
 #include "calendar.h"
 extern Fl_DateInput *inpDate_log;
 extern Fl_Input2 *inpTimeOn_log;
+#include <FL/Fl_Button.H>
+#include <ctime>
+extern Fl_Button *btnSetTimeOn;
 extern Fl_Input2 *inpCall_log;
 extern Fl_Input2 *inpName_log;
 extern Fl_Input2 *inpRstR_log;
 extern Fl_DateInput *inpDateOff_log;
 extern Fl_Input2 *inpTimeOff_log;
+extern Fl_Button *btnSetTimeOff;
 extern Fl_Input2 *inpFreq_log;
 extern Fl_Input2 *inpMode_log;
 extern Fl_Input2 *inpTX_pwr_log;
@@ -26,7 +30,6 @@ extern Fl_Input2 *inpCountry_log;
 extern Fl_Input2 *inpLoc_log;
 extern Fl_Input2 *txtNbrRecs_log;
 extern Fl_Input2 *inpSearchString;
-#include <FL/Fl_Button.H>
 extern void cb_search(Fl_Button*, void*);
 extern Fl_Button *bSearchPrev;
 extern Fl_Button *bSearchNext;
@@ -60,14 +63,22 @@ extern Fl_Input2 *inpSerNoOut_log;
 extern Fl_Input2 *inpMyXchg_log;
 extern Fl_Input2 *inpSerNoIn_log;
 extern Fl_Input2 *inpXchgIn_log;
-extern Fl_Input2 *inp_FD_class_log;
-extern Fl_Input2 *inp_FD_section_log;
+extern Fl_Input2 *inpClass_log;
+extern Fl_Input2 *inpSection_log;
+extern Fl_Input2 *inp_age_log;
+extern Fl_Input2 *inp_1010_log;
+extern Fl_Input2 *inp_check_log;
 extern Fl_Input2 *inpBand_log;
 extern Fl_Group *tab_log_cwss;
 extern Fl_Input2 *inp_log_cwss_serno;
 extern Fl_Input2 *inp_log_cwss_sec;
 extern Fl_Input2 *inp_log_cwss_prec;
 extern Fl_Input2 *inp_log_cwss_chk;
+extern Fl_Group *tab_log_jota;
+extern Fl_Input2 *inp_log_troop_s;
+extern Fl_Input2 *inp_log_troop_r;
+extern Fl_Input2 *inp_log_scout_s;
+extern Fl_Input2 *inp_log_scout_r;
 #include <FL/Fl_Output.H>
 extern Fl_Output *txtLogFile;
 extern void cb_btnNewSave(Fl_Button*, void*);

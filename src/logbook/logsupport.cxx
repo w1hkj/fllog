@@ -457,11 +457,11 @@ void saveLogbook()
 
 	qsodb.SortByDate();
 
-	qsodb.isdirty(0);
+	adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
+
 	restore_sort();
 
-	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
-
+	qsodb.isdirty(0);
 }
 
 void cb_mnuNewLogbook()
@@ -1537,7 +1537,6 @@ void clearRecord()
 	inpSerNoOut_log->value ("");
 	inpSerNoIn_log->value ("");
 	inpXchgIn_log->value("");
-//	inpMyXchg_log->value(progStatus.myXchg.c_str());
 	inpNotes_log->value ("");
 	inpIOTA_log->value("");
 	inpDXCC_log->value("");
@@ -1558,6 +1557,15 @@ void clearRecord()
 	inp_log_cwss_prec->value("");
 	inp_log_cwss_chk->value("");
 	inp_log_cwss_sec->value("");
+
+	inp_age_log->value("");
+	inp_1010_log->value("");
+	inp_check_log->value("");
+
+	inp_log_troop_s->value("");
+	inp_log_troop_r->value("");
+	inp_log_scout_s->value("");
+	inp_log_scout_r->value("");
 }
 
 void saveRecord()
@@ -1593,34 +1601,16 @@ void saveRecord()
 	rec.putField(EQSLSDATE, inpEQSLsentdate_log->value());
 
 	rec.putField(LOTWRDATE, inpLOTWrcvddate_log->value());
-
-//	if (progStatus.submit_lotw) {
-//		lotwsdate = szDate();
-//		rec.putField(LOTWSDATE, lotwsdate.c_str());
-//		Fl::awake(refresh_logbook_dialog);
-//	} else
-		rec.putField(LOTWSDATE, inpLOTWsentdate_log->value());
+	rec.putField(LOTWSDATE, inpLOTWsentdate_log->value());
 
 	rec.putField(RST_RCVD, inpRstR_log->value ());
 	rec.putField(RST_SENT, inpRstS_log->value ());
 	rec.putField(SRX, inpSerNoIn_log->value());
 	rec.putField(STX, inpSerNoOut_log->value());
 	rec.putField(XCHG1, inpXchgIn_log->value());
-	rec.putField(FDCLASS, inp_FD_class_log->value());
-	rec.putField(FDSECTION, inp_FD_section_log->value());
-//	if (!qso_exchange.empty()) {
-//		rec.putField(MYXCHG, qso_exchange.c_str());
-//		qso_exchange.clear();
-//		qso_time.clear();
-//	}
-//	 else if (!qso_time.empty()) {
-//		string myexch = inpMyXchg_log->value();
-//		myexch.append(" ").append(qso_time);
-//		rec.putField(MYXCHG, myexch.c_str());
-//		qso_time.clear();
-//	} else {
-		rec.putField(MYXCHG, inpMyXchg_log->value());
-//	}
+	rec.putField(CLASS, inpClass_log->value());
+	rec.putField(ARRL_SECT, inpSection_log->value());
+	rec.putField(MYXCHG, inpMyXchg_log->value());
 	rec.putField(CNTY, inpCNTY_log->value());
 	rec.putField(IOTA, inpIOTA_log->value());
 	rec.putField(DXCC, inpDXCC_log->value());
@@ -1640,12 +1630,16 @@ void saveRecord()
 	rec.putField(SS_CHK, inp_log_cwss_chk->value());
 	rec.putField(SS_SEC, inp_log_cwss_sec->value());
 
+	rec.putField(AGE,  inp_age_log->value());
+	rec.putField(TEN_TEN, inp_1010_log->value());
+	rec.putField(CHECK, inp_check_log->value());
+
+	rec.putField(TROOPS, inp_log_troop_s->value());
+	rec.putField(TROOPR, inp_log_troop_r->value());
+	rec.putField(SCOUTS, inp_log_scout_s->value());
+	rec.putField(SCOUTR, inp_log_scout_r->value());
+
 	qsodb.qsoNewRec (&rec);
-
-//	lotw_recs_sent.push_back(qsodb.nbrRecs() - 1);
-
-//	dxcc_entity_cache_add(&rec);
-//	submit_record(rec);
 
 	qsodb.isdirty(0);
 
@@ -1699,8 +1693,8 @@ void updateRecord() {
 	rec.putField(STX, inpSerNoOut_log->value());
 	rec.putField(XCHG1, inpXchgIn_log->value());
 	rec.putField(MYXCHG, inpMyXchg_log->value());
-	rec.putField(FDCLASS, inp_FD_class_log->value());
-	rec.putField(FDSECTION, inp_FD_section_log->value());
+	rec.putField(CLASS, inpClass_log->value());
+	rec.putField(ARRL_SECT, inpSection_log->value());
 	rec.putField(CNTY, inpCNTY_log->value());
 	rec.putField(IOTA, inpIOTA_log->value());
 	rec.putField(DXCC, inpDXCC_log->value());
@@ -1720,12 +1714,16 @@ void updateRecord() {
 	rec.putField(SS_CHK, inp_log_cwss_chk->value());
 	rec.putField(SS_SEC, inp_log_cwss_sec->value());
 
-//	dxcc_entity_cache_rm(qsodb.getRec(editNbr));
-	qsodb.qsoUpdRec (editNbr, &rec);
-//	dxcc_entity_cache_add(&rec);
+	rec.putField(AGE,  inp_age_log->value());
+	rec.putField(TEN_TEN, inp_1010_log->value());
+	rec.putField(CHECK, inp_check_log->value());
 
-//	cQsoDb::reverse = false;
-//	qsodb.SortByDate(progStatus.sort_date_time_off);
+	rec.putField(TROOPS, inp_log_troop_s->value());
+	rec.putField(TROOPR, inp_log_troop_r->value());
+	rec.putField(SCOUTS, inp_log_scout_s->value());
+	rec.putField(SCOUTR, inp_log_scout_r->value());
+
+	qsodb.qsoUpdRec (editNbr, &rec);
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -1741,11 +1739,7 @@ void deleteRecord () {
 					       _("Yes"), _("No"), NULL, wBrowser->valueAt(-1, 2)))
 		return;
 
-//	dxcc_entity_cache_rm(qsodb.getRec(editNbr));
 	qsodb.qsoDelRec(editNbr);
-
-//	cQsoDb::reverse = false;
-//	qsodb.SortByDate(progStatus.sort_date_time_off);
 
 	qsodb.isdirty(0);
 	restore_sort();
@@ -1791,8 +1785,8 @@ void EditRecord( int i )
 	inpSerNoIn_log->value(editQSO->getField(SRX));
 	inpSerNoOut_log->value(editQSO->getField(STX));
 	inpXchgIn_log->value(editQSO->getField(XCHG1));
-	inp_FD_class_log->value(editQSO->getField(FDCLASS));
-	inp_FD_section_log->value(editQSO->getField(FDSECTION));
+	inpClass_log->value(editQSO->getField(CLASS));
+	inpSection_log->value(editQSO->getField(ARRL_SECT));
 	inpMyXchg_log->value(editQSO->getField(MYXCHG));
 	inpCNTY_log->value(editQSO->getField(CNTY));
 	inpIOTA_log->value(editQSO->getField(IOTA));
@@ -1812,6 +1806,15 @@ void EditRecord( int i )
 	inp_log_cwss_prec->value(editQSO->getField(SS_PREC));
 	inp_log_cwss_chk->value(editQSO->getField(SS_CHK));
 	inp_log_cwss_sec->value(editQSO->getField(SS_SEC));
+
+	inp_age_log->value(editQSO->getField(AGE));
+	inp_1010_log->value(editQSO->getField(TEN_TEN));
+	inp_check_log->value(editQSO->getField(CHECK));
+
+	inp_log_troop_s->value(editQSO->getField(TROOPS));
+	inp_log_troop_r->value(editQSO->getField(TROOPR));
+	inp_log_scout_s->value(editQSO->getField(SCOUTS));
+	inp_log_scout_r->value(editQSO->getField(SCOUTR));
 
 }
 
@@ -1879,8 +1882,8 @@ void AddRecord ()
 	inpCQZ_log->value(inp_CQzone->value());
 	inpITUZ_log->value("");
 
-	inp_FD_class_log->value(ucasestr(inp_FD_class->value()).c_str());
-	inp_FD_section_log->value(ucasestr(inp_FD_section->value()).c_str());
+	inpClass_log->value(ucasestr(inp_FD_class->value()).c_str());
+	inpSection_log->value(ucasestr(inp_FD_section->value()).c_str());
 
 	inp_log_sta_call->value(progStatus.myCall.c_str());
 	inp_log_op_call->value(progStatus.operCall.c_str());
@@ -1891,6 +1894,15 @@ void AddRecord ()
 	inp_log_cwss_prec->value(ucasestr(inp_SS_Precedence->value()).c_str());
 	inp_log_cwss_chk->value(ucasestr(inp_SS_Check->value()).c_str());
 	inp_log_cwss_sec->value(ucasestr(inp_SS_Section->value()).c_str());
+
+	inp_age_log->value(ucasestr(inp_KD_age->value()).c_str());
+	inp_check_log->value(ucasestr(inp_ARR_check->value()).c_str());
+	inp_1010_log->value(ucasestr(inp_1010_nr->value()).c_str());
+
+	inp_log_troop_s->value(progdefaults.my_JOTA_troop.c_str());
+	inp_log_troop_r->value(inp_JOTA_troop->value());
+	inp_log_scout_s->value(progdefaults.my_JOTA_scout.c_str());
+	inp_log_scout_r->value(inp_JOTA_scout->value());
 
 	saveRecord();
 
@@ -1912,7 +1924,7 @@ void addBrowserRow(cQsoRec *rec, int nbr)
 	snprintf(sNbr,sizeof(sNbr),"%d", nbr);
 	wBrowser->addRow (7,
 		rec->getField(QSO_DATE_OFF),
-		timeview4(rec->getField(TIME_OFF)),
+		timeview4(rec->getField(progStatus.BrowseTimeOFF ? TIME_OFF : TIME_ON)),
 		rec->getField(CALL),
 		rec->getField(NAME),
 		rec->getField(FREQ),

@@ -5,14 +5,17 @@
 #include <FL/Fl.H>
 #include "font_browser.h"
 #include <FL/Fl_Double_Window.H>
-extern Fl_Double_Window *dlgColorFont;
-#include <FL/Fl_Button.H>
-extern Fl_Button *btnClrFntClose;
+extern Fl_Double_Window *dlgConfigItems;
 #include <FL/Fl_Group.H>
+#include <FL/Fl_Check_Button.H>
+#include "logsupport.h"
+extern Fl_Check_Button *btnBrowseTimeOFF;
 #include <FL/Fl_Output.H>
 extern Fl_Output *LOGBOOKdisplay;
+#include <FL/Fl_Button.H>
 extern Fl_Button *btnLOGBOOK_color;
 extern Fl_Button *btn_LOGBOOK_font;
 extern Fl_Button *btnLOGBOOKdefault_colors_font;
-Fl_Double_Window* make_colorsfonts();
+extern Fl_Button *btnClrFntClose;
+Fl_Double_Window* make_config_items();
 #endif

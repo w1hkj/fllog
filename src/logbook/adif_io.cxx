@@ -93,8 +93,8 @@ FIELD fields[] = {
 	{XCHG1,        100,   "SRX_STRING",       &btnSelectXchgIn},    // contest exchange #1 / free1 in xlog
 	{MYXCHG,       100,   "STX_STRING",       &btnSelectMyXchg},    // contest exchange sent
 
-	{FDCLASS,      20,    "FD_CLASS",         &btnSelectClass},     // Field Day class received
-	{FDSECTION,    20,    "FD_SECTION",       &btnSelectSection},   // Field Day section received
+	{CLASS,        20,    "CLASS",            &btnSelectClass},     // Field Day class received
+	{ARRL_SECT,    20,    "ARRL_SECT",        &btnSelectSection},   // Field Day section received
 
 	{TX_PWR,       8,     "TX_PWR",           &btnSelectTX_pwr},    // power transmitted by this station
 
@@ -107,6 +107,22 @@ FIELD fields[] = {
 	{SS_SERNO,     20,    "CWSS_SERNO",       &btnSelect_cwss_serno},
 	{SS_PREC,      20,    "CWSS_PREC",        &btnSelect_cwss_prec},
 	{SS_CHK,       20,    "CWSS_CHK",         &btnSelect_cwss_check},
+
+//	{AGE,          2,     "AGE",              &btnSelectAge},       // contacted operators age in years
+//	{TEN_TEN,      10,    "TEN_TEN",          &btnSelect_1010},     // ten ten # of other station
+//	{CHECK,        10,    "CHECK",            &btnSelectCheck},     // contest identifier
+
+	{AGE,          2,     "AGE",              NULL},       // contacted operators age in years
+	{TEN_TEN,      10,    "TEN_TEN",          NULL},     // ten ten # of other station
+	{CHECK,        10,    "CHECK",            NULL},     // contest identifier
+
+	{FD_CLASS,     20,    "FD_CLASS",         NULL},                // Field Day Rcvd
+	{FD_SECTION,   20,    "FD_SECTION",       NULL},                // FD section received
+
+	{TROOPS,       20,    "TROOPS",           NULL},                // JOTA troop number sent
+	{TROOPR,       20,    "TROOPR",           NULL},                // JOTA troop number received
+	{SCOUTS,       20,    "SCOUTS",           NULL},
+	{SCOUTR,       20,    "SCOUTR",           NULL},
 
 	{NUMFIELDS,    0,     "",             NULL}
 };

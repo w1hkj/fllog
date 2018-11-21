@@ -29,8 +29,8 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook open
-    xywh {547 44 590 515} type Double color 47 resizable visible
+    label Logbook
+    xywh {106 92 590 515} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
       xywh {0 0 427 24}
@@ -86,8 +86,8 @@ Function {create_logbook_dialogs()} {open return_type void
         }
       }
       MenuItem mnuColorsFonts {
-        label {Clr/Fnt}
-        callback {setColorsFonts();}
+        label Config
+        callback {setConfigItems();} selected
         xywh {0 0 36 21}
       }
       Submenu {} {
@@ -115,8 +115,20 @@ Function {create_logbook_dialogs()} {open return_type void
     }
     Fl_Input inpTimeOn_log {
       label {Time On}
-      tooltip {Time QSO started} xywh {107 45 70 24} align 5
+      tooltip {Time QSO started} xywh {110 45 50 24} align 5
       class Fl_Input2
+    }
+    Fl_Button btnSetTimeOn {
+      label {:}
+      callback {char szT[10];
+time_t tmptr;
+tm sTime;
+time (&tmptr);
+gmtime_r (&tmptr, &sTime);
+strftime(szT, 10, "%H:%M:%S", &sTime);
+inpTimeOn_log->value(szT);}
+      tooltip {Set time on to clock gmt} xywh {163 45 15 24}
+      code0 {\#include <ctime>}
     }
     Fl_Input inpCall_log {
       label Call
@@ -142,8 +154,20 @@ Function {create_logbook_dialogs()} {open return_type void
     }
     Fl_Input inpTimeOff_log {
       label {Time Off}
-      tooltip {Time QSO ended} xywh {107 87 70 24} align 5
+      tooltip {Time QSO ended} xywh {110 87 50 24} align 5
       class Fl_Input2
+    }
+    Fl_Button btnSetTimeOff {
+      label {:}
+      callback {char szT[10];
+time_t tmptr;
+tm sTime;
+time (&tmptr);
+gmtime_r (&tmptr, &sTime);
+strftime(szT, 10, "%H:%M:%S", &sTime);
+inpTimeOff_log->value(szT);}
+      tooltip {Set time off to clock gmt} xywh {163 87 15 24}
+      code0 {\#include <ctime>}
     }
     Fl_Input inpFreq_log {
       label {Freq.}
@@ -210,12 +234,12 @@ Function {create_logbook_dialogs()} {open return_type void
       tooltip {Find next} xywh {548 251 24 22} color 50 selection_color 48 align 16
       code0 {bSearchNext->image(new Fl_Pixmap(right_arrow_icon));}
     }
-    Fl_Tabs Tabs {
+    Fl_Tabs Tabs {open
       xywh {5 155 475 120}
     } {
       Fl_Group tab_log_qsl {
         label QSL
-        xywh {5 179 475 96}
+        xywh {5 179 475 96} hide
       } {
         Fl_Input inpQSLrcvddate_log {
           label {QSL-rcvd}
@@ -330,41 +354,56 @@ Function {create_logbook_dialogs()} {open return_type void
       }
       Fl_Group tab_log_contest {
         label Contest open
-        xywh {5 179 475 96} hide
+        xywh {5 179 475 96}
       } {
         Fl_Input inpSerNoOut_log {
           label {Ser out}
-          tooltip {Contest seral \# sent} xywh {72 189 55 24}
+          tooltip {Contest seral \# sent} xywh {64 189 55 24}
           class Fl_Input2
         }
         Fl_Input inpMyXchg_log {
           label {Exch Out}
-          tooltip {Contest exchange sent} xywh {210 189 264 24}
+          tooltip {Contest exchange sent} xywh {200 189 170 24}
           class Fl_Input2
         }
         Fl_Input inpSerNoIn_log {
           label {Ser in}
-          tooltip {Contest serial \# received} xywh {72 217 55 24}
+          tooltip {Contest serial \# received} xywh {64 217 55 24}
           class Fl_Input2
         }
         Fl_Input inpXchgIn_log {
           label {Exch In}
-          tooltip {Contest exchange received} xywh {210 217 264 24}
+          tooltip {Contest exchange received} xywh {200 217 170 24}
           class Fl_Input2
         }
-        Fl_Input inp_FD_class_log {
-          label {FD class}
-          tooltip {Contest serial \# received} xywh {72 246 55 24}
+        Fl_Input inpClass_log {
+          label Class
+          tooltip {Contest serial \# received} xywh {64 246 55 24}
           class Fl_Input2
         }
-        Fl_Input inp_FD_section_log {
-          label {FD section}
-          tooltip {Contest serial \# received} xywh {210 246 56 24}
+        Fl_Input inpSection_log {
+          label Section
+          tooltip {Contest serial \# received} xywh {200 246 56 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_age_log {
+          label Age
+          tooltip {Operators age received} xywh {415 188 60 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_1010_log {
+          label {10-10}
+          tooltip {Ten Ten number received} xywh {415 216 60 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_check_log {
+          label Check
+          tooltip {Check value received} xywh {310 246 60 24}
           class Fl_Input2
         }
         Fl_Input inpBand_log {
           label Band
-          tooltip {Contest serial \# received} xywh {394 246 80 24}
+          tooltip {Contest serial \# received} xywh {415 246 60 24}
           class Fl_Input2
         }
       }
@@ -390,6 +429,31 @@ Function {create_logbook_dialogs()} {open return_type void
         Fl_Input inp_log_cwss_chk {
           label Check
           tooltip {Contest exchange received} xywh {233 217 77 24}
+          class Fl_Input2
+        }
+      }
+      Fl_Group tab_log_jota {
+        label JOTA open
+        tooltip {Jamboree On The Air} xywh {5 179 475 96} hide
+      } {
+        Fl_Input inp_log_troop_s {
+          label {Troop-S}
+          tooltip {Sent troop number} xywh {110 189 100 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_log_troop_r {
+          label {Troop-R}
+          tooltip {Received troop number} xywh {287 189 100 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_log_scout_s {
+          label {Name-S}
+          tooltip {Sent scout name} xywh {110 225 100 24}
+          class Fl_Input2
+        }
+        Fl_Input inp_log_scout_r {
+          label {Name-R}
+          tooltip {Received scout name} xywh {287 225 100 24}
           class Fl_Input2
         }
       }
@@ -431,7 +495,7 @@ o->value(progStatus.mycall.c_str());}
         code0 {\#include "table.h"}
         class Table
       } {}
-      Fl_Text_Display status_display {selected
+      Fl_Text_Display status_display {
         xywh {2 432 586 80}
         code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
         code1 {txtbuffer->text("");}
@@ -461,7 +525,7 @@ wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
     label {Export Setup}
-    xywh {490 80 675 480} type Double hide
+    xywh {400 116 675 480} type Double hide
   } {
     Fl_Group {} {
       label {Select Records to Export}
@@ -767,42 +831,8 @@ btnSelectStaCity->value(1);}
       }
       Fl_Button btnSetFieldDefaults {
         label Defaults
-        callback {btnSelectCall->value(1);
-btnSelectName->value(1);
-btnSelectFreq->value(1);
-btnSelectBand->value(1);
-btnSelectMode->value(1);
-btnSelectQSOdateOn->value(1);
-btnSelectQSOdateOff->value(1);
-btnSelectTimeON->value(1);
-btnSelectTimeOFF->value(1);
-btnSelectQth->value(0);
-btnSelectLOC->value(0);
-btnSelectState->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(1);
-btnSelectIOTA->value(0);
-btnSelectDXCC->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectITUZ->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectOperator->value(0);
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);}
-        xywh {489 454 85 20}
+        callback {DefaultExport();}
+        tooltip {Left click - use defaults\\nRight click - set current as default} xywh {489 454 85 20}
       }
       Fl_Button btnSetLoTWfields {
         label LoTW

@@ -54,10 +54,11 @@ void upcase(string &s)
 
 void cbExit()
 {
-
 	progStatus.saveLastState();
 
-	close_logbook();
+	qsodb.SortByDate();
+	adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
+	restore_sort();
 
 	exit(0);
 }

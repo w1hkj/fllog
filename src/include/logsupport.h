@@ -1,5 +1,5 @@
 #ifndef LOG_SUPPORT_H
-#define LOG_SUPPORT_h
+#define LOG_SUPPORT_H
 
 #include <string>
 

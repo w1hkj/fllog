@@ -1,27 +1,27 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 1.0300 
-i18n_type 1 
-i18n_include "gettext.h" 
-i18n_function _ 
-header_name {.h} 
+version 1.0304
+i18n_type 1
+i18n_include "gettext.h"
+i18n_function _
+header_name {.h}
 code_name {.cxx}
 decl {\#include <config.h>} {private global
-} 
+}
 
 decl {\#include "fllog.h"} {private local
-} 
+}
 
 decl {\#include "status.h"} {private global
-} 
+}
 
 decl {\#include "font_browser.h"} {public global
-} 
+}
 
 decl {\#include <FL/Fl_Color_Chooser.H>} {private local
-} 
+}
 
 decl {\#include <FL/fl_show_colormap.H>} {private local
-} 
+}
 
 Function {choose_color(Fl_Color & c)} {open private return_type void
 } {
@@ -29,7 +29,7 @@ Function {choose_color(Fl_Color & c)} {open private return_type void
 Fl::get_color(c, r, g, b);
 if (fl_color_chooser("Font color", r, g, b))
     c = fl_rgb_color(r, g, b);} {}
-} 
+}
 
 Function {cbLOGBOOKFontBrowser(Fl_Widget*, void*)} {open private return_type void
 } {
@@ -49,27 +49,35 @@ Function {cbLOGBOOKFontBrowser(Fl_Widget*, void*)} {open private return_type voi
     LOGBOOK_colors_font();
 
     font_browser->hide();} {}
-} 
+}
 
-Function {make_colorsfonts()} {open
+Function {make_config_items()} {open
 } {
   code {font_browser = new Font_Browser;} {}
-  Fl_Window dlgColorFont {
-    label {Colors and Fonts} open
-    xywh {589 79 375 120} type Double
-    code0 {dlgColorFont->xclass(PACKAGE_TARNAME);} visible
+  Fl_Window dlgConfigItems {
+    label {Configuration Items} open
+    xywh {589 79 375 169} type Double hide
+    code0 {dlgConfigItems->xclass(PACKAGE_TARNAME);}
   } {
-    Fl_Button btnClrFntClose {
-      label Close
-      callback {o->window()->hide();}
-      xywh {292 84 75 25}
+    Fl_Group {} {
+      label {Log Table} open
+      xywh {2 2 370 65} box ENGRAVED_FRAME align 21
+    } {
+      Fl_Check_Button btnBrowseTimeOFF {
+        label {Browse Time OFF}
+        callback {progStatus.BrowseTimeOFF = o->value();
+loadBrowser(true);} selected
+        xywh {27 27 70 15} down_box DOWN_BOX
+        code0 {\#include "logsupport.h"}
+        code1 {o->value(progStatus.BrowseTimeOFF);}
+      }
     }
     Fl_Group {} {
-      label {Logbook Dialog} open
-      xywh {1 7 370 65} box ENGRAVED_FRAME align 21
+      label {Control Fonts / Colors} open
+      xywh {2 70 370 65} box ENGRAVED_FRAME align 21
     } {
-      Fl_Output LOGBOOKdisplay {selected
-        xywh {17 31 98 25}
+      Fl_Output LOGBOOKdisplay {
+        xywh {17 94 98 25}
         code0 {o->textfont(progStatus.LOGBOOKtextfont);o->textsize(progStatus.LOGBOOKtextsize);o->textcolor(progStatus.LOGBOOKtextcolor);}
         code1 {o->color(progStatus.LOGBOOKcolor);}
         code2 {o->value("W3NR/4");}
@@ -89,7 +97,7 @@ Function {make_colorsfonts()} {open
     LOGBOOKdisplay->redraw();
 
     LOGBOOK_colors_font();}
-        xywh {125 31 80 25}
+        xywh {125 94 80 25}
       }
       Fl_Button btn_LOGBOOK_font {
         label Font
@@ -99,7 +107,7 @@ font_browser->fontColor(progStatus.LOGBOOKtextcolor);
 font_browser->fontFilter(Font_Browser::ALL_TYPES);
 font_browser->callback(cbLOGBOOKFontBrowser);
 font_browser->show();}
-        xywh {215 31 55 25}
+        xywh {215 94 55 25}
       }
       Fl_Button btnLOGBOOKdefault_colors_font {
         label Default
@@ -115,8 +123,13 @@ LOGBOOKdisplay->textfont(progStatus.LOGBOOKtextfont);
 LOGBOOKdisplay->redraw();
     
 LOGBOOK_colors_font();}
-        xywh {281 31 80 25}
+        xywh {281 94 80 25}
       }
     }
+    Fl_Button btnClrFntClose {
+      label Close
+      callback {o->window()->hide();}
+      xywh {292 139 75 25}
+    }
   }
-} 
+}

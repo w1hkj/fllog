@@ -149,6 +149,7 @@ void LOGBOOK_colors_font()
 
 	int dlg_width =	inpDate_log->x() +
 					width_date + 2 +
+					wh + 2 +
 					width_time + 2 +
 					width_freq + 2 +
 					width_mode + 2 +
@@ -194,6 +195,9 @@ void LOGBOOK_colors_font()
 	inp_font_pos(inpTimeOn_log, xpos, ypos, width_time, wh);
 
 	xpos += width_time + 2;
+	btnSetTimeOn->resize(xpos, ypos, wh, wh);
+
+	xpos += wh + 2;
 	xwidth = width_freq;
 	inp_font_pos(inpCall_log, xpos, ypos, width_freq, wh);
 
@@ -215,6 +219,9 @@ void LOGBOOK_colors_font()
 	inp_font_pos(inpTimeOff_log, xpos, ypos, width_time, wh);
 
 	xpos += width_time + 2;
+	btnSetTimeOff->resize(xpos, ypos, wh, wh);
+
+	xpos += wh + 2;
 	inp_font_pos(inpFreq_log, xpos, ypos, width_freq, wh);
 
 	xpos = dlg_width - 2 - width_rst;
@@ -256,12 +263,16 @@ void LOGBOOK_colors_font()
 		inp_log_op_call, inp_log_sta_qth,
 		inp_log_sta_loc, inpSerNoOut_log,
 		inpMyXchg_log, inpSerNoIn_log,
-		inpXchgIn_log, inp_FD_class_log,
-		inp_FD_section_log, inpBand_log,
+		inpXchgIn_log, inpClass_log,
+		inpSection_log, inpBand_log,
+		inp_age_log, inp_1010_log, inp_check_log,
 		inp_log_cwss_serno, inp_log_cwss_sec,
 		inp_log_cwss_prec, inp_log_cwss_chk,
 		inp_mycall,
-		inpSearchString 
+		inp_log_troop_s, inp_log_troop_r,
+		inp_log_scout_s, inp_log_scout_r,
+		inpSearchString
+
 	};
 	for (size_t i = 0; i < sizeof(extras)/sizeof(*extras); i++) {
 		inp_font_pos(extras[i], extras[i]->x(), extras[i]->y(), extras[i]->w(), wh);
@@ -310,13 +321,11 @@ void LOGBOOK_colors_font()
 	wBrowser->headerSize(wh - 6);
 	wBrowser->color(progStatus.LOGBOOKcolor);
 	wBrowser->selection_color(FL_SELECTION_COLOR);
-//	wBrowser->allowVscroll(always);
 	wBrowser->allowHscroll(never);
 
 	browser_group->resize(
 		browser_group->x(), ypos, 
 		dlg_width - 2*browser_group->x(), mainwindow->h() - 2 - ypos);
-//	wBrowser->resize(wBrowser->x(), ypos, dlg_width - 2*wBrowser->x(), mainwindow->h() - 2 - ypos);
 
 	mainwindow->init_sizes();
 	mainwindow->damage();
@@ -324,10 +333,91 @@ void LOGBOOK_colors_font()
 
 }
 
-void setColorsFonts()
+void setConfigItems()
 {
-	if (!dlgColorFont) make_colorsfonts();
-	dlgColorFont->show();
+	if (!dlgConfigItems) make_config_items();
+	dlgConfigItems->show();
+}
+
+void setDefaultExport()
+{
+}
+
+void DefaultExport()
+{
+	if (Fl::event_button() == FL_RIGHT_MOUSE) {
+		progStatus.SelectCall = btnSelectCall->value();
+		progStatus.SelectName = btnSelectName->value();
+		progStatus.SelectFreq = btnSelectFreq->value();
+		progStatus.SelectBand = btnSelectBand->value();
+		progStatus.SelectMode = btnSelectMode->value();
+		progStatus.SelectQSOdateOn = btnSelectQSOdateOn->value();
+		progStatus.SelectQSOdateOff = btnSelectQSOdateOff->value();
+		progStatus.SelectTimeON = btnSelectTimeON->value();
+		progStatus.SelectTimeOFF = btnSelectTimeOFF->value();
+		progStatus.SelectQth = btnSelectQth->value();
+		progStatus.SelectLOC = btnSelectLOC->value();
+		progStatus.SelectState = btnSelectState->value();
+		progStatus.SelectProvince = btnSelectProvince->value();
+		progStatus.SelectCountry = btnSelectCountry->value();
+		progStatus.SelectQSLrcvd = btnSelectQSLrcvd->value();
+		progStatus.SelectQSLsent = btnSelectQSLsent->value();
+		progStatus.SelectSerialIN = btnSelectSerialIN->value();
+		progStatus.SelectSerialOUT = btnSelectSerialOUT->value();
+		progStatus.SelectXchgIn = btnSelectXchgIn->value();
+		progStatus.SelectMyXchg = btnSelectMyXchg->value();
+		progStatus.SelectRSTsent = btnSelectRSTsent->value();
+		progStatus.SelectRSTrcvd = btnSelectRSTrcvd->value();
+		progStatus.SelectIOTA = btnSelectIOTA->value();
+		progStatus.SelectDXCC = btnSelectDXCC->value();
+		progStatus.SelectCNTY = btnSelectCNTY->value();
+		progStatus.SelectCONT = btnSelectCONT->value();
+		progStatus.SelectCQZ = btnSelectCQZ->value();
+		progStatus.SelectITUZ = btnSelectITUZ->value();
+		progStatus.SelectTX_pwr = btnSelectTX_pwr->value();
+		progStatus.SelectNotes = btnSelectNotes->value();
+		progStatus.SelectQSL_VIA = btnSelectQSL_VIA->value();
+		progStatus.SelectOperator = btnSelectOperator->value();
+		progStatus.SelectStaCall = btnSelectStaCall->value();
+		progStatus.SelectStaGrid = btnSelectStaGrid->value();
+		progStatus.SelectStaCity = btnSelectStaCity->value();
+	} else {
+		btnSelectCall->value(progStatus.SelectCall);
+		btnSelectName->value(progStatus.SelectName);
+		btnSelectFreq->value(progStatus.SelectFreq);
+		btnSelectBand->value(progStatus.SelectBand);
+		btnSelectMode->value(progStatus.SelectMode);
+		btnSelectQSOdateOn->value(progStatus.SelectQSOdateOn);
+		btnSelectQSOdateOff->value(progStatus.SelectQSOdateOff);
+		btnSelectTimeON->value(progStatus.SelectTimeON);
+		btnSelectTimeOFF->value(progStatus.SelectTimeOFF);
+		btnSelectQth->value(progStatus.SelectQth);
+		btnSelectLOC->value(progStatus.SelectLOC);
+		btnSelectState->value(progStatus.SelectState);
+		btnSelectProvince->value(progStatus.SelectProvince);
+		btnSelectCountry->value(progStatus.SelectCountry);
+		btnSelectQSLrcvd->value(progStatus.SelectQSLrcvd);
+		btnSelectQSLsent->value(progStatus.SelectQSLsent);
+		btnSelectSerialIN->value(progStatus.SelectSerialIN);
+		btnSelectSerialOUT->value(progStatus.SelectSerialOUT);
+		btnSelectXchgIn->value(progStatus.SelectXchgIn);
+		btnSelectMyXchg->value(progStatus.SelectMyXchg);
+		btnSelectRSTsent->value(progStatus.SelectRSTsent);
+		btnSelectRSTrcvd->value(progStatus.SelectRSTrcvd);
+		btnSelectIOTA->value(progStatus.SelectIOTA);
+		btnSelectDXCC->value(progStatus.SelectDXCC);
+		btnSelectCNTY->value(progStatus.SelectCNTY);
+		btnSelectCONT->value(progStatus.SelectCONT);
+		btnSelectCQZ->value(progStatus.SelectCQZ);
+		btnSelectITUZ->value(progStatus.SelectITUZ);
+		btnSelectTX_pwr->value(progStatus.SelectTX_pwr);
+		btnSelectNotes->value(progStatus.SelectNotes);
+		btnSelectQSL_VIA->value(progStatus.SelectQSL_VIA);
+		btnSelectOperator->value(progStatus.SelectOperator);
+		btnSelectStaCall->value(progStatus.SelectStaCall);
+		btnSelectStaGrid->value(progStatus.SelectStaGrid);
+		btnSelectStaCity->value(progStatus.SelectStaCity);
+	}
 }
 
 //----------------------------------------------------------------------

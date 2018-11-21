@@ -34,12 +34,13 @@ static void cbLOGBOOKFontBrowser(Fl_Widget*, void*) {
       font_browser->hide();
 }
 
-Fl_Double_Window *dlgColorFont=(Fl_Double_Window *)0;
+Fl_Double_Window *dlgConfigItems=(Fl_Double_Window *)0;
 
-Fl_Button *btnClrFntClose=(Fl_Button *)0;
+Fl_Check_Button *btnBrowseTimeOFF=(Fl_Check_Button *)0;
 
-static void cb_btnClrFntClose(Fl_Button* o, void*) {
-  o->window()->hide();
+static void cb_btnBrowseTimeOFF(Fl_Check_Button* o, void*) {
+  progStatus.BrowseTimeOFF = o->value();
+loadBrowser(true);
 }
 
 Fl_Output *LOGBOOKdisplay=(Fl_Output *)0;
@@ -89,34 +90,50 @@ LOGBOOKdisplay->redraw();
 LOGBOOK_colors_font();
 }
 
-Fl_Double_Window* make_colorsfonts() {
+Fl_Button *btnClrFntClose=(Fl_Button *)0;
+
+static void cb_btnClrFntClose(Fl_Button* o, void*) {
+  o->window()->hide();
+}
+
+Fl_Double_Window* make_config_items() {
   font_browser = new Font_Browser;
-  { dlgColorFont = new Fl_Double_Window(375, 120, _("Colors and Fonts"));
-    { btnClrFntClose = new Fl_Button(292, 84, 75, 25, _("Close"));
-      btnClrFntClose->callback((Fl_Callback*)cb_btnClrFntClose);
-    } // Fl_Button* btnClrFntClose
-    { Fl_Group* o = new Fl_Group(1, 7, 370, 65, _("Logbook Dialog"));
+  { dlgConfigItems = new Fl_Double_Window(375, 169, _("Configuration Items"));
+    { Fl_Group* o = new Fl_Group(2, 2, 370, 65, _("Log Table"));
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
-      { Fl_Output* o = LOGBOOKdisplay = new Fl_Output(17, 31, 98, 25);
+      { Fl_Check_Button* o = btnBrowseTimeOFF = new Fl_Check_Button(27, 27, 70, 15, _("Browse Time OFF"));
+        btnBrowseTimeOFF->down_box(FL_DOWN_BOX);
+        btnBrowseTimeOFF->callback((Fl_Callback*)cb_btnBrowseTimeOFF);
+        o->value(progStatus.BrowseTimeOFF);
+      } // Fl_Check_Button* btnBrowseTimeOFF
+      o->end();
+    } // Fl_Group* o
+    { Fl_Group* o = new Fl_Group(2, 70, 370, 65, _("Control Fonts / Colors"));
+      o->box(FL_ENGRAVED_FRAME);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
+      { Fl_Output* o = LOGBOOKdisplay = new Fl_Output(17, 94, 98, 25);
         o->textfont(progStatus.LOGBOOKtextfont);o->textsize(progStatus.LOGBOOKtextsize);o->textcolor(progStatus.LOGBOOKtextcolor);
         o->color(progStatus.LOGBOOKcolor);
         o->value("W3NR/4");
         o->redraw();
       } // Fl_Output* LOGBOOKdisplay
-      { btnLOGBOOK_color = new Fl_Button(125, 31, 80, 25, _("Bg Color"));
+      { btnLOGBOOK_color = new Fl_Button(125, 94, 80, 25, _("Bg Color"));
         btnLOGBOOK_color->callback((Fl_Callback*)cb_btnLOGBOOK_color);
       } // Fl_Button* btnLOGBOOK_color
-      { btn_LOGBOOK_font = new Fl_Button(215, 31, 55, 25, _("Font"));
+      { btn_LOGBOOK_font = new Fl_Button(215, 94, 55, 25, _("Font"));
         btn_LOGBOOK_font->callback((Fl_Callback*)cb_btn_LOGBOOK_font);
       } // Fl_Button* btn_LOGBOOK_font
-      { btnLOGBOOKdefault_colors_font = new Fl_Button(281, 31, 80, 25, _("Default"));
+      { btnLOGBOOKdefault_colors_font = new Fl_Button(281, 94, 80, 25, _("Default"));
         btnLOGBOOKdefault_colors_font->callback((Fl_Callback*)cb_btnLOGBOOKdefault_colors_font);
       } // Fl_Button* btnLOGBOOKdefault_colors_font
       o->end();
     } // Fl_Group* o
-    dlgColorFont->xclass(PACKAGE_TARNAME);
-    dlgColorFont->end();
-  } // Fl_Double_Window* dlgColorFont
-  return dlgColorFont;
+    { btnClrFntClose = new Fl_Button(292, 139, 75, 25, _("Close"));
+      btnClrFntClose->callback((Fl_Callback*)cb_btnClrFntClose);
+    } // Fl_Button* btnClrFntClose
+    dlgConfigItems->xclass(PACKAGE_TARNAME);
+    dlgConfigItems->end();
+  } // Fl_Double_Window* dlgConfigItems
+  return dlgConfigItems;
 }
