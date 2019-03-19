@@ -54,7 +54,7 @@ FIELD fields[] = {
 //  TYPE,          FSIZE,  NAME,              WIDGET
 	{FREQ,         12,    "FREQ",             &btnSelectFreq},      // QSO frequency in Mhz
 	{CALL,         30,    "CALL",             &btnSelectCall},      // contacted stations CALLSIGN
-	{MODE,         10,    "MODE",             &btnSelectMode},      // QSO mode
+	{MODE,         20,    "MODE",             &btnSelectMode},      // QSO mode
 	{NAME,         80,    "NAME",             &btnSelectName},      // contacted operators NAME
 	{QSO_DATE,     8,     "QSO_DATE",         &btnSelectQSOdateOn}, // QSO data
 	{QSO_DATE_OFF, 8,     "QSO_DATE_OFF",     &btnSelectQSOdateOff},// QSO data OFF, according to ADIF 2.2.6
@@ -70,11 +70,11 @@ FIELD fields[] = {
 	{QSLRDATE,     8,     "QSLRDATE",         &btnSelectQSLrcvd},   // QSL received date
 	{QSLSDATE,     8,     "QSLSDATE",         &btnSelectQSLsent},   // QSL sent date
 
-	{EQSLRDATE,    8,     "EQSLRDATE",        NULL},                // EQSL received date
-	{EQSLSDATE,    8,     "EQSLSDATE",        NULL},                // EQSL sent date
+	{EQSLRDATE,    8,     "EQSLRDATE",        &btnSelecteQSLrcvd},  // EQSL received date
+	{EQSLSDATE,    8,     "EQSLSDATE",        &btnSelecteQSLsent},  // EQSL sent date
 
-	{LOTWRDATE,    8,     "LOTWRDATE",        NULL},                // EQSL received date
-	{LOTWSDATE,    8,     "LOTWSDATE",        NULL},                // EQSL sent date
+	{LOTWRDATE,    8,     "LOTWRDATE",        &btnSelectLOTWrcvd},  // LoTW received date
+	{LOTWSDATE,    8,     "LOTWSDATE",        &btnSelectLOTWsent},  // LoTW sent date
 
 	{GRIDSQUARE,   8,     "GRIDSQUARE",       &btnSelectLOC},       // contacted stations Maidenhead Grid Square
 	{BAND,         8,     "BAND",             &btnSelectBand},      // QSO band
@@ -108,16 +108,12 @@ FIELD fields[] = {
 	{SS_PREC,      20,    "CWSS_PREC",        &btnSelect_cwss_prec},
 	{SS_CHK,       20,    "CWSS_CHK",         &btnSelect_cwss_check},
 
-//	{AGE,          2,     "AGE",              &btnSelectAge},       // contacted operators age in years
-//	{TEN_TEN,      10,    "TEN_TEN",          &btnSelect_1010},     // ten ten # of other station
-//	{CHECK,        10,    "CHECK",            &btnSelectCheck},     // contest identifier
+	{AGE,          2,     "AGE",              &btnSelectAge},       // contacted operators age in years
+	{TEN_TEN,      10,    "TEN_TEN",          &btnSelect_1010},     // ten ten # of other station
+	{CHECK,        10,    "CHECK",            &btnSelectCheck},     // contest identifier
 
-	{AGE,          2,     "AGE",              NULL},       // contacted operators age in years
-	{TEN_TEN,      10,    "TEN_TEN",          NULL},     // ten ten # of other station
-	{CHECK,        10,    "CHECK",            NULL},     // contest identifier
-
-	{FD_CLASS,     20,    "FD_CLASS",         NULL},                // Field Day Rcvd
-	{FD_SECTION,   20,    "FD_SECTION",       NULL},                // FD section received
+	{FD_CLASS,     20,    "FD_CLASS",         &btnSelectClass},     // Field Day Rcvd
+	{FD_SECTION,   20,    "FD_SECTION",       &btnSelectSection},   // FD section received
 
 	{TROOPS,       20,    "TROOPS",           NULL},                // JOTA troop number sent
 	{TROOPR,       20,    "TROOPR",           NULL},                // JOTA troop number received

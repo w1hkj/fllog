@@ -215,7 +215,10 @@ struct mode_info_t {
 	int   mode;
 	const char *sname;
 	const char *adif_name;
+	const char *export_mode;
+	const char *export_submode;
 };
+
 extern const struct mode_info_t mode_info[NUM_MODES];
 
 class qrg_mode_t

@@ -29,11 +29,11 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook
-    xywh {106 92 590 515} type Double color 47 resizable visible
+    label Logbook open
+    xywh {458 53 590 433} type Double color 47 resizable visible
   } {
     Fl_Menu_Bar {} {open
-      xywh {0 0 427 24}
+      xywh {0 0 155 24}
     } {
       Submenu {} {
         label File
@@ -87,7 +87,7 @@ Function {create_logbook_dialogs()} {open return_type void
       }
       MenuItem mnuColorsFonts {
         label Config
-        callback {setConfigItems();} selected
+        callback {setConfigItems();}
         xywh {0 0 36 21}
       }
       Submenu {} {
@@ -99,12 +99,44 @@ Function {create_logbook_dialogs()} {open return_type void
           callback {about();}
           xywh {0 0 36 21}
         }
+        MenuItem mnu_Events {
+          label Events
+          callback {cb_mnuEvents();}
+          xywh {0 0 36 20}
+        }
         MenuItem {} {
           label {On-line help}
           callback {on_line_help();}
           xywh {0 0 36 21}
         }
       }
+    }
+    Fl_Input inp_mycall {
+      label {Sta Call}
+      callback {progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());}
+      tooltip {My station call sign} xywh {215 0 80 24}
+      code0 {o->value(progStatus.mycall.c_str());}
+      class Fl_Input2
+    }
+    Fl_Input inp_opcall {
+      label {Op Call}
+      callback {progStatus.opcall = o->value();
+for (size_t n = 0; n < progStatus.opcall.length(); n++)
+progStatus.opcall[n] = toupper(progStatus.opcall[n]);
+o->value(progStatus.opcall.c_str());}
+      tooltip {Operator call sign} xywh {355 0 80 24}
+      code0 {o->value(progStatus.opcall.c_str());}
+      class Fl_Input2
+    }
+    Fl_Input inp_opname {
+      label {Oper'}
+      callback {progStatus.opname = o->value();}
+      tooltip {Operator name} xywh {507 0 80 24}
+      code0 {o->value(progStatus.opname.c_str());}
+      class Fl_Input2
     }
     Fl_Input inpDate_log {
       label {Date On}
@@ -129,6 +161,7 @@ strftime(szT, 10, "%H:%M:%S", &sTime);
 inpTimeOn_log->value(szT);}
       tooltip {Set time on to clock gmt} xywh {163 45 15 24}
       code0 {\#include <ctime>}
+      code1 {\#include "timeops.h"}
     }
     Fl_Input inpCall_log {
       label Call
@@ -165,9 +198,8 @@ tm sTime;
 time (&tmptr);
 gmtime_r (&tmptr, &sTime);
 strftime(szT, 10, "%H:%M:%S", &sTime);
-inpTimeOff_log->value(szT);}
+inpTimeOff_log->value(szT);} selected
       tooltip {Set time off to clock gmt} xywh {163 87 15 24}
-      code0 {\#include <ctime>}
     }
     Fl_Input inpFreq_log {
       label {Freq.}
@@ -238,8 +270,8 @@ inpTimeOff_log->value(szT);}
       xywh {5 155 475 120}
     } {
       Fl_Group tab_log_qsl {
-        label QSL
-        xywh {5 179 475 96} hide
+        label QSL open
+        xywh {5 179 475 96}
       } {
         Fl_Input inpQSLrcvddate_log {
           label {QSL-rcvd}
@@ -279,7 +311,7 @@ inpTimeOff_log->value(szT);}
         }
         Fl_Input inpQSL_VIA_log {
           label {QSL-VIA}
-          tooltip {QSL route of contacted station} xywh {320 198 156 70} type Multiline align 5 resizable
+          tooltip {QSL route of contacted station} xywh {320 198 156 70} type Multiline align 5
           class Fl_Input2
         }
       }
@@ -354,7 +386,7 @@ inpTimeOff_log->value(szT);}
       }
       Fl_Group tab_log_contest {
         label Contest open
-        xywh {5 179 475 96}
+        xywh {5 179 475 96} hide
       } {
         Fl_Input inpSerNoOut_log {
           label {Ser out}
@@ -477,30 +509,14 @@ inpTimeOff_log->value(szT);}
       callback cb_btnDelete
       tooltip {Delete the current record} xywh {526 279 61 22} shortcut 0x80044 color 50 selection_color 48
     }
-    Fl_Input inp_mycall {
-      label {My Call}
-      callback {progStatus.mycall = o->value();
-for (size_t n = 0; n < progStatus.mycall.length(); n++)
-progStatus.mycall[n] = toupper(progStatus.mycall[n]);
-o->value(progStatus.mycall.c_str());}
-      tooltip {My station call sign} xywh {486 0 100 24}
-      code0 {o->value(progStatus.mycall.c_str());}
-      class Fl_Input2
-    }
     Fl_Group browser_group {open
-      xywh {2 310 586 205} resizable
+      xywh {2 310 586 120} resizable
     } {
       Fl_Group wBrowser {
         xywh {2 310 586 120} box DOWN_FRAME color 7 selection_color 15 resizable
         code0 {\#include "table.h"}
         class Table
       } {}
-      Fl_Text_Display status_display {
-        xywh {2 432 586 80}
-        code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
-        code1 {txtbuffer->text("");}
-        code2 {o->buffer(txtbuffer);}
-      }
     }
   }
   code {wBrowser->align (FL_ALIGN_TOP | FL_ALIGN_LEFT);
@@ -525,31 +541,31 @@ wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
     label {Export Setup}
-    xywh {400 116 675 480} type Double hide
+    xywh {462 113 810 440} type Double hide
   } {
     Fl_Group {} {
-      label {Select Records to Export}
-      xywh {4 4 388 445} box ENGRAVED_FRAME align 21
+      label {Select Records to Export} open
+      xywh {4 4 388 430} box ENGRAVED_FRAME align 21
     } {
       Fl_Check_Browser chkExportBrowser {
-        xywh {13 25 370 350}
+        xywh {13 25 370 330}
       }
       Fl_Button btnClearAll {
         label {Clear All}
         callback {btn_export_by_date->value(0);
 chkExportBrowser->check_none();}
-        xywh {69 379 90 24}
+        xywh {78 362 90 20}
       }
       Fl_Button btnCheckAll {
         label {Check All}
         callback {btn_export_by_date->value(0);
 chkExportBrowser->check_all();}
-        xywh {200 379 90 24}
+        xywh {201 362 90 20}
       }
       Fl_Input inp_export_start_date {
         label {Start Date}
         callback {cb_export_date_select();}
-        tooltip {Start date for export} xywh {14 422 100 22} align 5
+        tooltip {Start date for export} xywh {20 402 100 22} align 5
         code0 {\#include "calendar.h"}
         code1 {inp_export_start_date->format(2);}
         class Fl_DateInput
@@ -557,7 +573,7 @@ chkExportBrowser->check_all();}
       Fl_Input inp_export_stop_date {
         label {Stop Date}
         callback {cb_export_date_select();}
-        tooltip {Inclusive stop date for export} xywh {138 422 100 22} align 5
+        tooltip {Inclusive stop date for export} xywh {144 402 100 22} align 5
         code0 {\#include "calendar.h"}
         code1 {inp_export_stop_date->format(2);}
         class Fl_DateInput
@@ -565,23 +581,12 @@ chkExportBrowser->check_all();}
       Fl_Check_Button btn_export_by_date {
         label {select by date}
         callback {cb_export_date_select();}
-        tooltip {Enable to select date range} xywh {263 425 70 15} down_box DOWN_BOX
+        tooltip {Enable to select date range} xywh {269 405 70 15} down_box DOWN_BOX
       }
-    }
-    Fl_Return_Button btnOK {
-      label OK
-      callback {wExport->hide();
-Export_log();}
-      xywh {291 454 90 24}
-    }
-    Fl_Button btnCancel {
-      label Cancel
-      callback {wExport->hide();}
-      xywh {160 454 90 24}
     }
     Fl_Group {} {
       label {Select Fields to Export} open
-      xywh {392 4 280 475} box ENGRAVED_FRAME align 21
+      xywh {392 4 414 430} box ENGRAVED_FRAME align 21
     } {
       Fl_Check_Button btnSelectCall {
         label Call
@@ -589,163 +594,191 @@ Export_log();}
       }
       Fl_Check_Button btnSelectName {
         label Name
-        xywh {402 46 70 15} down_box DOWN_BOX value 1
+        xywh {402 47 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectFreq {
         label Freq
-        xywh {402 66 70 15} down_box DOWN_BOX value 1
+        xywh {402 68 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectBand {
         label Band
-        xywh {402 86 70 15} down_box DOWN_BOX
+        xywh {402 90 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectMode {
         label Mode
-        xywh {402 106 70 15} down_box DOWN_BOX value 1
+        xywh {402 111 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectQSOdateOn {
         label {QSO Date On}
-        xywh {402 127 70 15} down_box DOWN_BOX value 1
+        xywh {402 133 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectQSOdateOff {
         label {QSO Date Off}
-        xywh {402 147 70 15} down_box DOWN_BOX value 1
+        xywh {402 154 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectTimeON {
         label {Time ON}
-        xywh {402 167 70 15} down_box DOWN_BOX value 1
+        xywh {402 176 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectTimeOFF {
         label {Time OFF}
-        xywh {402 187 70 15} down_box DOWN_BOX
+        xywh {402 197 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectTX_pwr {
         label {TX Power}
-        xywh {402 207 70 15} down_box DOWN_BOX
+        xywh {402 219 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectRSTsent {
         label {RST sent}
-        xywh {402 228 70 15} down_box DOWN_BOX value 1
+        xywh {402 240 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectRSTrcvd {
         label {RST rcvd}
-        xywh {402 248 70 15} down_box DOWN_BOX value 1
+        xywh {402 262 70 15} down_box DOWN_BOX value 1
       }
       Fl_Check_Button btnSelectQth {
         label Qth
-        xywh {402 268 70 15} down_box DOWN_BOX
+        xywh {402 283 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectLOC {
         label LOC
-        xywh {402 288 70 15} down_box DOWN_BOX
+        xywh {402 305 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectState {
         label State
-        xywh {402 308 70 15} down_box DOWN_BOX
+        xywh {402 326 70 15} down_box DOWN_BOX
       }
-      Fl_Check_Button btnSelectQSL_VIA {
-        label {QSL-VIA}
-        xywh {402 329 70 15} down_box DOWN_BOX
+      Fl_Check_Button btnSelectAge {
+        label Age
+        xywh {402 348 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectStaCall {
         label {Station Call}
-        xywh {402 349 70 15} down_box DOWN_BOX
+        xywh {536 26 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectStaCity {
         label {Station QTH}
-        xywh {402 369 70 15} down_box DOWN_BOX
+        xywh {536 47 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectStaGrid {
         label {Station LOC}
-        xywh {402 389 70 15} down_box DOWN_BOX
+        xywh {536 68 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectOperator {
         label Operator
-        xywh {402 410 70 15} down_box DOWN_BOX
+        xywh {536 90 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectProvince {
         label Province
-        xywh {533 26 70 15} down_box DOWN_BOX
+        xywh {536 111 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCountry {
         label Country
-        xywh {533 46 70 15} down_box DOWN_BOX
+        xywh {536 133 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectNotes {
         label Notes
-        xywh {533 66 70 15} down_box DOWN_BOX
+        xywh {536 154 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectQSLrcvd {
         label {QSL rcvd date}
-        xywh {533 86 70 15} down_box DOWN_BOX
+        xywh {536 176 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectQSLsent {
         label {QSL sent date}
-        xywh {533 107 70 15} down_box DOWN_BOX
+        xywh {536 197 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelecteQSLrcvd {
+        label {eQSL rcvd date}
+        xywh {536 219 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelecteQSLsent {
+        label {eQSL sent date}
+        xywh {536 240 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelectLOTWrcvd {
+        label {LoTW rcvd date}
+        xywh {536 262 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelectLOTWsent {
+        label {LoTW sent date}
+        xywh {536 283 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelectQSL_VIA {
+        label {QSL-VIA}
+        xywh {536 305 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectSerialIN {
         label {Serial \# in}
-        xywh {533 127 70 15} down_box DOWN_BOX
+        xywh {536 326 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectSerialOUT {
         label {Serial \# out}
-        xywh {533 147 70 15} down_box DOWN_BOX
+        xywh {536 348 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelectCheck {
+        label Check
+        xywh {670 26 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectXchgIn {
         label {Exchange In}
-        xywh {533 167 70 15} down_box DOWN_BOX
+        xywh {670 47 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectMyXchg {
         label {Exchange Out}
-        xywh {533 188 70 15} down_box DOWN_BOX
+        xywh {670 68 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCNTY {
         label County
-        xywh {533 208 70 15} down_box DOWN_BOX
+        xywh {670 90 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCONT {
         label Continent
-        xywh {533 228 70 15} down_box DOWN_BOX
+        xywh {670 111 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCQZ {
         label CQZ
-        xywh {533 248 70 15} down_box DOWN_BOX
+        xywh {670 133 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectDXCC {
         label DXCC
-        xywh {533 269 70 15} down_box DOWN_BOX
+        xywh {670 154 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectIOTA {
         label IOTA
-        xywh {533 289 70 15} down_box DOWN_BOX
+        xywh {670 176 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectITUZ {
         label ITUZ
-        xywh {533 309 70 15} down_box DOWN_BOX
+        xywh {670 197 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectClass {
         label {FD class}
-        xywh {533 329 70 15} down_box DOWN_BOX
+        xywh {670 219 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectSection {
         label {FD section}
-        xywh {533 349 70 15} down_box DOWN_BOX
+        xywh {670 240 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelect_cwss_serno {
         label {CW SS SerNo R}
-        tooltip {CW sweepstakes rcvd ser. no.} xywh {535 369 70 15} down_box DOWN_BOX
+        tooltip {CW sweepstakes rcvd ser. no.} xywh {670 262 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelect_cwss_prec {
         label {CW SS Prec'}
-        tooltip {CW sweepstakes precedence} xywh {535 389 70 15} down_box DOWN_BOX
+        tooltip {CW sweepstakes precedence} xywh {670 283 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelect_cwss_check {
         label {CW SS Check}
-        xywh {535 409 70 15} down_box DOWN_BOX
+        xywh {670 305 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelect_cwss_section {
         label {CW SS Section}
-        tooltip {CW sweepstakes section} xywh {535 430 70 15} down_box DOWN_BOX
+        tooltip {CW sweepstakes section} xywh {670 326 70 15} down_box DOWN_BOX
+      }
+      Fl_Check_Button btnSelect_1010 {
+        label {10-10}
+        tooltip {CW sweepstakes section} xywh {670 348 70 15} down_box DOWN_BOX
       }
       Fl_Button btnClearAllFields {
         label {Clear All}
@@ -758,35 +791,47 @@ btnSelectQSOdateOn->value(0);
 btnSelectQSOdateOff->value(0);
 btnSelectTimeON->value(0);
 btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
 btnSelectQth->value(0);
 btnSelectLOC->value(0);
 btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
 btnSelectProvince->value(0);
 btnSelectCountry->value(0);
+btnSelectNotes->value(0);
 btnSelectQSLrcvd->value(0);
 btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
 btnSelectSerialIN->value(0);
 btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
 btnSelectXchgIn->value(0);
 btnSelectMyXchg->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectIOTA->value(0);
-btnSelectDXCC->value(0);
 btnSelectCNTY->value(0);
 btnSelectCONT->value(0);
 btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
 btnSelectITUZ->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);
 btnSelectClass->value(0);
 btnSelectSection->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectOperator->value(0);
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);}
-        xywh {396 432 85 20}
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);}
+        xywh {412 373 85 20}
       }
       Fl_Button btnCheckAllFields {
         label {Check All}
@@ -799,40 +844,100 @@ btnSelectQSOdateOn->value(1);
 btnSelectQSOdateOff->value(1);
 btnSelectTimeON->value(1);
 btnSelectTimeOFF->value(1);
+btnSelectTX_pwr->value(1);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(1);
 btnSelectQth->value(1);
 btnSelectLOC->value(1);
 btnSelectState->value(1);
+btnSelectAge->value(1);
+
+btnSelectStaCall->value(1);
+btnSelectStaGrid->value(1);
+btnSelectStaCity->value(1);
+btnSelectOperator->value(1);
 btnSelectProvince->value(1);
 btnSelectCountry->value(1);
+btnSelectNotes->value(1);
 btnSelectQSLrcvd->value(1);
 btnSelectQSLsent->value(1);
+btnSelecteQSLrcvd->value(1);
+btnSelecteQSLsent->value(1);
+btnSelectLOTWrcvd->value(1);
+btnSelectLOTWsent->value(1);
+btnSelectQSL_VIA->value(1);
 btnSelectSerialIN->value(1);
 btnSelectSerialOUT->value(1);
+
+btnSelectCheck->value(1);
 btnSelectXchgIn->value(1);
 btnSelectMyXchg->value(1);
-btnSelectRSTsent->value(1);
-btnSelectRSTrcvd->value(1);
-btnSelectIOTA->value(1);
-btnSelectDXCC->value(1);
 btnSelectCNTY->value(1);
 btnSelectCONT->value(1);
 btnSelectCQZ->value(1);
+btnSelectDXCC->value(1);
+btnSelectIOTA->value(1);
 btnSelectITUZ->value(1);
-btnSelectTX_pwr->value(1);
-btnSelectNotes->value(1);
 btnSelectClass->value(1);
 btnSelectSection->value(1);
-btnSelectQSL_VIA->value(1);
-btnSelectOperator->value(1);
-btnSelectStaCall->value(1);
-btnSelectStaGrid->value(1);
-btnSelectStaCity->value(1);}
-        xywh {396 454 85 20}
+btnSelect_cwss_serno->value(1);
+btnSelect_cwss_prec->value(1);
+btnSelect_cwss_check->value(1);
+btnSelect_1010->value(1);}
+        xywh {507 373 85 20}
       }
       Fl_Button btnSetFieldDefaults {
         label Defaults
-        callback {DefaultExport();}
-        tooltip {Left click - use defaults\\nRight click - set current as default} xywh {489 454 85 20}
+        callback {btnSelectCall->value(1);
+btnSelectName->value(1);
+btnSelectFreq->value(1);
+btnSelectBand->value(1);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(1);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(1);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(1);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);}
+        xywh {602 373 85 20}
       }
       Fl_Button btnSetLoTWfields {
         label LoTW
@@ -845,33 +950,58 @@ btnSelectQSOdateOn->value(1);
 btnSelectQSOdateOff->value(0);
 btnSelectTimeON->value(1);
 btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
 btnSelectQth->value(0);
 btnSelectLOC->value(0);
 btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
 btnSelectProvince->value(0);
 btnSelectCountry->value(0);
+btnSelectNotes->value(0);
 btnSelectQSLrcvd->value(0);
 btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
 btnSelectSerialIN->value(0);
 btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
 btnSelectXchgIn->value(0);
 btnSelectMyXchg->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectIOTA->value(0);
-btnSelectDXCC->value(0);
 btnSelectCNTY->value(0);
 btnSelectCONT->value(0);
 btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
 btnSelectITUZ->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectOperator->value(0);
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);}
-        xywh {582 454 85 20}
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);}
+        xywh {697 373 85 20}
+      }
+      Fl_Return_Button btnOK {
+        label OK
+        callback {wExport->hide();
+Export_log();}
+        xywh {697 403 85 20}
+      }
+      Fl_Button btnCancel {
+        label Cancel
+        callback {wExport->hide();}
+        xywh {602 403 85 20}
       }
     }
   }
@@ -994,6 +1124,17 @@ btnCabRSTsent->value(1);
 btnCabRSTrcvd->value(1);}
         xywh {539 277 110 24}
       }
+    }
+  }
+  Fl_Window wEvents {
+    label {Event Log}
+    xywh {459 518 590 124} type Double visible
+  } {
+    Fl_Text_Display status_display {
+      xywh {2 2 586 120}
+      code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
+      code1 {txtbuffer->text("");}
+      code2 {o->buffer(txtbuffer);}
     }
   }
 }

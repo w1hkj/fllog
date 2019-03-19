@@ -7,11 +7,15 @@
 #include <FL/Fl_Double_Window.H>
 extern Fl_Double_Window *dlgLogbook;
 #include <FL/Fl_Menu_Bar.H>
+extern Fl_Input2 *inp_mycall;
+extern Fl_Input2 *inp_opcall;
+extern Fl_Input2 *inp_opname;
 #include "calendar.h"
 extern Fl_DateInput *inpDate_log;
 extern Fl_Input2 *inpTimeOn_log;
 #include <FL/Fl_Button.H>
 #include <ctime>
+#include "timeops.h"
 extern Fl_Button *btnSetTimeOn;
 extern Fl_Input2 *inpCall_log;
 extern Fl_Input2 *inpName_log;
@@ -87,12 +91,9 @@ extern void cb_btnUpdateCancel(Fl_Button*, void*);
 extern Fl_Button *bUpdateCancel;
 extern void cb_btnDelete(Fl_Button*, void*);
 extern Fl_Button *bDelete;
-extern Fl_Input2 *inp_mycall;
 extern Fl_Group *browser_group;
 #include "table.h"
 extern Table *wBrowser;
-#include <FL/Fl_Text_Display.H>
-extern Fl_Text_Display *status_display;
 extern Fl_Double_Window *wExport;
 #include <FL/Fl_Check_Browser.H>
 extern Fl_Check_Browser *chkExportBrowser;
@@ -102,9 +103,6 @@ extern Fl_DateInput *inp_export_start_date;
 extern Fl_DateInput *inp_export_stop_date;
 #include <FL/Fl_Check_Button.H>
 extern Fl_Check_Button *btn_export_by_date;
-#include <FL/Fl_Return_Button.H>
-extern Fl_Return_Button *btnOK;
-extern Fl_Button *btnCancel;
 extern Fl_Check_Button *btnSelectCall;
 extern Fl_Check_Button *btnSelectName;
 extern Fl_Check_Button *btnSelectFreq;
@@ -120,7 +118,7 @@ extern Fl_Check_Button *btnSelectRSTrcvd;
 extern Fl_Check_Button *btnSelectQth;
 extern Fl_Check_Button *btnSelectLOC;
 extern Fl_Check_Button *btnSelectState;
-extern Fl_Check_Button *btnSelectQSL_VIA;
+extern Fl_Check_Button *btnSelectAge;
 extern Fl_Check_Button *btnSelectStaCall;
 extern Fl_Check_Button *btnSelectStaCity;
 extern Fl_Check_Button *btnSelectStaGrid;
@@ -130,8 +128,14 @@ extern Fl_Check_Button *btnSelectCountry;
 extern Fl_Check_Button *btnSelectNotes;
 extern Fl_Check_Button *btnSelectQSLrcvd;
 extern Fl_Check_Button *btnSelectQSLsent;
+extern Fl_Check_Button *btnSelecteQSLrcvd;
+extern Fl_Check_Button *btnSelecteQSLsent;
+extern Fl_Check_Button *btnSelectLOTWrcvd;
+extern Fl_Check_Button *btnSelectLOTWsent;
+extern Fl_Check_Button *btnSelectQSL_VIA;
 extern Fl_Check_Button *btnSelectSerialIN;
 extern Fl_Check_Button *btnSelectSerialOUT;
+extern Fl_Check_Button *btnSelectCheck;
 extern Fl_Check_Button *btnSelectXchgIn;
 extern Fl_Check_Button *btnSelectMyXchg;
 extern Fl_Check_Button *btnSelectCNTY;
@@ -146,10 +150,14 @@ extern Fl_Check_Button *btnSelect_cwss_serno;
 extern Fl_Check_Button *btnSelect_cwss_prec;
 extern Fl_Check_Button *btnSelect_cwss_check;
 extern Fl_Check_Button *btnSelect_cwss_section;
+extern Fl_Check_Button *btnSelect_1010;
 extern Fl_Button *btnClearAllFields;
 extern Fl_Button *btnCheckAllFields;
 extern Fl_Button *btnSetFieldDefaults;
 extern Fl_Button *btnSetLoTWfields;
+#include <FL/Fl_Return_Button.H>
+extern Fl_Return_Button *btnOK;
+extern Fl_Button *btnCancel;
 extern Fl_Double_Window *wCabrillo;
 extern Fl_Check_Browser *chkCabBrowser;
 extern Fl_Button *btnCabClearAll;
@@ -172,6 +180,9 @@ extern Fl_Check_Button *btnCabXchgIn;
 extern Fl_Check_Button *btnCabMyXchg;
 extern Fl_Button *btnCabClearAllFields;
 extern Fl_Button *btnCabCheckAllFields;
+extern Fl_Double_Window *wEvents;
+#include <FL/Fl_Text_Display.H>
+extern Fl_Text_Display *status_display;
 void create_logbook_dialogs();
 extern unsigned char menu__i18n_done;
 extern Fl_Menu_Item menu_[];
@@ -185,4 +196,5 @@ extern Fl_Menu_Item menu_[];
 #define mnu_export_cabrillo (menu_+8)
 #define mnu_exit (menu_+9)
 #define mnuColorsFonts (menu_+11)
+#define mnu_Events (menu_+14)
 #endif

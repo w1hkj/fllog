@@ -55,6 +55,10 @@ static void cb_About(Fl_Menu_*, void*) {
   about();
 }
 
+static void cb_mnu_Events(Fl_Menu_*, void*) {
+  cb_mnuEvents();
+}
+
 static void cb_On(Fl_Menu_*, void*) {
   on_line_help();
 }
@@ -75,10 +79,35 @@ Fl_Menu_Item menu_[] = {
  {"Config", 0,  (Fl_Callback*)cb_mnuColorsFonts, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 14, 0},
  {"&Help", 0,  0, 0, 64, (uchar)FL_NORMAL_LABEL, 0, 14, 0},
  {"&About", 0,  (Fl_Callback*)cb_About, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 14, 0},
+ {"Events", 0,  (Fl_Callback*)cb_mnu_Events, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 14, 0},
  {"On-line help", 0,  (Fl_Callback*)cb_On, 0, 0, (uchar)FL_NORMAL_LABEL, 0, 14, 0},
  {0,0,0,0,0,0,0,0,0},
  {0,0,0,0,0,0,0,0,0}
 };
+
+Fl_Input2 *inp_mycall=(Fl_Input2 *)0;
+
+static void cb_inp_mycall(Fl_Input2* o, void*) {
+  progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());
+}
+
+Fl_Input2 *inp_opcall=(Fl_Input2 *)0;
+
+static void cb_inp_opcall(Fl_Input2* o, void*) {
+  progStatus.opcall = o->value();
+for (size_t n = 0; n < progStatus.opcall.length(); n++)
+progStatus.opcall[n] = toupper(progStatus.opcall[n]);
+o->value(progStatus.opcall.c_str());
+}
+
+Fl_Input2 *inp_opname=(Fl_Input2 *)0;
+
+static void cb_inp_opname(Fl_Input2* o, void*) {
+  progStatus.opname = o->value();
+}
 
 Fl_DateInput *inpDate_log=(Fl_DateInput *)0;
 
@@ -240,20 +269,9 @@ Fl_Button *bUpdateCancel=(Fl_Button *)0;
 
 Fl_Button *bDelete=(Fl_Button *)0;
 
-Fl_Input2 *inp_mycall=(Fl_Input2 *)0;
-
-static void cb_inp_mycall(Fl_Input2* o, void*) {
-  progStatus.mycall = o->value();
-for (size_t n = 0; n < progStatus.mycall.length(); n++)
-progStatus.mycall[n] = toupper(progStatus.mycall[n]);
-o->value(progStatus.mycall.c_str());
-}
-
 Fl_Group *browser_group=(Fl_Group *)0;
 
 Table *wBrowser=(Table *)0;
-
-Fl_Text_Display *status_display=(Fl_Text_Display *)0;
 
 Fl_Double_Window *wExport=(Fl_Double_Window *)0;
 
@@ -291,19 +309,6 @@ static void cb_btn_export_by_date(Fl_Check_Button*, void*) {
   cb_export_date_select();
 }
 
-Fl_Return_Button *btnOK=(Fl_Return_Button *)0;
-
-static void cb_btnOK(Fl_Return_Button*, void*) {
-  wExport->hide();
-Export_log();
-}
-
-Fl_Button *btnCancel=(Fl_Button *)0;
-
-static void cb_btnCancel(Fl_Button*, void*) {
-  wExport->hide();
-}
-
 Fl_Check_Button *btnSelectCall=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectName=(Fl_Check_Button *)0;
@@ -334,7 +339,7 @@ Fl_Check_Button *btnSelectLOC=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectState=(Fl_Check_Button *)0;
 
-Fl_Check_Button *btnSelectQSL_VIA=(Fl_Check_Button *)0;
+Fl_Check_Button *btnSelectAge=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectStaCall=(Fl_Check_Button *)0;
 
@@ -354,9 +359,21 @@ Fl_Check_Button *btnSelectQSLrcvd=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectQSLsent=(Fl_Check_Button *)0;
 
+Fl_Check_Button *btnSelecteQSLrcvd=(Fl_Check_Button *)0;
+
+Fl_Check_Button *btnSelecteQSLsent=(Fl_Check_Button *)0;
+
+Fl_Check_Button *btnSelectLOTWrcvd=(Fl_Check_Button *)0;
+
+Fl_Check_Button *btnSelectLOTWsent=(Fl_Check_Button *)0;
+
+Fl_Check_Button *btnSelectQSL_VIA=(Fl_Check_Button *)0;
+
 Fl_Check_Button *btnSelectSerialIN=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectSerialOUT=(Fl_Check_Button *)0;
+
+Fl_Check_Button *btnSelectCheck=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelectXchgIn=(Fl_Check_Button *)0;
 
@@ -386,6 +403,8 @@ Fl_Check_Button *btnSelect_cwss_check=(Fl_Check_Button *)0;
 
 Fl_Check_Button *btnSelect_cwss_section=(Fl_Check_Button *)0;
 
+Fl_Check_Button *btnSelect_1010=(Fl_Check_Button *)0;
+
 Fl_Button *btnClearAllFields=(Fl_Button *)0;
 
 static void cb_btnClearAllFields(Fl_Button*, void*) {
@@ -398,34 +417,46 @@ btnSelectQSOdateOn->value(0);
 btnSelectQSOdateOff->value(0);
 btnSelectTimeON->value(0);
 btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
 btnSelectQth->value(0);
 btnSelectLOC->value(0);
 btnSelectState->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectIOTA->value(0);
-btnSelectDXCC->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectITUZ->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);
-btnSelectClass->value(0);
-btnSelectSection->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectOperator->value(0);
+btnSelectAge->value(0);
+
 btnSelectStaCall->value(0);
 btnSelectStaGrid->value(0);
 btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);
 }
 
 Fl_Button *btnCheckAllFields=(Fl_Button *)0;
@@ -440,40 +471,100 @@ btnSelectQSOdateOn->value(1);
 btnSelectQSOdateOff->value(1);
 btnSelectTimeON->value(1);
 btnSelectTimeOFF->value(1);
+btnSelectTX_pwr->value(1);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(1);
 btnSelectQth->value(1);
 btnSelectLOC->value(1);
 btnSelectState->value(1);
-btnSelectProvince->value(1);
-btnSelectCountry->value(1);
-btnSelectQSLrcvd->value(1);
-btnSelectQSLsent->value(1);
-btnSelectSerialIN->value(1);
-btnSelectSerialOUT->value(1);
-btnSelectXchgIn->value(1);
-btnSelectMyXchg->value(1);
-btnSelectRSTsent->value(1);
-btnSelectRSTrcvd->value(1);
-btnSelectIOTA->value(1);
-btnSelectDXCC->value(1);
-btnSelectCNTY->value(1);
-btnSelectCONT->value(1);
-btnSelectCQZ->value(1);
-btnSelectITUZ->value(1);
-btnSelectTX_pwr->value(1);
-btnSelectNotes->value(1);
-btnSelectClass->value(1);
-btnSelectSection->value(1);
-btnSelectQSL_VIA->value(1);
-btnSelectOperator->value(1);
+btnSelectAge->value(1);
+
 btnSelectStaCall->value(1);
 btnSelectStaGrid->value(1);
 btnSelectStaCity->value(1);
+btnSelectOperator->value(1);
+btnSelectProvince->value(1);
+btnSelectCountry->value(1);
+btnSelectNotes->value(1);
+btnSelectQSLrcvd->value(1);
+btnSelectQSLsent->value(1);
+btnSelecteQSLrcvd->value(1);
+btnSelecteQSLsent->value(1);
+btnSelectLOTWrcvd->value(1);
+btnSelectLOTWsent->value(1);
+btnSelectQSL_VIA->value(1);
+btnSelectSerialIN->value(1);
+btnSelectSerialOUT->value(1);
+
+btnSelectCheck->value(1);
+btnSelectXchgIn->value(1);
+btnSelectMyXchg->value(1);
+btnSelectCNTY->value(1);
+btnSelectCONT->value(1);
+btnSelectCQZ->value(1);
+btnSelectDXCC->value(1);
+btnSelectIOTA->value(1);
+btnSelectITUZ->value(1);
+btnSelectClass->value(1);
+btnSelectSection->value(1);
+btnSelect_cwss_serno->value(1);
+btnSelect_cwss_prec->value(1);
+btnSelect_cwss_check->value(1);
+btnSelect_1010->value(1);
 }
 
 Fl_Button *btnSetFieldDefaults=(Fl_Button *)0;
 
 static void cb_btnSetFieldDefaults(Fl_Button*, void*) {
-  DefaultExport();
+  btnSelectCall->value(1);
+btnSelectName->value(1);
+btnSelectFreq->value(1);
+btnSelectBand->value(1);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(1);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(1);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(1);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);
 }
 
 Fl_Button *btnSetLoTWfields=(Fl_Button *)0;
@@ -488,32 +579,59 @@ btnSelectQSOdateOn->value(1);
 btnSelectQSOdateOff->value(0);
 btnSelectTimeON->value(1);
 btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
 btnSelectQth->value(0);
 btnSelectLOC->value(0);
 btnSelectState->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectIOTA->value(0);
-btnSelectDXCC->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectITUZ->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectNotes->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectOperator->value(0);
+btnSelectAge->value(0);
+
 btnSelectStaCall->value(0);
 btnSelectStaGrid->value(0);
 btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);
+}
+
+Fl_Return_Button *btnOK=(Fl_Return_Button *)0;
+
+static void cb_btnOK(Fl_Return_Button*, void*) {
+  wExport->hide();
+Export_log();
+}
+
+Fl_Button *btnCancel=(Fl_Button *)0;
+
+static void cb_btnCancel(Fl_Button*, void*) {
+  wExport->hide();
 }
 
 Fl_Double_Window *wCabrillo=(Fl_Double_Window *)0;
@@ -605,19 +723,65 @@ btnCabRSTsent->value(1);
 btnCabRSTrcvd->value(1);
 }
 
+Fl_Double_Window *wEvents=(Fl_Double_Window *)0;
+
+Fl_Text_Display *status_display=(Fl_Text_Display *)0;
+
 void create_logbook_dialogs() {
-  { dlgLogbook = new Fl_Double_Window(590, 515, _("Logbook"));
+  { dlgLogbook = new Fl_Double_Window(590, 433, _("Logbook"));
     dlgLogbook->color(FL_DARK1);
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 427, 24);
+    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 155, 24);
       if (!menu__i18n_done) {
         int i=0;
-        for ( ; i<15; i++)
+        for ( ; i<16; i++)
           if (menu_[i].label())
             menu_[i].label(_(menu_[i].label()));
         menu__i18n_done = 1;
       }
       o->menu(menu_);
     } // Fl_Menu_Bar* o
+    { Fl_Input2* o = inp_mycall = new Fl_Input2(215, 0, 80, 24, _("Sta Call"));
+      inp_mycall->tooltip(_("My station call sign"));
+      inp_mycall->box(FL_DOWN_BOX);
+      inp_mycall->color(FL_BACKGROUND2_COLOR);
+      inp_mycall->selection_color(FL_SELECTION_COLOR);
+      inp_mycall->labeltype(FL_NORMAL_LABEL);
+      inp_mycall->labelfont(0);
+      inp_mycall->labelsize(14);
+      inp_mycall->labelcolor(FL_FOREGROUND_COLOR);
+      inp_mycall->callback((Fl_Callback*)cb_inp_mycall);
+      inp_mycall->align(Fl_Align(FL_ALIGN_LEFT));
+      inp_mycall->when(FL_WHEN_RELEASE);
+      o->value(progStatus.mycall.c_str());
+    } // Fl_Input2* inp_mycall
+    { Fl_Input2* o = inp_opcall = new Fl_Input2(355, 0, 80, 24, _("Op Call"));
+      inp_opcall->tooltip(_("Operator call sign"));
+      inp_opcall->box(FL_DOWN_BOX);
+      inp_opcall->color(FL_BACKGROUND2_COLOR);
+      inp_opcall->selection_color(FL_SELECTION_COLOR);
+      inp_opcall->labeltype(FL_NORMAL_LABEL);
+      inp_opcall->labelfont(0);
+      inp_opcall->labelsize(14);
+      inp_opcall->labelcolor(FL_FOREGROUND_COLOR);
+      inp_opcall->callback((Fl_Callback*)cb_inp_opcall);
+      inp_opcall->align(Fl_Align(FL_ALIGN_LEFT));
+      inp_opcall->when(FL_WHEN_RELEASE);
+      o->value(progStatus.opcall.c_str());
+    } // Fl_Input2* inp_opcall
+    { Fl_Input2* o = inp_opname = new Fl_Input2(507, 0, 80, 24, _("Oper\'"));
+      inp_opname->tooltip(_("Operator name"));
+      inp_opname->box(FL_DOWN_BOX);
+      inp_opname->color(FL_BACKGROUND2_COLOR);
+      inp_opname->selection_color(FL_SELECTION_COLOR);
+      inp_opname->labeltype(FL_NORMAL_LABEL);
+      inp_opname->labelfont(0);
+      inp_opname->labelsize(14);
+      inp_opname->labelcolor(FL_FOREGROUND_COLOR);
+      inp_opname->callback((Fl_Callback*)cb_inp_opname);
+      inp_opname->align(Fl_Align(FL_ALIGN_LEFT));
+      inp_opname->when(FL_WHEN_RELEASE);
+      o->value(progStatus.opname.c_str());
+    } // Fl_Input2* inp_opname
     { inpDate_log = new Fl_DateInput(5, 45, 100, 24, _("Date On"));
       inpDate_log->tooltip(_("Date QSO started"));
       inpDate_log->box(FL_DOWN_BOX);
@@ -862,7 +1026,6 @@ void create_logbook_dialogs() {
     } // Fl_Button* bSearchNext
     { Tabs = new Fl_Tabs(5, 155, 475, 120);
       { tab_log_qsl = new Fl_Group(5, 179, 475, 96, _("QSL"));
-        tab_log_qsl->hide();
         { Fl_DateInput* o = inpQSLrcvddate_log = new Fl_DateInput(9, 198, 100, 24, _("QSL-rcvd"));
           inpQSLrcvddate_log->tooltip(_("QSL received on this date"));
           inpQSLrcvddate_log->box(FL_DOWN_BOX);
@@ -953,7 +1116,6 @@ void create_logbook_dialogs() {
           inpQSL_VIA_log->labelcolor(FL_FOREGROUND_COLOR);
           inpQSL_VIA_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpQSL_VIA_log->when(FL_WHEN_RELEASE);
-          Fl_Group::current()->resizable(inpQSL_VIA_log);
         } // Fl_Input2* inpQSL_VIA_log
         tab_log_qsl->end();
       } // Fl_Group* tab_log_qsl
@@ -1103,6 +1265,7 @@ void create_logbook_dialogs() {
         tab_log_my_station->end();
       } // Fl_Group* tab_log_my_station
       { tab_log_contest = new Fl_Group(5, 179, 475, 96, _("Contest"));
+        tab_log_contest->hide();
         { inpSerNoOut_log = new Fl_Input2(64, 189, 55, 24, _("Ser out"));
           inpSerNoOut_log->tooltip(_("Contest seral # sent"));
           inpSerNoOut_log->box(FL_DOWN_BOX);
@@ -1357,21 +1520,7 @@ void create_logbook_dialogs() {
       bDelete->selection_color((Fl_Color)48);
       bDelete->callback((Fl_Callback*)cb_btnDelete);
     } // Fl_Button* bDelete
-    { Fl_Input2* o = inp_mycall = new Fl_Input2(486, 0, 100, 24, _("My Call"));
-      inp_mycall->tooltip(_("My station call sign"));
-      inp_mycall->box(FL_DOWN_BOX);
-      inp_mycall->color(FL_BACKGROUND2_COLOR);
-      inp_mycall->selection_color(FL_SELECTION_COLOR);
-      inp_mycall->labeltype(FL_NORMAL_LABEL);
-      inp_mycall->labelfont(0);
-      inp_mycall->labelsize(14);
-      inp_mycall->labelcolor(FL_FOREGROUND_COLOR);
-      inp_mycall->callback((Fl_Callback*)cb_inp_mycall);
-      inp_mycall->align(Fl_Align(FL_ALIGN_LEFT));
-      inp_mycall->when(FL_WHEN_RELEASE);
-      o->value(progStatus.mycall.c_str());
-    } // Fl_Input2* inp_mycall
-    { browser_group = new Fl_Group(2, 310, 586, 205);
+    { browser_group = new Fl_Group(2, 310, 586, 120);
       { wBrowser = new Table(2, 310, 586, 120);
         wBrowser->box(FL_DOWN_FRAME);
         wBrowser->color(FL_BACKGROUND2_COLOR);
@@ -1385,11 +1534,6 @@ void create_logbook_dialogs() {
         wBrowser->end();
         Fl_Group::current()->resizable(wBrowser);
       } // Table* wBrowser
-      { Fl_Text_Display* o = status_display = new Fl_Text_Display(2, 432, 586, 80);
-        Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();
-        txtbuffer->text("");
-        o->buffer(txtbuffer);
-      } // Fl_Text_Display* status_display
       browser_group->end();
       Fl_Group::current()->resizable(browser_group);
     } // Fl_Group* browser_group
@@ -1415,19 +1559,19 @@ void create_logbook_dialogs() {
   wBrowser->allowResize (1);
   wBrowser->gridEnabled (0);
   dlgLogbook->xclass(PACKAGE_TARNAME);
-  { wExport = new Fl_Double_Window(675, 480, _("Export Setup"));
-    { Fl_Group* o = new Fl_Group(4, 4, 388, 445, _("Select Records to Export"));
+  { wExport = new Fl_Double_Window(810, 440, _("Export Setup"));
+    { Fl_Group* o = new Fl_Group(4, 4, 388, 430, _("Select Records to Export"));
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
-      { chkExportBrowser = new Fl_Check_Browser(13, 25, 370, 350);
+      { chkExportBrowser = new Fl_Check_Browser(13, 25, 370, 330);
       } // Fl_Check_Browser* chkExportBrowser
-      { btnClearAll = new Fl_Button(69, 379, 90, 24, _("Clear All"));
+      { btnClearAll = new Fl_Button(78, 362, 90, 20, _("Clear All"));
         btnClearAll->callback((Fl_Callback*)cb_btnClearAll);
       } // Fl_Button* btnClearAll
-      { btnCheckAll = new Fl_Button(200, 379, 90, 24, _("Check All"));
+      { btnCheckAll = new Fl_Button(201, 362, 90, 20, _("Check All"));
         btnCheckAll->callback((Fl_Callback*)cb_btnCheckAll);
       } // Fl_Button* btnCheckAll
-      { inp_export_start_date = new Fl_DateInput(14, 422, 100, 22, _("Start Date"));
+      { inp_export_start_date = new Fl_DateInput(20, 402, 100, 22, _("Start Date"));
         inp_export_start_date->tooltip(_("Start date for export"));
         inp_export_start_date->box(FL_DOWN_BOX);
         inp_export_start_date->color(FL_BACKGROUND2_COLOR);
@@ -1441,7 +1585,7 @@ void create_logbook_dialogs() {
         inp_export_start_date->when(FL_WHEN_RELEASE);
         inp_export_start_date->format(2);
       } // Fl_DateInput* inp_export_start_date
-      { inp_export_stop_date = new Fl_DateInput(138, 422, 100, 22, _("Stop Date"));
+      { inp_export_stop_date = new Fl_DateInput(144, 402, 100, 22, _("Stop Date"));
         inp_export_stop_date->tooltip(_("Inclusive stop date for export"));
         inp_export_stop_date->box(FL_DOWN_BOX);
         inp_export_stop_date->color(FL_BACKGROUND2_COLOR);
@@ -1455,170 +1599,191 @@ void create_logbook_dialogs() {
         inp_export_stop_date->when(FL_WHEN_RELEASE);
         inp_export_stop_date->format(2);
       } // Fl_DateInput* inp_export_stop_date
-      { btn_export_by_date = new Fl_Check_Button(263, 425, 70, 15, _("select by date"));
+      { btn_export_by_date = new Fl_Check_Button(269, 405, 70, 15, _("select by date"));
         btn_export_by_date->tooltip(_("Enable to select date range"));
         btn_export_by_date->down_box(FL_DOWN_BOX);
         btn_export_by_date->callback((Fl_Callback*)cb_btn_export_by_date);
       } // Fl_Check_Button* btn_export_by_date
       o->end();
     } // Fl_Group* o
-    { btnOK = new Fl_Return_Button(291, 454, 90, 24, _("OK"));
-      btnOK->callback((Fl_Callback*)cb_btnOK);
-    } // Fl_Return_Button* btnOK
-    { btnCancel = new Fl_Button(160, 454, 90, 24, _("Cancel"));
-      btnCancel->callback((Fl_Callback*)cb_btnCancel);
-    } // Fl_Button* btnCancel
-    { Fl_Group* o = new Fl_Group(392, 4, 280, 475, _("Select Fields to Export"));
+    { Fl_Group* o = new Fl_Group(392, 4, 414, 430, _("Select Fields to Export"));
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { btnSelectCall = new Fl_Check_Button(402, 26, 70, 15, _("Call"));
         btnSelectCall->down_box(FL_DOWN_BOX);
         btnSelectCall->value(1);
       } // Fl_Check_Button* btnSelectCall
-      { btnSelectName = new Fl_Check_Button(402, 46, 70, 15, _("Name"));
+      { btnSelectName = new Fl_Check_Button(402, 47, 70, 15, _("Name"));
         btnSelectName->down_box(FL_DOWN_BOX);
         btnSelectName->value(1);
       } // Fl_Check_Button* btnSelectName
-      { btnSelectFreq = new Fl_Check_Button(402, 66, 70, 15, _("Freq"));
+      { btnSelectFreq = new Fl_Check_Button(402, 68, 70, 15, _("Freq"));
         btnSelectFreq->down_box(FL_DOWN_BOX);
         btnSelectFreq->value(1);
       } // Fl_Check_Button* btnSelectFreq
-      { btnSelectBand = new Fl_Check_Button(402, 86, 70, 15, _("Band"));
+      { btnSelectBand = new Fl_Check_Button(402, 90, 70, 15, _("Band"));
         btnSelectBand->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectBand
-      { btnSelectMode = new Fl_Check_Button(402, 106, 70, 15, _("Mode"));
+      { btnSelectMode = new Fl_Check_Button(402, 111, 70, 15, _("Mode"));
         btnSelectMode->down_box(FL_DOWN_BOX);
         btnSelectMode->value(1);
       } // Fl_Check_Button* btnSelectMode
-      { btnSelectQSOdateOn = new Fl_Check_Button(402, 127, 70, 15, _("QSO Date On"));
+      { btnSelectQSOdateOn = new Fl_Check_Button(402, 133, 70, 15, _("QSO Date On"));
         btnSelectQSOdateOn->down_box(FL_DOWN_BOX);
         btnSelectQSOdateOn->value(1);
       } // Fl_Check_Button* btnSelectQSOdateOn
-      { btnSelectQSOdateOff = new Fl_Check_Button(402, 147, 70, 15, _("QSO Date Off"));
+      { btnSelectQSOdateOff = new Fl_Check_Button(402, 154, 70, 15, _("QSO Date Off"));
         btnSelectQSOdateOff->down_box(FL_DOWN_BOX);
         btnSelectQSOdateOff->value(1);
       } // Fl_Check_Button* btnSelectQSOdateOff
-      { btnSelectTimeON = new Fl_Check_Button(402, 167, 70, 15, _("Time ON"));
+      { btnSelectTimeON = new Fl_Check_Button(402, 176, 70, 15, _("Time ON"));
         btnSelectTimeON->down_box(FL_DOWN_BOX);
         btnSelectTimeON->value(1);
       } // Fl_Check_Button* btnSelectTimeON
-      { btnSelectTimeOFF = new Fl_Check_Button(402, 187, 70, 15, _("Time OFF"));
+      { btnSelectTimeOFF = new Fl_Check_Button(402, 197, 70, 15, _("Time OFF"));
         btnSelectTimeOFF->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectTimeOFF
-      { btnSelectTX_pwr = new Fl_Check_Button(402, 207, 70, 15, _("TX Power"));
+      { btnSelectTX_pwr = new Fl_Check_Button(402, 219, 70, 15, _("TX Power"));
         btnSelectTX_pwr->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectTX_pwr
-      { btnSelectRSTsent = new Fl_Check_Button(402, 228, 70, 15, _("RST sent"));
+      { btnSelectRSTsent = new Fl_Check_Button(402, 240, 70, 15, _("RST sent"));
         btnSelectRSTsent->down_box(FL_DOWN_BOX);
         btnSelectRSTsent->value(1);
       } // Fl_Check_Button* btnSelectRSTsent
-      { btnSelectRSTrcvd = new Fl_Check_Button(402, 248, 70, 15, _("RST rcvd"));
+      { btnSelectRSTrcvd = new Fl_Check_Button(402, 262, 70, 15, _("RST rcvd"));
         btnSelectRSTrcvd->down_box(FL_DOWN_BOX);
         btnSelectRSTrcvd->value(1);
       } // Fl_Check_Button* btnSelectRSTrcvd
-      { btnSelectQth = new Fl_Check_Button(402, 268, 70, 15, _("Qth"));
+      { btnSelectQth = new Fl_Check_Button(402, 283, 70, 15, _("Qth"));
         btnSelectQth->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectQth
-      { btnSelectLOC = new Fl_Check_Button(402, 288, 70, 15, _("LOC"));
+      { btnSelectLOC = new Fl_Check_Button(402, 305, 70, 15, _("LOC"));
         btnSelectLOC->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectLOC
-      { btnSelectState = new Fl_Check_Button(402, 308, 70, 15, _("State"));
+      { btnSelectState = new Fl_Check_Button(402, 326, 70, 15, _("State"));
         btnSelectState->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectState
-      { btnSelectQSL_VIA = new Fl_Check_Button(402, 329, 70, 15, _("QSL-VIA"));
-        btnSelectQSL_VIA->down_box(FL_DOWN_BOX);
-      } // Fl_Check_Button* btnSelectQSL_VIA
-      { btnSelectStaCall = new Fl_Check_Button(402, 349, 70, 15, _("Station Call"));
+      { btnSelectAge = new Fl_Check_Button(402, 348, 70, 15, _("Age"));
+        btnSelectAge->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelectAge
+      { btnSelectStaCall = new Fl_Check_Button(536, 26, 70, 15, _("Station Call"));
         btnSelectStaCall->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectStaCall
-      { btnSelectStaCity = new Fl_Check_Button(402, 369, 70, 15, _("Station QTH"));
+      { btnSelectStaCity = new Fl_Check_Button(536, 47, 70, 15, _("Station QTH"));
         btnSelectStaCity->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectStaCity
-      { btnSelectStaGrid = new Fl_Check_Button(402, 389, 70, 15, _("Station LOC"));
+      { btnSelectStaGrid = new Fl_Check_Button(536, 68, 70, 15, _("Station LOC"));
         btnSelectStaGrid->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectStaGrid
-      { btnSelectOperator = new Fl_Check_Button(402, 410, 70, 15, _("Operator"));
+      { btnSelectOperator = new Fl_Check_Button(536, 90, 70, 15, _("Operator"));
         btnSelectOperator->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectOperator
-      { btnSelectProvince = new Fl_Check_Button(533, 26, 70, 15, _("Province"));
+      { btnSelectProvince = new Fl_Check_Button(536, 111, 70, 15, _("Province"));
         btnSelectProvince->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectProvince
-      { btnSelectCountry = new Fl_Check_Button(533, 46, 70, 15, _("Country"));
+      { btnSelectCountry = new Fl_Check_Button(536, 133, 70, 15, _("Country"));
         btnSelectCountry->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectCountry
-      { btnSelectNotes = new Fl_Check_Button(533, 66, 70, 15, _("Notes"));
+      { btnSelectNotes = new Fl_Check_Button(536, 154, 70, 15, _("Notes"));
         btnSelectNotes->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectNotes
-      { btnSelectQSLrcvd = new Fl_Check_Button(533, 86, 70, 15, _("QSL rcvd date"));
+      { btnSelectQSLrcvd = new Fl_Check_Button(536, 176, 70, 15, _("QSL rcvd date"));
         btnSelectQSLrcvd->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectQSLrcvd
-      { btnSelectQSLsent = new Fl_Check_Button(533, 107, 70, 15, _("QSL sent date"));
+      { btnSelectQSLsent = new Fl_Check_Button(536, 197, 70, 15, _("QSL sent date"));
         btnSelectQSLsent->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectQSLsent
-      { btnSelectSerialIN = new Fl_Check_Button(533, 127, 70, 15, _("Serial # in"));
+      { btnSelecteQSLrcvd = new Fl_Check_Button(536, 219, 70, 15, _("eQSL rcvd date"));
+        btnSelecteQSLrcvd->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelecteQSLrcvd
+      { btnSelecteQSLsent = new Fl_Check_Button(536, 240, 70, 15, _("eQSL sent date"));
+        btnSelecteQSLsent->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelecteQSLsent
+      { btnSelectLOTWrcvd = new Fl_Check_Button(536, 262, 70, 15, _("LoTW rcvd date"));
+        btnSelectLOTWrcvd->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelectLOTWrcvd
+      { btnSelectLOTWsent = new Fl_Check_Button(536, 283, 70, 15, _("LoTW sent date"));
+        btnSelectLOTWsent->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelectLOTWsent
+      { btnSelectQSL_VIA = new Fl_Check_Button(536, 305, 70, 15, _("QSL-VIA"));
+        btnSelectQSL_VIA->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelectQSL_VIA
+      { btnSelectSerialIN = new Fl_Check_Button(536, 326, 70, 15, _("Serial # in"));
         btnSelectSerialIN->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectSerialIN
-      { btnSelectSerialOUT = new Fl_Check_Button(533, 147, 70, 15, _("Serial # out"));
+      { btnSelectSerialOUT = new Fl_Check_Button(536, 348, 70, 15, _("Serial # out"));
         btnSelectSerialOUT->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectSerialOUT
-      { btnSelectXchgIn = new Fl_Check_Button(533, 167, 70, 15, _("Exchange In"));
+      { btnSelectCheck = new Fl_Check_Button(670, 26, 70, 15, _("Check"));
+        btnSelectCheck->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelectCheck
+      { btnSelectXchgIn = new Fl_Check_Button(670, 47, 70, 15, _("Exchange In"));
         btnSelectXchgIn->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectXchgIn
-      { btnSelectMyXchg = new Fl_Check_Button(533, 188, 70, 15, _("Exchange Out"));
+      { btnSelectMyXchg = new Fl_Check_Button(670, 68, 70, 15, _("Exchange Out"));
         btnSelectMyXchg->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectMyXchg
-      { btnSelectCNTY = new Fl_Check_Button(533, 208, 70, 15, _("County"));
+      { btnSelectCNTY = new Fl_Check_Button(670, 90, 70, 15, _("County"));
         btnSelectCNTY->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectCNTY
-      { btnSelectCONT = new Fl_Check_Button(533, 228, 70, 15, _("Continent"));
+      { btnSelectCONT = new Fl_Check_Button(670, 111, 70, 15, _("Continent"));
         btnSelectCONT->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectCONT
-      { btnSelectCQZ = new Fl_Check_Button(533, 248, 70, 15, _("CQZ"));
+      { btnSelectCQZ = new Fl_Check_Button(670, 133, 70, 15, _("CQZ"));
         btnSelectCQZ->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectCQZ
-      { btnSelectDXCC = new Fl_Check_Button(533, 269, 70, 15, _("DXCC"));
+      { btnSelectDXCC = new Fl_Check_Button(670, 154, 70, 15, _("DXCC"));
         btnSelectDXCC->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectDXCC
-      { btnSelectIOTA = new Fl_Check_Button(533, 289, 70, 15, _("IOTA"));
+      { btnSelectIOTA = new Fl_Check_Button(670, 176, 70, 15, _("IOTA"));
         btnSelectIOTA->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectIOTA
-      { btnSelectITUZ = new Fl_Check_Button(533, 309, 70, 15, _("ITUZ"));
+      { btnSelectITUZ = new Fl_Check_Button(670, 197, 70, 15, _("ITUZ"));
         btnSelectITUZ->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectITUZ
-      { btnSelectClass = new Fl_Check_Button(533, 329, 70, 15, _("FD class"));
+      { btnSelectClass = new Fl_Check_Button(670, 219, 70, 15, _("FD class"));
         btnSelectClass->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectClass
-      { btnSelectSection = new Fl_Check_Button(533, 349, 70, 15, _("FD section"));
+      { btnSelectSection = new Fl_Check_Button(670, 240, 70, 15, _("FD section"));
         btnSelectSection->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelectSection
-      { btnSelect_cwss_serno = new Fl_Check_Button(535, 369, 70, 15, _("CW SS SerNo R"));
+      { btnSelect_cwss_serno = new Fl_Check_Button(670, 262, 70, 15, _("CW SS SerNo R"));
         btnSelect_cwss_serno->tooltip(_("CW sweepstakes rcvd ser. no."));
         btnSelect_cwss_serno->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelect_cwss_serno
-      { btnSelect_cwss_prec = new Fl_Check_Button(535, 389, 70, 15, _("CW SS Prec\'"));
+      { btnSelect_cwss_prec = new Fl_Check_Button(670, 283, 70, 15, _("CW SS Prec\'"));
         btnSelect_cwss_prec->tooltip(_("CW sweepstakes precedence"));
         btnSelect_cwss_prec->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelect_cwss_prec
-      { btnSelect_cwss_check = new Fl_Check_Button(535, 409, 70, 15, _("CW SS Check"));
+      { btnSelect_cwss_check = new Fl_Check_Button(670, 305, 70, 15, _("CW SS Check"));
         btnSelect_cwss_check->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelect_cwss_check
-      { btnSelect_cwss_section = new Fl_Check_Button(535, 430, 70, 15, _("CW SS Section"));
+      { btnSelect_cwss_section = new Fl_Check_Button(670, 326, 70, 15, _("CW SS Section"));
         btnSelect_cwss_section->tooltip(_("CW sweepstakes section"));
         btnSelect_cwss_section->down_box(FL_DOWN_BOX);
       } // Fl_Check_Button* btnSelect_cwss_section
-      { btnClearAllFields = new Fl_Button(396, 432, 85, 20, _("Clear All"));
+      { btnSelect_1010 = new Fl_Check_Button(670, 348, 70, 15, _("10-10"));
+        btnSelect_1010->tooltip(_("CW sweepstakes section"));
+        btnSelect_1010->down_box(FL_DOWN_BOX);
+      } // Fl_Check_Button* btnSelect_1010
+      { btnClearAllFields = new Fl_Button(412, 373, 85, 20, _("Clear All"));
         btnClearAllFields->callback((Fl_Callback*)cb_btnClearAllFields);
       } // Fl_Button* btnClearAllFields
-      { btnCheckAllFields = new Fl_Button(396, 454, 85, 20, _("Check All"));
+      { btnCheckAllFields = new Fl_Button(507, 373, 85, 20, _("Check All"));
         btnCheckAllFields->callback((Fl_Callback*)cb_btnCheckAllFields);
       } // Fl_Button* btnCheckAllFields
-      { btnSetFieldDefaults = new Fl_Button(489, 454, 85, 20, _("Defaults"));
-        btnSetFieldDefaults->tooltip(_("Left click - use defaults\\nRight click - set current as default"));
+      { btnSetFieldDefaults = new Fl_Button(602, 373, 85, 20, _("Defaults"));
         btnSetFieldDefaults->callback((Fl_Callback*)cb_btnSetFieldDefaults);
       } // Fl_Button* btnSetFieldDefaults
-      { btnSetLoTWfields = new Fl_Button(582, 454, 85, 20, _("LoTW"));
+      { btnSetLoTWfields = new Fl_Button(697, 373, 85, 20, _("LoTW"));
         btnSetLoTWfields->callback((Fl_Callback*)cb_btnSetLoTWfields);
       } // Fl_Button* btnSetLoTWfields
+      { btnOK = new Fl_Return_Button(697, 403, 85, 20, _("OK"));
+        btnOK->callback((Fl_Callback*)cb_btnOK);
+      } // Fl_Return_Button* btnOK
+      { btnCancel = new Fl_Button(602, 403, 85, 20, _("Cancel"));
+        btnCancel->callback((Fl_Callback*)cb_btnCancel);
+      } // Fl_Button* btnCancel
       o->end();
     } // Fl_Group* o
     wExport->end();
@@ -1713,4 +1878,12 @@ void create_logbook_dialogs() {
     } // Fl_Group* o
     wCabrillo->end();
   } // Fl_Double_Window* wCabrillo
+  { wEvents = new Fl_Double_Window(590, 124, _("Event Log"));
+    { Fl_Text_Display* o = status_display = new Fl_Text_Display(2, 2, 586, 120);
+      Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();
+      txtbuffer->text("");
+      o->buffer(txtbuffer);
+    } // Fl_Text_Display* status_display
+    wEvents->end();
+  } // Fl_Double_Window* wEvents
 }

@@ -53,6 +53,8 @@ status progStatus = {
 
 	"",						// logbookfilename
 	"",						// mycall
+	"",						// opcall
+	"",						// opname
 	SORTDATE,
 	true,
 	true,
@@ -126,6 +128,9 @@ void status::saveLastState()
 
 	spref.set("logbook_filename", logbookfilename.c_str());
 	spref.set("mycall", mycall.c_str());
+	spref.set("opcall", opcall.c_str());
+	spref.set("opname", opname.c_str());
+
 	spref.set("lastsort", lastsort);
 	spref.set("callfwd", callfwd);
 	spref.set("datefwd", datefwd);
@@ -202,6 +207,12 @@ void status::loadLastState()
 
 		spref.get("mycall", defbuffer, mycall.c_str(), 199);
 		mycall = defbuffer;
+
+		spref.get("opcall", defbuffer, opcall.c_str(), 199);
+		opcall = defbuffer;
+
+		spref.get("opname", defbuffer, opname.c_str(), 199);
+		opname = defbuffer;
 
 		if (spref.get("lastsort", i, lastsort)) lastsort = (sorttype) i;
 		if (spref.get("callfwd", i, callfwd)) callfwd = i;

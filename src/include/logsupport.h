@@ -40,6 +40,7 @@ extern void cb_mnuMergeADIF_log();
 extern void cb_mnuExportADIF_log();
 extern void cb_mnuExportCSV_log();
 extern void cb_mnuExportTEXT_log();
+extern void cb_mnuEvents();
 extern void cb_Export_Cabrillo();
 
 extern void saveLogbook();

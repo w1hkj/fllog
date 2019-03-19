@@ -138,8 +138,8 @@ void LOGBOOK_colors_font()
 
 // input / output / date / text fields
 	fl_font(progStatus.LOGBOOKtextfont, progStatus.LOGBOOKtextsize);
-	int wh = fl_height() + 4;// + 8;
-	int width_date = fl_width("888888888") + wh;
+	int wh = fl_height() + 6;
+	int width_date = fl_width("20190828") + wh;
 	int width_time = fl_width("23:59:599");
 	int width_freq = fl_width("99.9999999");
 	int width_rst  = fl_width("5999");
@@ -268,7 +268,7 @@ void LOGBOOK_colors_font()
 		inp_age_log, inp_1010_log, inp_check_log,
 		inp_log_cwss_serno, inp_log_cwss_sec,
 		inp_log_cwss_prec, inp_log_cwss_chk,
-		inp_mycall,
+		inp_mycall, inp_opcall, inp_opname,
 		inp_log_troop_s, inp_log_troop_r,
 		inp_log_scout_s, inp_log_scout_r,
 		inpSearchString
@@ -279,17 +279,55 @@ void LOGBOOK_colors_font()
 	}
 	inp_font_pos(inpNotes_log, inpNotes_log->x(), inpNotes_log->y(),
 				inpNotes_log->w(), inpNotes_log->h());
-	inp_font_pos(inpQSL_VIA_log, inpQSL_VIA_log->x(), inpQSL_VIA_log->y(),
-				inpQSL_VIA_log->w(), inpQSL_VIA_log->h());
 
-	Fl_DateInput* dates[] = {
-		inpQSLrcvddate_log, inpEQSLrcvddate_log, inpLOTWrcvddate_log,
-		inpQSLsentdate_log, inpEQSLsentdate_log, inpLOTWsentdate_log,
-	};
-	for (size_t i = 0; i < sizeof(dates)/sizeof(*dates); i++) {
-		date_font_pos(dates[i], dates[i]->x(), dates[i]->y(),
-					dates[i]->w(), wh);
-	}
+//	Fl_DateInput* dates[] = {
+//		inpQSLrcvddate_log, inpEQSLrcvddate_log, inpLOTWrcvddate_log,
+//		inpQSLsentdate_log, inpEQSLsentdate_log, inpLOTWsentdate_log,
+//	};
+//	for (size_t i = 0; i < sizeof(dates)/sizeof(*dates); i++) {
+//		date_font_pos(dates[i], dates[i]->x(), dates[i]->y(),
+//					dates[i]->w(), wh);
+//	}
+
+	date_font_pos(inpQSLrcvddate_log,
+				  inpQSLrcvddate_log->x(), inpQSLrcvddate_log->y(),
+				  width_date, wh);
+
+	date_font_pos(inpQSLsentdate_log,
+				  inpQSLsentdate_log->x(), inpQSLsentdate_log->y(),
+				  width_date, wh);
+
+	inpEQSLrcvddate_log->position(inpQSLrcvddate_log->x() + inpQSLrcvddate_log->w() + 2,
+								  inpQSLrcvddate_log->y());
+	inpEQSLsentdate_log->position(inpEQSLrcvddate_log->x(), inpEQSLsentdate_log->y());
+	date_font_pos(inpEQSLrcvddate_log,
+				  inpEQSLrcvddate_log->x(), inpEQSLrcvddate_log->y(),
+				  width_date, wh);
+	date_font_pos(inpEQSLsentdate_log,
+				  inpEQSLsentdate_log->x(), inpEQSLsentdate_log->y(),
+				  width_date, wh);
+
+	inpLOTWrcvddate_log->position(inpEQSLrcvddate_log->x() + inpEQSLrcvddate_log->w() + 2,
+								  inpLOTWrcvddate_log->y());
+	inpLOTWsentdate_log->position(inpLOTWrcvddate_log->x(), inpLOTWsentdate_log->y());
+	date_font_pos(inpLOTWrcvddate_log,
+				  inpLOTWrcvddate_log->x(), inpLOTWrcvddate_log->y(),
+				  width_date, wh);
+	date_font_pos(inpLOTWsentdate_log,
+				  inpLOTWsentdate_log->x(), inpLOTWsentdate_log->y(),
+				  width_date, wh);
+
+	int via_x = inpLOTWrcvddate_log->x() + inpLOTWrcvddate_log->w() + 2;
+	int via_y = inpQSL_VIA_log->y();
+	int via_w = Tabs->w() + Tabs->x() - via_x;
+	int via_h = inpQSL_VIA_log->h();
+std::cout << Tabs->w() + Tabs->x() << ", " << via_x << ", " << via_y << ", " << via_w << ", " << via_h << std::endl;
+
+	inpQSL_VIA_log->resize( via_x, via_y, via_w, via_h);
+	inpQSL_VIA_log->textsize(progStatus.LOGBOOKtextsize);
+	inpQSL_VIA_log->textfont(progStatus.LOGBOOKtextfont);
+	inpQSL_VIA_log->textcolor(progStatus.LOGBOOKtextcolor);
+	inpQSL_VIA_log->color(progStatus.LOGBOOKcolor);
 
 	int srchwidth = dlg_width - 8 - Tabs->w();
 	int srchx = dlg_width - srchwidth - 2;
@@ -609,6 +647,8 @@ int main (int argc, char *argv[])
 
 	progStatus.loadLastState();
 	inp_mycall->value(progStatus.mycall.c_str());
+	inp_opcall->value(progStatus.opcall.c_str());
+	inp_opname->value(progStatus.opname.c_str());
 
 	LOGBOOK_colors_font();
 

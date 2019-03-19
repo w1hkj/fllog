@@ -1163,6 +1163,11 @@ void cb_mnuShowLogbook()
 	dlgLogbook->show();
 }
 
+void cb_mnuEvents()
+{
+	wEvents->show();
+}
+
 enum State {VIEWREC, NEWREC};
 static State logState = VIEWREC;
 
