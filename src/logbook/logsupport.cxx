@@ -41,17 +41,15 @@
 #include "debug.h"
 #include "status.h"
 #include "date.h"
-
 #include "adif_io.h"
 #include "logbook.h"
 #include "textio.h"
 #include "lgbook.h"
-
+#include "globals.h"
 #include "logger.h"
 #include "fileselect.h"
 #include "icons.h"
 #include "gettext.h"
-
 #include "timeops.h"
 
 using namespace std;
@@ -296,11 +294,119 @@ void Export_TXT()
 	txtFile.writeTXTFile(p, &qsodb);
 }
 
+string adif_field(int num, const char *s)
+{
+	char tempstr[100];
+	int slen = strlen(s);
+	if (slen == 0) return "";
+	int n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s", fields[num].name, slen, s);
+	if (n == -1) {
+		return "";
+	}
+	return tempstr;
+}
+
+bool want_field(int j)
+{
+	if (fields[j].btn == NULL) return false;
+	return (*fields[j].btn)->value();
+}
+
+string export_rec(cQsoRec *rec)
+{
+	string record;
+	string notes;
+	string temp;
+
+	if (want_field(CALL)) {
+		temp = rec->getField(CALL);
+		if (temp.empty()) return "";
+		record += adif_field(CALL, temp.c_str());
+	}
+	if (want_field(QSO_DATE)) {
+		temp = rec->getField(QSO_DATE);
+		if (temp.empty()) return "";
+		record += adif_field(QSO_DATE, temp.c_str());
+	}
+	if (want_field(TIME_ON)) {
+		temp = rec->getField(TIME_ON);
+		if (temp.empty()) return "";
+		record += adif_field(TIME_ON, temp.c_str());
+	}
+	if (want_field(QSO_DATE_OFF)) {
+		temp = rec->getField(QSO_DATE_OFF);
+		if (temp.empty()) return "";
+		record += adif_field(QSO_DATE_OFF, temp.c_str());
+	}
+	if (want_field(TIME_OFF)) {
+		temp = rec->getField(TIME_OFF);
+		if (temp.empty()) return "";
+		record += adif_field(TIME_OFF, temp.c_str());
+	}
+	if (want_field(FREQ))
+		record += adif_field(FREQ, rec->getField(FREQ));
+	if (want_field(MODE)) {
+		record += adif_field(MODE, adif2export(rec->getField(MODE)).c_str());
+		string submode = adif2submode(rec->getField(MODE));
+		if (!submode.empty())
+			record += adif_field(SUBMODE, submode.c_str());
+	}
+	if (want_field(RST_SENT))
+		record += adif_field(RST_SENT, rec->getField(RST_SENT));
+	if (want_field(RST_RCVD))
+		record += adif_field(RST_RCVD, rec->getField(RST_RCVD));
+	if (want_field(TX_PWR))
+		record += adif_field(TX_PWR, rec->getField(TX_PWR));
+	if (want_field(NAME))
+		record += adif_field(NAME, rec->getField(NAME));
+	if (want_field(QTH))
+		record += adif_field(QTH, rec->getField(QTH));
+	if (want_field(STATE))
+		record += adif_field(STATE, rec->getField(STATE));
+	if (want_field(COUNTRY))
+		record += adif_field(VE_PROV, rec->getField(COUNTRY));
+	if (want_field(GRIDSQUARE))
+		record += adif_field(GRIDSQUARE, rec->getField(GRIDSQUARE));
+	if (want_field(STX))
+		record += adif_field(STX, rec->getField(STX));
+	if (want_field(SRX))
+		record += adif_field(SRX, rec->getField(SRX));
+	if (want_field(XCHG1))
+		record += adif_field(XCHG1, rec->getField(XCHG1));
+	if (want_field(MYXCHG))
+		record += adif_field(MYXCHG, rec->getField(MYXCHG));
+	if (want_field(NOTES)) {
+		notes = rec->getField(NOTES);
+		for (size_t i = 0; i < notes.length(); i++)
+			if (notes[i] == '\n') notes[i] = ';';
+		record += adif_field(NOTES, notes.c_str());
+	}
+	if (want_field(IOTA))
+		record += adif_field(IOTA, rec->getField(IOTA));
+	if (want_field(DXCC))
+		record += adif_field(DXCC, rec->getField(DXCC));
+	if (want_field(QSL_VIA))
+		record += adif_field(QSL_VIA, rec->getField(QSL_VIA));
+	if (want_field(QSLRDATE))
+		record += adif_field(QSLRDATE, rec->getField(QSLRDATE));
+	if (want_field(QSLSDATE))
+		record += adif_field(QSLSDATE, rec->getField(QSLSDATE));
+	if (want_field(EQSLRDATE))
+		record += adif_field(EQSLRDATE, rec->getField(EQSLRDATE));
+	if (want_field(EQSLSDATE))
+		record += adif_field(EQSLSDATE, rec->getField(EQSLSDATE));
+	if (want_field(LOTWRDATE))
+		record += adif_field(LOTWRDATE, rec->getField(LOTWRDATE));
+	if (want_field(LOTWSDATE))
+		record += adif_field(LOTWSDATE, rec->getField(LOTWSDATE));
+
+	record += "<EOR>\r\n";
+	return record;
+}
+
 void Export_ADIF()
 {
 	if (chkExportBrowser->nchecked() == 0) return;
-
-	cQsoRec *rec;
 
 	string title = _("Export to ADIF file");
 	string filters;
@@ -315,19 +421,38 @@ void Export_ADIF()
 	if (!p) return;
 	if (!*p) return;
 
-	for (int i = 0; i < chkExportBrowser->nitems(); i++) {
-		if (chkExportBrowser->checked(i + 1)) {
-			rec = qsodb.getRec(i);
-			rec->putField(EXPORT, "E");
-			qsodb.qsoUpdRec (i, rec);
-		}
-	}
 	string sp = p;
 	string temp = ".";
 	temp.append(ADIF_SUFFIX);
 
 	if (sp.find(temp) == string::npos) sp.append(temp);
-	adifFile.writeFile (sp.c_str(), &qsodb);
+
+	string adif;
+	char szheader[500];
+	const char *header =\
+"File: %s\r\n\
+<ADIF_VER:%d>%s\r\n\
+<PROGRAMID:%d>%s\r\n\
+<PROGRAMVERSION:%d>%s\r\n\
+<EOH>\r\n";
+
+	snprintf (szheader, sizeof(szheader), header,
+			 fl_filename_name(sp.c_str()),
+			 strlen(ADIF_VERS), ADIF_VERS,
+			 strlen(PACKAGE_NAME), PACKAGE_NAME,
+			 strlen(PACKAGE_VERSION), PACKAGE_VERSION);
+
+	adif.assign(szheader);
+	for (int i = 0; i < chkExportBrowser->nitems(); i++) {
+		if (chkExportBrowser->checked(i + 1)) {
+			adif.append(export_rec(qsodb.getRec(i)));
+		}
+	}
+
+	ofstream ofile(sp.c_str());
+	ofile << adif;
+	ofile.close();
+
 }
 
 /*

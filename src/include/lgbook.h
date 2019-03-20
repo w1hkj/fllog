@@ -158,6 +158,7 @@ extern Fl_Button *btnSetLoTWfields;
 #include <FL/Fl_Return_Button.H>
 extern Fl_Return_Button *btnOK;
 extern Fl_Button *btnCancel;
+extern Fl_Button *btnSeteQSLfields;
 extern Fl_Double_Window *wCabrillo;
 extern Fl_Check_Browser *chkCabBrowser;
 extern Fl_Button *btnCabClearAll;

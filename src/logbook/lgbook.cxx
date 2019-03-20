@@ -634,6 +634,60 @@ static void cb_btnCancel(Fl_Button*, void*) {
   wExport->hide();
 }
 
+Fl_Button *btnSeteQSLfields=(Fl_Button *)0;
+
+static void cb_btnSeteQSLfields(Fl_Button*, void*) {
+  btnSelectCall->value(1);
+btnSelectName->value(0);
+btnSelectFreq->value(1);
+btnSelectBand->value(1);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(0);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(0);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);
+}
+
 Fl_Double_Window *wCabrillo=(Fl_Double_Window *)0;
 
 Fl_Check_Browser *chkCabBrowser=(Fl_Check_Browser *)0;
@@ -1775,7 +1829,7 @@ void create_logbook_dialogs() {
       { btnSetFieldDefaults = new Fl_Button(602, 373, 85, 20, _("Defaults"));
         btnSetFieldDefaults->callback((Fl_Callback*)cb_btnSetFieldDefaults);
       } // Fl_Button* btnSetFieldDefaults
-      { btnSetLoTWfields = new Fl_Button(697, 373, 85, 20, _("LoTW"));
+      { btnSetLoTWfields = new Fl_Button(412, 403, 85, 20, _("LoTW"));
         btnSetLoTWfields->callback((Fl_Callback*)cb_btnSetLoTWfields);
       } // Fl_Button* btnSetLoTWfields
       { btnOK = new Fl_Return_Button(697, 403, 85, 20, _("OK"));
@@ -1784,6 +1838,9 @@ void create_logbook_dialogs() {
       { btnCancel = new Fl_Button(602, 403, 85, 20, _("Cancel"));
         btnCancel->callback((Fl_Callback*)cb_btnCancel);
       } // Fl_Button* btnCancel
+      { btnSeteQSLfields = new Fl_Button(507, 403, 85, 20, _("eQSL"));
+        btnSeteQSLfields->callback((Fl_Callback*)cb_btnSeteQSLfields);
+      } // Fl_Button* btnSeteQSLfields
       o->end();
     } // Fl_Group* o
     wExport->end();

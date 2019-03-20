@@ -29,8 +29,8 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook open
-    xywh {458 53 590 433} type Double color 47 resizable visible
+    label Logbook
+    xywh {458 53 590 433} type Double color 47 hide resizable
   } {
     Fl_Menu_Bar {} {open
       xywh {0 0 155 24}
@@ -198,7 +198,7 @@ tm sTime;
 time (&tmptr);
 gmtime_r (&tmptr, &sTime);
 strftime(szT, 10, "%H:%M:%S", &sTime);
-inpTimeOff_log->value(szT);} selected
+inpTimeOff_log->value(szT);}
       tooltip {Set time off to clock gmt} xywh {163 87 15 24}
     }
     Fl_Input inpFreq_log {
@@ -540,8 +540,8 @@ wBrowser->allowResize (1);
 wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
-    label {Export Setup}
-    xywh {462 113 810 440} type Double hide
+    label {Export Setup} open
+    xywh {462 113 810 440} type Double visible
   } {
     Fl_Group {} {
       label {Select Records to Export} open
@@ -990,7 +990,7 @@ btnSelect_cwss_serno->value(0);
 btnSelect_cwss_prec->value(0);
 btnSelect_cwss_check->value(0);
 btnSelect_1010->value(0);}
-        xywh {697 373 85 20}
+        xywh {412 403 85 20}
       }
       Fl_Return_Button btnOK {
         label OK
@@ -1002,6 +1002,59 @@ Export_log();}
         label Cancel
         callback {wExport->hide();}
         xywh {602 403 85 20}
+      }
+      Fl_Button btnSeteQSLfields {
+        label eQSL
+        callback {btnSelectCall->value(1);
+btnSelectName->value(0);
+btnSelectFreq->value(1);
+btnSelectBand->value(1);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(0);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(0);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchgIn->value(0);
+btnSelectMyXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectClass->value(0);
+btnSelectSection->value(0);
+btnSelect_cwss_serno->value(0);
+btnSelect_cwss_prec->value(0);
+btnSelect_cwss_check->value(0);
+btnSelect_1010->value(0);} selected
+        xywh {507 403 85 20}
       }
     }
   }
@@ -1128,7 +1181,7 @@ btnCabRSTrcvd->value(1);}
   }
   Fl_Window wEvents {
     label {Event Log}
-    xywh {459 518 590 124} type Double visible
+    xywh {459 518 590 124} type Double hide
   } {
     Fl_Text_Display status_display {
       xywh {2 2 586 120}

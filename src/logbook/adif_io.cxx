@@ -55,6 +55,7 @@ FIELD fields[] = {
 	{FREQ,         12,    "FREQ",             &btnSelectFreq},      // QSO frequency in Mhz
 	{CALL,         30,    "CALL",             &btnSelectCall},      // contacted stations CALLSIGN
 	{MODE,         20,    "MODE",             &btnSelectMode},      // QSO mode
+	{SUBMODE,      20,    "SUBMODE",          NULL},                // QSO submode
 	{NAME,         80,    "NAME",             &btnSelectName},      // contacted operators NAME
 	{QSO_DATE,     8,     "QSO_DATE",         &btnSelectQSOdateOn}, // QSO data
 	{QSO_DATE_OFF, 8,     "QSO_DATE_OFF",     &btnSelectQSOdateOff},// QSO data OFF, according to ADIF 2.2.6

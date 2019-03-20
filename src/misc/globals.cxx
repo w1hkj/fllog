@@ -188,6 +188,28 @@ const struct mode_info_t mode_info[NUM_MODES] = {
 
 };
 
+std::string adif2export(std::string adif)
+{
+	std::string test = adif;
+	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
+	for (int n = 0; n < NUM_MODES; n++) {
+		if (test == mode_info[n].adif_name)
+			return mode_info[n].export_mode;
+	}
+	return test;
+}
+
+std::string adif2submode(std::string adif)
+{
+	std::string test = adif;
+	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
+	for (int n = 0; n < NUM_MODES; n++) {
+		if (test == mode_info[n].adif_name)
+			return mode_info[n].export_submode;
+	}
+	return "";
+}
+
 std::ostream& operator<<(std::ostream& s, const qrg_mode_t& m)
 {
 	return s << m.rfcarrier << ' '
@@ -341,3 +363,4 @@ const char* band_freq(const char* band_name)
 
 	return "";
 }
+
