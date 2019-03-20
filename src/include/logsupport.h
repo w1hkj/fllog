@@ -59,6 +59,7 @@ extern void DupCheck();
 extern void cb_search(Fl_Widget* w, void*);
 extern int log_search_handler(int);
 extern void restore_sort();
+extern void EditRecord(int);
 extern const char* fetch_record(const char *);
 
 extern char *szTime(int typ);
