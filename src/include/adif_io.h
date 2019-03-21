@@ -42,6 +42,7 @@ public:
 	int readAdifRec () {return 0;};
 	int  writeAdifRec (cQsoRec *rec, const char *fname);
 	void add_record (const char *, cQsoDb &);
+	void update_record (const char *, cQsoDb &);
 	void readFile (std::string , cQsoDb *);
 	void readfile_(std::string, cQsoDb *);
 

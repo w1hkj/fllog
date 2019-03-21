@@ -611,70 +611,45 @@ void cAdifIO::writelog_()
 	return;
 }
 
-/*
-//======================================================================
-// thread to support writing database in a separate thread
-//======================================================================
-
-static void *ADIF_RW_loop(void *args);
-static bool ADIF_RW_EXIT = false;
-
-static void *ADIF_RW_loop(void *args)
+// ---------------------------------------------------------------------
+// update_record
+//
+//   used by xmlrpc server to update the current record in the database
+//   buffer contains ADIF fields with <eor> as terminator
+//   db points to the current database
+//
+//----------------------------------------------------------------------
+void cAdifIO::update_record(const char *buffer, cQsoDb &db)
 {
-	SET_THREAD_ID(ADIF_RW_TID);
+	int found;
+	char * p = strchr((char *)buffer,'<'); // find first ADIF specifier
 
-	for (;;) {
-		pthread_mutex_lock(&ADIF_RW_mutex);
-		pthread_cond_wait(&ADIF_RW_cond, &ADIF_RW_mutex);
-		pthread_mutex_unlock(&ADIF_RW_mutex);
-
-		if (ADIF_RW_EXIT)
-			return NULL;
-		if (ADIF_WRITE && adifIO) {
-			adifIO->writelog_();
-			ADIF_WRITE = false;
-		} else if (ADIF_READ && adifIO) {
-			adifIO->readfile_(adif_file_name.c_str(), adif_db);
-			ADIF_READ = false;
-		}
+	int editnbr = db.nbrRecs() - 1; // last record in database
+	adifqso = qsodb.getRec (editnbr);
+	while (p) {
+		found = findfield(p + 1);
+		if (found > -1) {
+			fillfield (found, p + 1);
+		} else if (found == -1) // <eor> reached;
+			adifqso = 0;
+		p = strchr(p + 1,'<');
 	}
-	return NULL;
+	
+	db.qsoUpdRec (editnbr, adifqso);
+	db.isdirty(0);
+	db.SortByDate();
+	std::string status = buffer;
+	size_t ptr = status.find("<CALL:");
+	if (ptr != std::string::npos) ptr = status.find(">", ptr);
+	status.erase(0, ptr + 1);
+	ptr = status.find("<");
+	status.erase(ptr);
+	status.insert(0, "Updated record: ").append("\n");
+	write_status(status);
+
+	loadBrowser(true);
+
 }
-
-void ADIF_RW_close(void)
-{
-	ENSURE_THREAD(FLMAIN_TID);
-
-	if (!ADIF_RW_thread)
-		return;
-
-	pthread_mutex_lock(&ADIF_RW_mutex);
-	ADIF_RW_EXIT = true;
-	LOG_INFO("%s", "Exiting ADIF_RW_thread");
-	pthread_cond_signal(&ADIF_RW_cond);
-	pthread_mutex_unlock(&ADIF_RW_mutex);
-
-	pthread_join(*ADIF_RW_thread, NULL);
-	delete ADIF_RW_thread;
-	ADIF_RW_thread = 0;
-	LOG_INFO("%s", "ADIF_RW_thread closed");
-}
-
-static void ADIF_RW_init()
-{
-	ENSURE_THREAD(FLMAIN_TID);
-
-	if (ADIF_RW_thread)
-		return;
-	ADIF_RW_thread = new pthread_t;
-	ADIF_RW_EXIT = false;
-	if (pthread_create(ADIF_RW_thread, NULL, ADIF_RW_loop, NULL) != 0) {
-		LOG_PERROR("pthread_create");
-		return;
-	}
-	MilliSleep(10);
-}
-*/
 
 // ---------------------------------------------------------------------
 // add_record

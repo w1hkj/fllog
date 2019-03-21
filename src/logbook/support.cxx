@@ -40,6 +40,7 @@
 #include <FL/Enumerations.H>
 
 #include "support.h"
+#include "logsupport.h"
 #include "debug.h"
 #include "gettext.h"
 #include "status.h"
@@ -75,6 +76,22 @@ int main_handler(int event)
 			return 1;
 	}
 	return 0;
+}
+
+static std::string status_string;
+static void status_update(void *)
+{
+	status_display->insert(status_string.c_str());
+	status_display->show_insert_position();
+	status_display->redraw();
+	mainwindow->redraw();
+}
+
+void write_status(std::string s)
+{
+	LOG_INFO("%s", s.c_str());
+	status_string = s;
+	Fl::awake(status_update);
 }
 
 //======================================================================
@@ -115,6 +132,19 @@ public:
 } log_get_record(&s);    // This constructor registers the method with the server
 
 // Arguments: CALLSIGN MODE TIME_SPAN FREQ
+static int duprecnbr;
+void goto_dup_rec(void *)
+{
+	std::cout << "goto_dup_rec " << duprecnbr << std::endl;
+	EditRecord(duprecnbr);
+	int brow = 0;
+	int bcol = 6;
+	char szrec[10];
+	snprintf(szrec, sizeof(szrec), "%d", duprecnbr);
+	wBrowser->search(brow, bcol, false, szrec);
+	wBrowser->GotoRow(brow);
+}
+
 class log_check_dup : public XmlRpcServerMethod
 {
 public:
@@ -140,19 +170,31 @@ public:
 		bool bmode = (mode != "0");
 		bool bstate = (state != "0");
 		bool bxchg = (xchg_in != "0");
-		bool res = qsodb.duplicate(
+		int res = qsodb.duplicate(
 			callsign.c_str(),
 			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, bspn,
 			freq.c_str(), bfreq,
 			state.c_str(), bstate,
 			mode.c_str(), bmode,
-			xchg_in.c_str(), bxchg);
-		result = (res ? "true" : "false");
+			xchg_in.c_str(), bxchg, duprecnbr);
+		std::string status;
+		switch (res) {
+			case 1:
+				result = "true"; 
+				status = "Duplicate: ";
+				break;
+			case 2:
+				result = "possible";
+				status = "Possible dup: ";
+				break;
+			case 0:
+			default:  result = "false";
+		}
 
-		if (res) {
-			std::string status = "Duplicate: ";
+		if (res > 0) {
 			status.append(callsign).append("\n");
 			write_status(status);
+			Fl::awake(goto_dup_rec);
 		}
 
 	}
@@ -168,7 +210,6 @@ void updateBrowser(void *)
 	loadBrowser(false);
 }
 
-// One argument is passed, result is "Hello, " + arg.
 class log_add_record : public XmlRpcServerMethod
 {
 public:
@@ -183,6 +224,21 @@ public:
 	std::string help() { return std::string("log.add_record ADIF RECORD"); }
 
 } log_add_record(&s);
+
+class log_update_record : public XmlRpcServerMethod
+{
+public:
+	log_update_record(XmlRpcServer* s) : XmlRpcServerMethod("log.update_record", s) {}
+
+	void execute(XmlRpcValue& params, XmlRpcValue& result)
+	{
+		std::string adif_record = std::string(params[0]);
+		xml_adif.update_record(adif_record.c_str(), qsodb);
+		Fl::awake(updateBrowser);
+	}
+	std::string help() { return std::string("log.update_record ADIF RECORD"); }
+
+} log_update_record(&s);
 
 pthread_t *xml_thread = 0;
 
@@ -215,21 +271,4 @@ void exit_server()
 {
 	s.exit();
 }
-
-static std::string status_string;
-static void status_update(void *)
-{
-	status_display->insert(status_string.c_str());
-	status_display->show_insert_position();
-	status_display->redraw();
-	mainwindow->redraw();
-}
-
-void write_status(std::string s)
-{
-	LOG_INFO("%s", s.c_str());
-	status_string = s;
-	Fl::awake(status_update);
-}
-
 

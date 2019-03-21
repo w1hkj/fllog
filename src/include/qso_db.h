@@ -115,13 +115,14 @@ public:
 	void sort_reverse(bool rev) { reverse = rev;}
 	const cQsoRec *recarray() { return qsorec; }
 
-	bool duplicate(
+	int duplicate(
 		const char *callsign,
 		const char *date, const char *time, unsigned int interval, bool chkdatetime,
 		const char *freq, bool chkfreq,
 		const char *state, bool chkstate,
 		const char *mode, bool chkmode,
-		const char *xchg1, bool chkxchg1 );
+		const char *xchg1, bool chkxchg1,
+		int &duprecnbr );
 
 	int matched( cQsoRec *rec );
 };
