@@ -106,6 +106,7 @@ class Fl_PopCal : public Fl_Window {
 //    Fl_Window popcal_form;
     Fl_Calendar *popcal;
     Fl_Input2 *target;
+    bool gmdate_;
   public: 
     Fl_PopCal (int x, int y, int w, int h, Fl_Input2 *inp = 0);
     ~Fl_PopCal ();
@@ -117,6 +118,7 @@ class Fl_PopCal : public Fl_Window {
     int  popcalfmt ();
     int  handle (int);   
     void setDate (int, int, int);
+    void gmdate(bool on) { gmdate_ = on; popcal->gmdate(on); }
 };
 
 class Fl_DateInput : public Fl_Group  {
@@ -129,6 +131,7 @@ class Fl_DateInput : public Fl_Group  {
     Fl_Window *popcal_form;
     Fl_Calendar *popcal;
     int popcalfmt_;
+    bool gmdate_;
 
     void makepopcal();
 
@@ -148,6 +151,7 @@ class Fl_DateInput : public Fl_Group  {
     void align (Fl_Align);
     void fl_popcal();
     void take_focus();
+    void gmdate(bool on) { gmdate_ = on; }
 
 };
 

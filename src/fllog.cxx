@@ -280,15 +280,6 @@ void LOGBOOK_colors_font()
 	inp_font_pos(inpNotes_log, inpNotes_log->x(), inpNotes_log->y(),
 				inpNotes_log->w(), inpNotes_log->h());
 
-//	Fl_DateInput* dates[] = {
-//		inpQSLrcvddate_log, inpEQSLrcvddate_log, inpLOTWrcvddate_log,
-//		inpQSLsentdate_log, inpEQSLsentdate_log, inpLOTWsentdate_log,
-//	};
-//	for (size_t i = 0; i < sizeof(dates)/sizeof(*dates); i++) {
-//		date_font_pos(dates[i], dates[i]->x(), dates[i]->y(),
-//					dates[i]->w(), wh);
-//	}
-
 	date_font_pos(inpQSLrcvddate_log,
 				  inpQSLrcvddate_log->x(), inpQSLrcvddate_log->y(),
 				  width_date, wh);
@@ -321,7 +312,6 @@ void LOGBOOK_colors_font()
 	int via_y = inpQSL_VIA_log->y();
 	int via_w = Tabs->w() + Tabs->x() - via_x;
 	int via_h = inpQSL_VIA_log->h();
-std::cout << Tabs->w() + Tabs->x() << ", " << via_x << ", " << via_y << ", " << via_w << ", " << via_h << std::endl;
 
 	inpQSL_VIA_log->resize( via_x, via_y, via_w, via_h);
 	inpQSL_VIA_log->textsize(progStatus.LOGBOOKtextsize);

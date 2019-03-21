@@ -836,7 +836,7 @@ void create_logbook_dialogs() {
       inp_opname->when(FL_WHEN_RELEASE);
       o->value(progStatus.opname.c_str());
     } // Fl_Input2* inp_opname
-    { inpDate_log = new Fl_DateInput(5, 45, 100, 24, _("Date On"));
+    { Fl_DateInput* o = inpDate_log = new Fl_DateInput(5, 45, 100, 24, _("Date On"));
       inpDate_log->tooltip(_("Date QSO started"));
       inpDate_log->box(FL_DOWN_BOX);
       inpDate_log->color(FL_BACKGROUND2_COLOR);
@@ -847,7 +847,8 @@ void create_logbook_dialogs() {
       inpDate_log->labelcolor(FL_FOREGROUND_COLOR);
       inpDate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpDate_log->when(FL_WHEN_RELEASE);
-      inpDate_log->format(2);
+      o->format(2);
+      o->gmdate(true);
     } // Fl_DateInput* inpDate_log
     { inpTimeOn_log = new Fl_Input2(110, 45, 50, 24, _("Time On"));
       inpTimeOn_log->tooltip(_("Time QSO started"));
@@ -901,7 +902,7 @@ void create_logbook_dialogs() {
       inpRstR_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpRstR_log->when(FL_WHEN_RELEASE);
     } // Fl_Input2* inpRstR_log
-    { inpDateOff_log = new Fl_DateInput(5, 87, 100, 24, _("Date Off"));
+    { Fl_DateInput* o = inpDateOff_log = new Fl_DateInput(5, 87, 100, 24, _("Date Off"));
       inpDateOff_log->tooltip(_("Date QSO Ended"));
       inpDateOff_log->box(FL_DOWN_BOX);
       inpDateOff_log->color(FL_BACKGROUND2_COLOR);
@@ -912,7 +913,8 @@ void create_logbook_dialogs() {
       inpDateOff_log->labelcolor(FL_FOREGROUND_COLOR);
       inpDateOff_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
       inpDateOff_log->when(FL_WHEN_RELEASE);
-      inpDateOff_log->format(2);
+      o->format(2);
+      o->gmdate(true);
     } // Fl_DateInput* inpDateOff_log
     { inpTimeOff_log = new Fl_Input2(110, 87, 50, 24, _("Time Off"));
       inpTimeOff_log->tooltip(_("Time QSO ended"));
@@ -1091,6 +1093,7 @@ void create_logbook_dialogs() {
           inpQSLrcvddate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpQSLrcvddate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpQSLrcvddate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpQSLrcvddate_log
         { Fl_DateInput* o = inpEQSLrcvddate_log = new Fl_DateInput(113, 198, 100, 24, _("EQSL-rcvd"));
@@ -1104,6 +1107,7 @@ void create_logbook_dialogs() {
           inpEQSLrcvddate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpEQSLrcvddate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpEQSLrcvddate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpEQSLrcvddate_log
         { Fl_DateInput* o = inpLOTWrcvddate_log = new Fl_DateInput(217, 198, 100, 24, _("LOTW-rcvd"));
@@ -1117,6 +1121,7 @@ void create_logbook_dialogs() {
           inpLOTWrcvddate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpLOTWrcvddate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpLOTWrcvddate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpLOTWrcvddate_log
         { Fl_DateInput* o = inpQSLsentdate_log = new Fl_DateInput(9, 244, 100, 24, _("QSL-sent"));
@@ -1130,6 +1135,7 @@ void create_logbook_dialogs() {
           inpQSLsentdate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpQSLsentdate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpQSLsentdate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpQSLsentdate_log
         { Fl_DateInput* o = inpEQSLsentdate_log = new Fl_DateInput(113, 244, 100, 24, _("EQSL-sent"));
@@ -1143,6 +1149,7 @@ void create_logbook_dialogs() {
           inpEQSLsentdate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpEQSLsentdate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpEQSLsentdate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpEQSLsentdate_log
         { Fl_DateInput* o = inpLOTWsentdate_log = new Fl_DateInput(217, 244, 100, 24, _("LOTW-sent"));
@@ -1156,6 +1163,7 @@ void create_logbook_dialogs() {
           inpLOTWsentdate_log->labelcolor(FL_FOREGROUND_COLOR);
           inpLOTWsentdate_log->align(Fl_Align(FL_ALIGN_TOP_LEFT));
           inpLOTWsentdate_log->when(FL_WHEN_RELEASE);
+          o->gmdate(true);
           o->format(2);
         } // Fl_DateInput* inpLOTWsentdate_log
         { inpQSL_VIA_log = new Fl_Input2(320, 198, 156, 70, _("QSL-VIA"));
@@ -1638,6 +1646,7 @@ void create_logbook_dialogs() {
         inp_export_start_date->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         inp_export_start_date->when(FL_WHEN_RELEASE);
         inp_export_start_date->format(2);
+        inp_export_start_date->gmdate(true);
       } // Fl_DateInput* inp_export_start_date
       { inp_export_stop_date = new Fl_DateInput(144, 402, 100, 22, _("Stop Date"));
         inp_export_stop_date->tooltip(_("Inclusive stop date for export"));
@@ -1652,6 +1661,7 @@ void create_logbook_dialogs() {
         inp_export_stop_date->align(Fl_Align(FL_ALIGN_TOP_LEFT));
         inp_export_stop_date->when(FL_WHEN_RELEASE);
         inp_export_stop_date->format(2);
+        inp_export_stop_date->gmdate(true);
       } // Fl_DateInput* inp_export_stop_date
       { btn_export_by_date = new Fl_Check_Button(269, 405, 70, 15, _("select by date"));
         btn_export_by_date->tooltip(_("Enable to select date range"));
@@ -1937,10 +1947,12 @@ void create_logbook_dialogs() {
   } // Fl_Double_Window* wCabrillo
   { wEvents = new Fl_Double_Window(590, 124, _("Event Log"));
     { Fl_Text_Display* o = status_display = new Fl_Text_Display(2, 2, 586, 120);
+      Fl_Group::current()->resizable(status_display);
       Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();
       txtbuffer->text("");
       o->buffer(txtbuffer);
     } // Fl_Text_Display* status_display
+    wEvents->set_non_modal();
     wEvents->end();
   } // Fl_Double_Window* wEvents
 }

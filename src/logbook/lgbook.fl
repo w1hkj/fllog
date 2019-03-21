@@ -29,7 +29,7 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook
+    label Logbook open
     xywh {458 53 590 433} type Double color 47 hide resizable
   } {
     Fl_Menu_Bar {} {open
@@ -142,7 +142,8 @@ o->value(progStatus.opcall.c_str());}
       label {Date On}
       tooltip {Date QSO started} xywh {5 45 100 24} align 5
       code0 {\#include "calendar.h"}
-      code1 {inpDate_log->format(2);}
+      code1 {o->format(2);}
+      code2 {o->gmdate(true);}
       class Fl_DateInput
     }
     Fl_Input inpTimeOn_log {
@@ -182,7 +183,8 @@ inpTimeOn_log->value(szT);}
       label {Date Off}
       tooltip {Date QSO Ended} xywh {5 87 100 24} align 5
       code0 {\#include "calendar.h"}
-      code1 {inpDateOff_log->format(2);}
+      code1 {o->format(2);}
+      code2 {o->gmdate(true);}
       class Fl_DateInput
     }
     Fl_Input inpTimeOff_log {
@@ -276,36 +278,42 @@ inpTimeOff_log->value(szT);}
         Fl_Input inpQSLrcvddate_log {
           label {QSL-rcvd}
           tooltip {QSL received on this date} xywh {9 198 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
         Fl_Input inpEQSLrcvddate_log {
           label {EQSL-rcvd}
           tooltip {QSL received on this date} xywh {113 198 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
         Fl_Input inpLOTWrcvddate_log {
           label {LOTW-rcvd}
           tooltip {QSL received on this date} xywh {217 198 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
         Fl_Input inpQSLsentdate_log {
           label {QSL-sent}
           tooltip {QSL sent on this date} xywh {9 244 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
         Fl_Input inpEQSLsentdate_log {
           label {EQSL-sent}
           tooltip {QSL sent on this date} xywh {113 244 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
         Fl_Input inpLOTWsentdate_log {
           label {LOTW-sent}
           tooltip {QSL sent on this date} xywh {217 244 100 24} align 5
+          code0 {o->gmdate(true);}
           code1 {o->format(2);}
           class Fl_DateInput
         }
@@ -541,7 +549,7 @@ wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
     label {Export Setup} open
-    xywh {462 113 810 440} type Double visible
+    xywh {254 40 810 440} type Double visible
   } {
     Fl_Group {} {
       label {Select Records to Export} open
@@ -568,14 +576,16 @@ chkExportBrowser->check_all();}
         tooltip {Start date for export} xywh {20 402 100 22} align 5
         code0 {\#include "calendar.h"}
         code1 {inp_export_start_date->format(2);}
+        code2 {inp_export_start_date->gmdate(true);}
         class Fl_DateInput
       }
       Fl_Input inp_export_stop_date {
         label {Stop Date}
-        callback {cb_export_date_select();}
+        callback {cb_export_date_select();} selected
         tooltip {Inclusive stop date for export} xywh {144 402 100 22} align 5
         code0 {\#include "calendar.h"}
         code1 {inp_export_stop_date->format(2);}
+        code2 {inp_export_stop_date->gmdate(true);}
         class Fl_DateInput
       }
       Fl_Check_Button btn_export_by_date {
@@ -1053,7 +1063,7 @@ btnSelectSection->value(0);
 btnSelect_cwss_serno->value(0);
 btnSelect_cwss_prec->value(0);
 btnSelect_cwss_check->value(0);
-btnSelect_1010->value(0);} selected
+btnSelect_1010->value(0);}
         xywh {507 403 85 20}
       }
     }
@@ -1180,11 +1190,11 @@ btnCabRSTrcvd->value(1);}
     }
   }
   Fl_Window wEvents {
-    label {Event Log}
-    xywh {459 518 590 124} type Double hide
+    label {Event Log} open
+    xywh {459 518 590 124} type Double hide resizable non_modal
   } {
     Fl_Text_Display status_display {
-      xywh {2 2 586 120}
+      xywh {2 2 586 120} resizable
       code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
       code1 {txtbuffer->text("");}
       code2 {o->buffer(txtbuffer);}

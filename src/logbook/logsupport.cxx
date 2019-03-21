@@ -1526,6 +1526,7 @@ int editNbr = 0;
 void clearRecord() 
 {
 	Date tdy;
+	tdy.gmdate(true);
 	inpCall_log->value ("");
 	inpName_log->value ("");
 	inpDate_log->value (tdy.szDate(2));
