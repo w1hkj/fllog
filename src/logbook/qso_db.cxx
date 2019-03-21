@@ -580,7 +580,6 @@ int cQsoDb::duplicate(
 			 }
 		}
 	}
-std::cout << "rec nbr " << duprecnbr << " dup level " << isdup << std::endl;
 	return isdup;
 }
 

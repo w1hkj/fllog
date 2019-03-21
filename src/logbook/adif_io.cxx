@@ -624,27 +624,27 @@ void cAdifIO::update_record(const char *buffer, cQsoDb &db)
 	int found;
 	char * p = strchr((char *)buffer,'<'); // find first ADIF specifier
 
-	int editnbr = db.nbrRecs() - 1; // last record in database
+	int editnbr = wBrowser->value();
+
 	adifqso = qsodb.getRec (editnbr);
+	if (!adifqso) return;
+
 	while (p) {
 		found = findfield(p + 1);
 		if (found > -1) {
 			fillfield (found, p + 1);
 		} else if (found == -1) // <eor> reached;
-			adifqso = 0;
+			break;
 		p = strchr(p + 1,'<');
 	}
 	
 	db.qsoUpdRec (editnbr, adifqso);
 	db.isdirty(0);
 	db.SortByDate();
-	std::string status = buffer;
-	size_t ptr = status.find("<CALL:");
-	if (ptr != std::string::npos) ptr = status.find(">", ptr);
-	status.erase(0, ptr + 1);
-	ptr = status.find("<");
-	status.erase(ptr);
-	status.insert(0, "Updated record: ").append("\n");
+
+	std::string status = "Updated record: ";
+	status.append(buffer);
+
 	write_status(status);
 
 	loadBrowser(true);
