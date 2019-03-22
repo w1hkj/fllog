@@ -102,7 +102,7 @@ void write_status(std::string s)
 using namespace XmlRpc;
 
 // The server
-XmlRpcServer s;
+XmlRpcServer log_server;
 cAdifIO xml_adif;
 
 // Request record if it exists else return "NO_RECORD"
@@ -110,7 +110,7 @@ cAdifIO xml_adif;
 class log_get_record : public XmlRpcServerMethod
 {
 public:
-  log_get_record(XmlRpcServer* s) : XmlRpcServerMethod("log.get_record", s) {}
+  log_get_record(XmlRpcServer* log_server) : XmlRpcServerMethod("log.get_record", log_server) {}
 
   void execute(XmlRpcValue& params, XmlRpcValue& result)
   {
@@ -129,7 +129,7 @@ public:
 
   std::string help() { return std::string("log.get_record CALL"); }
 
-} log_get_record(&s);    // This constructor registers the method with the server
+} log_get_record(&log_server);    // This constructor registers the method with the server
 
 // Arguments: CALLSIGN MODE TIME_SPAN FREQ
 static int duprecnbr;
@@ -148,7 +148,7 @@ void goto_dup_rec(void *)
 class log_check_dup : public XmlRpcServerMethod
 {
 public:
-	log_check_dup(XmlRpcServer* s) : XmlRpcServerMethod("log.check_dup", s) {}
+	log_check_dup(XmlRpcServer* log_server) : XmlRpcServerMethod("log.check_dup", log_server) {}
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
@@ -203,7 +203,7 @@ public:
 		return std::string("log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)"); 
 	}
 
-} log_check_dup(&s);
+} log_check_dup(&log_server);
 
 void updateBrowser(void *)
 {
@@ -213,7 +213,7 @@ void updateBrowser(void *)
 class log_add_record : public XmlRpcServerMethod
 {
 public:
-	log_add_record(XmlRpcServer* s) : XmlRpcServerMethod("log.add_record", s) {}
+	log_add_record(XmlRpcServer* log_server) : XmlRpcServerMethod("log.add_record", log_server) {}
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
@@ -223,12 +223,12 @@ public:
 	}
 	std::string help() { return std::string("log.add_record ADIF RECORD"); }
 
-} log_add_record(&s);
+} log_add_record(&log_server);
 
 class log_update_record : public XmlRpcServerMethod
 {
 public:
-	log_update_record(XmlRpcServer* s) : XmlRpcServerMethod("log.update_record", s) {}
+	log_update_record(XmlRpcServer* log_server) : XmlRpcServerMethod("log.update_record", log_server) {}
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
@@ -238,14 +238,45 @@ public:
 	}
 	std::string help() { return std::string("log.update_record ADIF RECORD"); }
 
-} log_update_record(&s);
+} log_update_record(&log_server);
+
+struct MLIST {
+	string name; string signature; string help;
+} mlist[] = {
+	{ "log.add_record",    "s:s", "adds new ADIF-RECORD" },
+	{ "log.get_record",    "s:s", "returns ADIF-RECORD for CALL" },
+	{ "log.update_record", "s:s", "updates current record with specified ADIF-RECORD" },
+	{ "log.check_dup",     "s:s", "return true/false/possible for ADIF record" },
+	{ "log.list_methods",  "s:s", "return this list" }
+};
+
+class log_list_methods : public XmlRpcServerMethod {
+public:
+	log_list_methods(XmlRpcServer *log_server) : XmlRpcServerMethod("log.list_methods", log_server) {}
+
+	void execute(XmlRpcValue& params, XmlRpcValue& result) {
+
+		vector<XmlRpcValue> methods;
+		for (size_t n = 0; n < sizeof(mlist) / sizeof(*mlist); ++n) {
+			XmlRpcValue::ValueStruct item;
+			item["name"]      = mlist[n].name;
+			item["signature"] = mlist[n].signature;
+			item["help"]      = mlist[n].help;
+			methods.push_back(item);
+		}
+
+		result = methods;
+	}
+	std::string help() { return std::string("get fllog methods"); }
+} log_list_methods(&log_server);
+
 
 pthread_t *xml_thread = 0;
 
 void * xml_thread_loop(void *d)
 {
 	for(;;) {
-		s.work(-1.0);
+		log_server.work(-1.0);
 	}
 	return NULL;
 }
@@ -255,10 +286,10 @@ void start_server(int port)
 	XmlRpc::setVerbosity(0);
 
 // Create the server socket on the specified port
-	s.bindAndListen(port);
+	log_server.bindAndListen(port);
 
 // Enable introspection
-	s.enableIntrospection(true);
+	log_server.enableIntrospection(true);
 
 	xml_thread = new pthread_t;
 	if (pthread_create(xml_thread, NULL, xml_thread_loop, NULL)) {
@@ -269,6 +300,6 @@ void start_server(int port)
 
 void exit_server()
 {
-	s.exit();
+	log_server.exit();
 }
 
