@@ -543,7 +543,7 @@ int cQsoDb::duplicate(
 	if (chkdatetime) datetime = epoch_dt(szdate, sztime);
 
 	duprecnbr = -1;
-	for (int i = 0; i < nbrrecs; i++) {
+	if (reverse) for (int i = nbrrecs - 1; i >= 0; i--) {
 		if (strcasecmp(qsorec[i].getField(CALL), callsign) == 0) {
 // found callsign duplicate
 			isdup = 2;
@@ -569,7 +569,41 @@ int cQsoDb::duplicate(
 								qsorec[i].getField(TIME_OFF));
 				if ((datetime - qsodatetime) < interval*60) b_dtimeDUP = true;
 			}
-
+ 			if ( (!chkfreq     || (chkfreq     && b_freqDUP)) &&
+			     (!chkstate    || (chkstate    && b_stateDUP)) &&
+			     (!chkmode     || (chkmode     && b_modeDUP)) &&
+			     (!chkxchg1    || (chkxchg1    && b_xchg1DUP)) &&
+			     (!chkdatetime || (chkdatetime && b_dtimeDUP))) {
+			     isdup = 1;
+			     break;
+			 }
+		}
+	}
+	else for (int i = 0; i < nbrrecs; i++) {
+		if (strcasecmp(qsorec[i].getField(CALL), callsign) == 0) {
+// found callsign duplicate
+			isdup = 2;
+			duprecnbr = i;
+			b_freqDUP = b_stateDUP = b_modeDUP =
+				   	   b_xchg1DUP = b_dtimeDUP = false;
+			if (chkfreq) {
+				f2 = (int)atof(qsorec[i].getField(FREQ));
+				b_freqDUP = (f1 == f2);
+			}
+			if (chkstate)
+				b_stateDUP = (qsorec[i].getField(STATE)[0] == 0 && state[0] == 0) ||							 (strcasestr(qsorec[i].getField(STATE), state) != 0);
+			if (chkmode)
+				b_modeDUP  = (qsorec[i].getField(MODE)[0] == 0 && mode[0] == 0) ||
+							 (strcasestr(qsorec[i].getField(MODE), mode) != 0);
+			if (chkxchg1)
+				b_xchg1DUP = (qsorec[i].getField(XCHG1)[0] == 0 && xchg1[0] == 0) ||
+							 (strcasestr(qsorec[i].getField(XCHG1), xchg1) != 0);
+			if (chkdatetime) {
+				qsodatetime = epoch_dt (
+								qsorec[i].getField(QSO_DATE),
+								qsorec[i].getField(TIME_OFF));
+				if ((datetime - qsodatetime) < interval*60) b_dtimeDUP = true;
+			}
  			if ( (!chkfreq     || (chkfreq     && b_freqDUP)) &&
 			     (!chkstate    || (chkstate    && b_stateDUP)) &&
 			     (!chkmode     || (chkmode     && b_modeDUP)) &&

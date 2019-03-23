@@ -135,7 +135,6 @@ public:
 static int duprecnbr;
 void goto_dup_rec(void *)
 {
-	std::cout << "goto_dup_rec " << duprecnbr << std::endl;
 	EditRecord(duprecnbr);
 	int brow = 0;
 	int bcol = 6;
