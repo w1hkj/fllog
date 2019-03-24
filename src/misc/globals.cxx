@@ -32,6 +32,7 @@
 #include <cerrno>
 #include <cstdio>
 #include <cstring>
+#include <iostream>
 
 #include "globals.h"
 #include "util.h"
@@ -193,7 +194,10 @@ std::string adif2export(std::string adif)
 	std::string test = adif;
 	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
 	for (int n = 0; n < NUM_MODES; n++) {
-		if (test == mode_info[n].adif_name)
+		if (test == mode_info[n].sname ||
+			test == mode_info[n].adif_name ||
+			test == mode_info[n].export_mode ||
+			test == mode_info[n].export_submode)
 			return mode_info[n].export_mode;
 	}
 	return test;
@@ -204,7 +208,10 @@ std::string adif2submode(std::string adif)
 	std::string test = adif;
 	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
 	for (int n = 0; n < NUM_MODES; n++) {
-		if (test == mode_info[n].adif_name)
+		if (test == mode_info[n].sname ||
+			test == mode_info[n].adif_name ||
+			test == mode_info[n].export_mode ||
+			test == mode_info[n].export_submode)
 			return mode_info[n].export_submode;
 	}
 	return "";

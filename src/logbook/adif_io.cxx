@@ -637,8 +637,9 @@ void cAdifIO::update_record(const char *buffer, cQsoDb &db)
 			break;
 		p = strchr(p + 1,'<');
 	}
-	
+
 	db.qsoUpdRec (editnbr, adifqso);
+
 	db.isdirty(0);
 	db.SortByDate();
 

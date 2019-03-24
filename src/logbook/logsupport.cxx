@@ -345,6 +345,7 @@ string export_rec(cQsoRec *rec)
 	}
 	if (want_field(FREQ))
 		record += adif_field(FREQ, rec->getField(FREQ));
+
 	if (want_field(MODE)) {
 		record += adif_field(MODE, adif2export(rec->getField(MODE)).c_str());
 		string submode = adif2submode(rec->getField(MODE));
@@ -659,7 +660,7 @@ void cb_Export_log() {
 			rec->getField(TIME_OFF),//(export_to == LOTW ? TIME_ON : TIME_OFF) ),
 			rec->getField(CALL),
 			szfreq(rec->getField(FREQ)),
-			rec->getField(MODE) );
+			adif2export(rec->getField(MODE)).c_str() );
         chkExportBrowser->add(line);
 	}
 	cb_export_date_select();
@@ -1422,7 +1423,7 @@ void cb_Export_Cabrillo() {
 			time4(rec->getField(TIME_OFF)),
 			rec->getField(CALL),
 			szfreq(rec->getField(FREQ)),
-			rec->getField(MODE) );
+			adif2export(rec->getField(MODE)).c_str() );
 		chkCabBrowser->add(line);
 	}
 	wCabrillo->show();

@@ -136,6 +136,9 @@ static int duprecnbr;
 void goto_dup_rec(void *)
 {
 	EditRecord(duprecnbr);
+
+	inpSearchString->value((qsodb.getRec(duprecnbr))->getField(CALL));
+
 	int brow = 0;
 	int bcol = 6;
 	char szrec[10];
@@ -204,8 +207,10 @@ public:
 
 } log_check_dup(&log_server);
 
-void updateBrowser(void *)
+static std::string adif_add_record;
+static void add_record(void *)
 {
+	xml_adif.add_record(adif_add_record.c_str(), qsodb);
 	loadBrowser(false);
 }
 
@@ -216,13 +221,18 @@ public:
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
-		std::string adif_record = std::string(params[0]);
-		xml_adif.add_record(adif_record.c_str(), qsodb);
-		Fl::awake(updateBrowser);
+		adif_add_record = std::string(params[0]);
+		Fl::awake(add_record);
 	}
 	std::string help() { return std::string("log.add_record ADIF RECORD"); }
 
 } log_add_record(&log_server);
+
+static std::string adif_update_record;
+static void update_record(void *)
+{
+	xml_adif.update_record(adif_update_record.c_str(), qsodb);
+}
 
 class log_update_record : public XmlRpcServerMethod
 {
@@ -231,9 +241,8 @@ public:
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
-		std::string adif_record = std::string(params[0]);
-		xml_adif.update_record(adif_record.c_str(), qsodb);
-		Fl::awake(updateBrowser);
+		adif_update_record = std::string(params[0]);
+		Fl::awake(update_record);
 	}
 	std::string help() { return std::string("log.update_record ADIF RECORD"); }
 
