@@ -268,7 +268,6 @@ void LOGBOOK_colors_font()
 		inp_age_log, inp_1010_log, inp_check_log,
 		inp_log_cwss_serno, inp_log_cwss_sec,
 		inp_log_cwss_prec, inp_log_cwss_chk,
-		inp_mycall, inp_opcall, inp_opname,
 		inp_log_troop_s, inp_log_troop_r,
 		inp_log_scout_s, inp_log_scout_r,
 		inpSearchString
@@ -345,8 +344,9 @@ void LOGBOOK_colors_font()
 // browser (table)
 	ypos += btns[0]->h() + 4;
 
-	wBrowser->rowSize(wh - 6);
-	wBrowser->headerSize(wh - 6);
+	wBrowser->rowSize(wh-6); // this is going to determine the font size used
+	wBrowser->headerSize(wh-6);
+	wBrowser->font(progStatus.LOGBOOKtextfont);
 	wBrowser->color(progStatus.LOGBOOKcolor);
 	wBrowser->selection_color(FL_SELECTION_COLOR);
 	wBrowser->allowHscroll(never);
@@ -359,6 +359,8 @@ void LOGBOOK_colors_font()
 	mainwindow->damage();
 	mainwindow->redraw();
 
+	debug::font(progStatus.LOGBOOKtextfont);
+	debug::font_size(progStatus.LOGBOOKtextsize);
 }
 
 void setConfigItems()
@@ -392,8 +394,7 @@ void DefaultExport()
 		progStatus.SelectQSLsent = btnSelectQSLsent->value();
 		progStatus.SelectSerialIN = btnSelectSerialIN->value();
 		progStatus.SelectSerialOUT = btnSelectSerialOUT->value();
-		progStatus.SelectXchgIn = btnSelectXchgIn->value();
-		progStatus.SelectMyXchg = btnSelectMyXchg->value();
+		progStatus.SelectXchg = btnSelectXchg->value();
 		progStatus.SelectRSTsent = btnSelectRSTsent->value();
 		progStatus.SelectRSTrcvd = btnSelectRSTrcvd->value();
 		progStatus.SelectIOTA = btnSelectIOTA->value();
@@ -409,6 +410,8 @@ void DefaultExport()
 		progStatus.SelectStaCall = btnSelectStaCall->value();
 		progStatus.SelectStaGrid = btnSelectStaGrid->value();
 		progStatus.SelectStaCity = btnSelectStaCity->value();
+		progStatus.SelectCWSS = btnSelectCWSS->value();
+		progStatus.SelectJOTA = btnSelectJOTA->value();
 	} else {
 		btnSelectCall->value(progStatus.SelectCall);
 		btnSelectName->value(progStatus.SelectName);
@@ -428,8 +431,7 @@ void DefaultExport()
 		btnSelectQSLsent->value(progStatus.SelectQSLsent);
 		btnSelectSerialIN->value(progStatus.SelectSerialIN);
 		btnSelectSerialOUT->value(progStatus.SelectSerialOUT);
-		btnSelectXchgIn->value(progStatus.SelectXchgIn);
-		btnSelectMyXchg->value(progStatus.SelectMyXchg);
+		btnSelectXchg->value(progStatus.SelectXchg);
 		btnSelectRSTsent->value(progStatus.SelectRSTsent);
 		btnSelectRSTrcvd->value(progStatus.SelectRSTrcvd);
 		btnSelectIOTA->value(progStatus.SelectIOTA);
@@ -445,6 +447,8 @@ void DefaultExport()
 		btnSelectStaCall->value(progStatus.SelectStaCall);
 		btnSelectStaGrid->value(progStatus.SelectStaGrid);
 		btnSelectStaCity->value(progStatus.SelectStaCity);
+		btnSelectCWSS->value(progStatus.SelectCWSS);
+		btnSelectJOTA->value(progStatus.SelectJOTA);
 	}
 }
 
@@ -619,7 +623,7 @@ int main (int argc, char *argv[])
 	try {
 		debug::start(string(LogHomeDir).append("status_log.txt").c_str());
 		time_t t = time(NULL);
-		LOG(debug::WARN_LEVEL, debug::LOG_OTHER, _("%s log started on %s"), PACKAGE_STRING, ctime(&t));
+		LOG(debug::INFO_LEVEL, debug::LOG_OTHER, _("%s log started on \n%s"), PACKAGE_STRING, ctime(&t));
 	}
 	catch (const char* error) {
 		cerr << error << '\n';
@@ -636,9 +640,6 @@ int main (int argc, char *argv[])
 #endif
 
 	progStatus.loadLastState();
-	inp_mycall->value(progStatus.mycall.c_str());
-	inp_opcall->value(progStatus.opcall.c_str());
-	inp_opname->value(progStatus.opname.c_str());
 
 	LOGBOOK_colors_font();
 
@@ -659,6 +660,11 @@ int main (int argc, char *argv[])
 #else
 	mainwindow->show(argc, argv);
 #endif
+
+	debug::resize(mainwindow->x(), mainwindow->y() + mainwindow->h() + 26,
+				  mainwindow->w(), 200);
+
+	if (progStatus.event_log_open) debug::show();
 
 	start_logbook();
 

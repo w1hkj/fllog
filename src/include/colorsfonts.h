@@ -17,5 +17,9 @@ extern Fl_Button *btnLOGBOOK_color;
 extern Fl_Button *btn_LOGBOOK_font;
 extern Fl_Button *btnLOGBOOKdefault_colors_font;
 extern Fl_Button *btnClrFntClose;
+extern Fl_Input2 *inp_mycall;
+extern Fl_Input2 *inp_opcall;
+extern Fl_Input2 *inp_my_staqth;
+extern Fl_Input2 *inp_my_staloc;
 Fl_Double_Window* make_config_items();
 #endif

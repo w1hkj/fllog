@@ -32,6 +32,7 @@
 
 #include "textio.h"
 #include "lgbook.h"
+#include "globals.h"
 
 using namespace std;
 
@@ -73,6 +74,7 @@ void cTextFile::writeCSVHeader(FILE *txtFile)
 	if (btnSelectBand->value())      fprintf (txtFile, "%s", ",\"BAND\"");
 	if (btnSelectFreq->value())      fprintf (txtFile, "%s", ",\"FREQ\"");
 	if (btnSelectMode->value())      fprintf (txtFile, "%s", ",\"MODE\"");
+	if (btnSelectMode->value())      fprintf (txtFile, "%s", ",\SUB_MODE\"");
 	if (btnSelectTX_pwr->value())    fprintf (txtFile, "%s", ",\"TX_PWR\"");
 	if (btnSelectRSTsent->value())   fprintf (txtFile, "%s", ",\"RSTSENT\"");
 	if (btnSelectRSTrcvd->value())   fprintf (txtFile, "%s", ",\"RSTRCVD\"");
@@ -95,8 +97,16 @@ void cTextFile::writeCSVHeader(FILE *txtFile)
 	if (btnSelectNotes->value())     fprintf (txtFile, "%s", ",\"NOTES\"");
 	if (btnSelectSerialIN->value())  fprintf (txtFile, "%s", ",\"SERIAL RCVD\"");
 	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%s", ",\"SERIAL_SENT\"");
-	if (btnSelectXchgIn->value())    fprintf (txtFile, "%s", ",\"SRX_STRING\"");
-	if (btnSelectMyXchg->value())    fprintf (txtFile, "%s", ",\"STX_STRING\"");
+	if (btnSelectXchg->value())      fprintf (txtFile, "%s", ",\"SRX_STRING\"");
+	if (btnSelectXchg->value())      fprintf (txtFile, "%s", ",\"STX_STRING\"");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%s", ",\"CWSS_SECTION\"");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%s", ",\"CWSS_SERNO\"");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%s", ",\"CWSS_PREC\"");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%s", ",\"CWSS_CHK\"");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%s", ",\"JOTA_TROOPS\"");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%s", ",\"JOTA_TROOPR\"");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%s", ",\"JOTA_SCOUTS\"");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%s", ",\"JOTA_SCOUTR\"");
 	fprintf (txtFile, "%s", szEOL);
 }
 
@@ -127,7 +137,9 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 				if (btnSelectFreq->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(FREQ));
 				if (btnSelectMode->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(MODE));
+					fprintf (txtFile, ",\"%s\"", adif2export(pRec->getField(MODE)).c_str());
+				if (btnSelectMode->value())
+					fprintf (txtFile, ",\"%s\"", adif2submode(pRec->getField(MODE)).c_str());
 				if (btnSelectTX_pwr->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(TX_PWR));
 				if (btnSelectRSTsent->value())
@@ -176,10 +188,30 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, ",\"%s\"", pRec->getField(SRX));
 				if (btnSelectSerialOUT->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(STX));
-				if (btnSelectXchgIn->value())
+
+				if (btnSelectXchg->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(XCHG1));
-				if (btnSelectMyXchg->value())
+				if (btnSelectXchg->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(MYXCHG));
+
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SS_SEC));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SS_SERNO));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SS_PREC));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SS_CHK));
+
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(TROOPS));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(TROOPR));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SCOUTS));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, ",\"%s\"", pRec->getField(SCOUTR));
+
 				fprintf (txtFile, "%s", szEOL);
 				pRec->putField(EXPORT,"");
 				db->qsoUpdRec(i, pRec);
@@ -195,13 +227,14 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 {
 	if (btnSelectQSOdateOn->value()) fprintf (txtFile, "%-10s", "DATE_ON");
 	if (btnSelectQSOdateOff->value())fprintf (txtFile, "%-10s", "DATE_OFF");
-	if (btnSelectTimeON->value())    fprintf (txtFile, "%-6s", "ON");
-	if (btnSelectTimeOFF->value())   fprintf (txtFile, "%-6s", "OFF");
+	if (btnSelectTimeON->value())    fprintf (txtFile, "%-10s", "ON");
+	if (btnSelectTimeOFF->value())   fprintf (txtFile, "%-10s", "OFF");
 	if (btnSelectCall->value())      fprintf (txtFile, "%-10s", "CALL");
 	if (btnSelectName->value())      fprintf (txtFile, "%-15s", "NAME");
 	if (btnSelectBand->value())      fprintf (txtFile, "%-7s", "BAND");
 	if (btnSelectFreq->value())      fprintf (txtFile, "%-12s", "FREQ");
 	if (btnSelectMode->value())      fprintf (txtFile, "%-20s", "MODE");
+	if (btnSelectMode->value())      fprintf (txtFile, "%-20s", "SUB_MODE");
 	if (btnSelectTX_pwr->value())    fprintf (txtFile, "%-8s", "TX_PWR");
 	if (btnSelectRSTsent->value())   fprintf (txtFile, "%-6s", "RSTX");
 	if (btnSelectRSTrcvd->value())   fprintf (txtFile, "%-6s", "RSTR");
@@ -222,10 +255,19 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectQSLrcvd->value())   fprintf (txtFile, "%-10s", "LOTW_QSLR");
 	if (btnSelectQSLsent->value())   fprintf (txtFile, "%-10s", "LOTW_QSLS");
 	if (btnSelectNotes->value())     fprintf (txtFile, "%-80s", "NOTES");
-	if (btnSelectSerialIN->value())  fprintf (txtFile, "%-7s", "SRX");
-	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%-7s", "STX");
-	if (btnSelectXchgIn->value())    fprintf (txtFile, "%-15s", "SRX_STRING");
-	if (btnSelectMyXchg->value())    fprintf (txtFile, "%-15s", "STX_STRING");
+	if (btnSelectSerialIN->value())  fprintf (txtFile, "%-7s",  "SRX");
+	if (btnSelectSerialOUT->value()) fprintf (txtFile, "%-7s",  "STX");
+	if (btnSelectXchg->value())      fprintf (txtFile, "%-15s", "SRX_STRING");
+	if (btnSelectXchg->value())      fprintf (txtFile, "%-20s", "STX_STRING");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%-8s",  "SS_SEC");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%-8s",  "SS_SERNO");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%-8s",  "SS_PREC");
+	if (btnSelectCWSS->value())      fprintf (txtFile, "%-8s",  "SS_CHK");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%-15s", "TROOPS");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%-15s", "TROOPR");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%-15s", "SCOUTS");
+	if (btnSelectJOTA->value())      fprintf (txtFile, "%-15s", "SCOUTR");
+
 	fprintf (txtFile, "%s", szEOL);
 }
 
@@ -244,9 +286,9 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 				if (btnSelectQSOdateOff->value())
 					fprintf (txtFile, "%-10s", pRec->getField(QSO_DATE_OFF));
 				if (btnSelectTimeON->value())
-					fprintf (txtFile, "%-8s", pRec->getField(TIME_ON));
+					fprintf (txtFile, "%-10s", pRec->getField(TIME_ON));
 				if (btnSelectTimeOFF->value())
-					fprintf (txtFile, "%-8s", pRec->getField(TIME_OFF));
+					fprintf (txtFile, "%-10s", pRec->getField(TIME_OFF));
 				if (btnSelectCall->value())
 					fprintf (txtFile, "%-10s", pRec->getField(CALL));
 				if (btnSelectName->value())
@@ -256,7 +298,9 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 				if (btnSelectFreq->value())
 					fprintf (txtFile, "%-12s", pRec->getField(FREQ));
 				if (btnSelectMode->value())
-					fprintf (txtFile, "%-20s", pRec->getField(MODE));
+					fprintf (txtFile, "%-20s", adif2export(pRec->getField(MODE)).c_str());
+				if (btnSelectMode->value())
+					fprintf (txtFile, "%-20s", adif2submode(pRec->getField(MODE)).c_str());
 				if (btnSelectTX_pwr->value())
 					fprintf (txtFile, "%-8s", pRec->getField(TX_PWR));
 				if (btnSelectRSTsent->value())
@@ -305,10 +349,30 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, "%-7s", pRec->getField(SRX));
 				if (btnSelectSerialOUT->value())
 					fprintf (txtFile, "%-7s", pRec->getField(STX));
-				if (btnSelectXchgIn->value())
+
+				if (btnSelectXchg->value())
 					fprintf (txtFile, "%-15s", pRec->getField(XCHG1));
-				if (btnSelectMyXchg->value())
+				if (btnSelectXchg->value())
 					fprintf (txtFile, "%-15s", pRec->getField(MYXCHG));
+
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, "%-8s", pRec->getField(SS_SEC));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, "%-8s", pRec->getField(SS_SERNO));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, "%-8s", pRec->getField(SS_PREC));
+				if (btnSelectCWSS->value())
+					fprintf (txtFile, "%-8s", pRec->getField(SS_CHK));
+
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, "%-15s", pRec->getField(TROOPS));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, "%-15s", pRec->getField(TROOPR));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, "%-15s", pRec->getField(SCOUTS));
+				if (btnSelectJOTA->value())
+					fprintf (txtFile, "%-15s", pRec->getField(SCOUTR));
+
 				fprintf (txtFile, "%s", szEOL);
 				pRec->putField(EXPORT,"");
 				db->qsoUpdRec(i, pRec);

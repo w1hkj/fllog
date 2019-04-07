@@ -7,9 +7,6 @@
 #include <FL/Fl_Double_Window.H>
 extern Fl_Double_Window *dlgLogbook;
 #include <FL/Fl_Menu_Bar.H>
-extern Fl_Input2 *inp_mycall;
-extern Fl_Input2 *inp_opcall;
-extern Fl_Input2 *inp_opname;
 #include "calendar.h"
 extern Fl_DateInput *inpDate_log;
 extern Fl_Input2 *inpTimeOn_log;
@@ -136,29 +133,26 @@ extern Fl_Check_Button *btnSelectQSL_VIA;
 extern Fl_Check_Button *btnSelectSerialIN;
 extern Fl_Check_Button *btnSelectSerialOUT;
 extern Fl_Check_Button *btnSelectCheck;
-extern Fl_Check_Button *btnSelectXchgIn;
-extern Fl_Check_Button *btnSelectMyXchg;
+extern Fl_Check_Button *btnSelectXchg;
 extern Fl_Check_Button *btnSelectCNTY;
 extern Fl_Check_Button *btnSelectCONT;
 extern Fl_Check_Button *btnSelectCQZ;
 extern Fl_Check_Button *btnSelectDXCC;
 extern Fl_Check_Button *btnSelectIOTA;
 extern Fl_Check_Button *btnSelectITUZ;
-extern Fl_Check_Button *btnSelectClass;
-extern Fl_Check_Button *btnSelectSection;
-extern Fl_Check_Button *btnSelect_cwss_serno;
-extern Fl_Check_Button *btnSelect_cwss_prec;
-extern Fl_Check_Button *btnSelect_cwss_check;
-extern Fl_Check_Button *btnSelect_cwss_section;
+extern Fl_Check_Button *btnSelectFD;
+extern Fl_Check_Button *btnSelectCWSS;
 extern Fl_Check_Button *btnSelect_1010;
+extern Fl_Check_Button *btnSelectJOTA;
+extern Fl_Button *btnSeteQSLfields;
 extern Fl_Button *btnClearAllFields;
 extern Fl_Button *btnCheckAllFields;
 extern Fl_Button *btnSetFieldDefaults;
 extern Fl_Button *btnSetLoTWfields;
+extern Fl_Button *btnCancel;
 #include <FL/Fl_Return_Button.H>
 extern Fl_Return_Button *btnOK;
-extern Fl_Button *btnCancel;
-extern Fl_Button *btnSeteQSLfields;
+extern Fl_Check_Button *btn_use_nulines;
 extern Fl_Double_Window *wCabrillo;
 extern Fl_Check_Browser *chkCabBrowser;
 extern Fl_Button *btnCabClearAll;
@@ -181,9 +175,6 @@ extern Fl_Check_Button *btnCabXchgIn;
 extern Fl_Check_Button *btnCabMyXchg;
 extern Fl_Button *btnCabClearAllFields;
 extern Fl_Button *btnCabCheckAllFields;
-extern Fl_Double_Window *wEvents;
-#include <FL/Fl_Text_Display.H>
-extern Fl_Text_Display *status_display;
 void create_logbook_dialogs();
 extern unsigned char menu__i18n_done;
 extern Fl_Menu_Item menu_[];

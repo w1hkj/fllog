@@ -56,17 +56,17 @@ Function {make_config_items()} {open
   code {font_browser = new Font_Browser;} {}
   Fl_Window dlgConfigItems {
     label {Configuration Items} open
-    xywh {589 79 375 169} type Double hide
-    code0 {dlgConfigItems->xclass(PACKAGE_TARNAME);}
+    xywh {566 166 375 255} type Double
+    code0 {dlgConfigItems->xclass(PACKAGE_TARNAME);} visible
   } {
     Fl_Group {} {
       label {Log Table} open
-      xywh {2 2 370 65} box ENGRAVED_FRAME align 21
+      xywh {2 2 371 65} box ENGRAVED_FRAME align 21
     } {
       Fl_Check_Button btnBrowseTimeOFF {
         label {Browse Time OFF}
         callback {progStatus.BrowseTimeOFF = o->value();
-loadBrowser(true);} selected
+loadBrowser(true);}
         xywh {27 27 70 15} down_box DOWN_BOX
         code0 {\#include "logsupport.h"}
         code1 {o->value(progStatus.BrowseTimeOFF);}
@@ -74,7 +74,7 @@ loadBrowser(true);} selected
     }
     Fl_Group {} {
       label {Control Fonts / Colors} open
-      xywh {2 70 370 65} box ENGRAVED_FRAME align 21
+      xywh {2 70 371 65} box ENGRAVED_FRAME align 21
     } {
       Fl_Output LOGBOOKdisplay {
         xywh {17 94 98 25}
@@ -129,7 +129,46 @@ LOGBOOK_colors_font();}
     Fl_Button btnClrFntClose {
       label Close
       callback {o->window()->hide();}
-      xywh {292 139 75 25}
+      xywh {281 223 80 25}
+    }
+    Fl_Group {} {
+      label Station open
+      xywh {2 136 371 79} box ENGRAVED_BOX align 21
+    } {
+      Fl_Input inp_mycall {
+        label {Sta Call}
+        callback {progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());} selected
+        tooltip {My station call sign} xywh {140 148 80 24}
+        code0 {o->value(progStatus.mycall.c_str());}
+        class Fl_Input2
+      }
+      Fl_Input inp_opcall {
+        label {Op Call}
+        callback {progStatus.opcall = o->value();
+for (size_t n = 0; n < progStatus.opcall.length(); n++)
+progStatus.opcall[n] = toupper(progStatus.opcall[n]);
+o->value(progStatus.opcall.c_str());}
+        tooltip {Operator call sign} xywh {281 148 69 24}
+        code0 {o->value(progStatus.opcall.c_str());}
+        class Fl_Input2
+      }
+      Fl_Input inp_my_staqth {
+        label {Sta QTH}
+        callback {progStatus.my_staqth = o->value();}
+        tooltip {My station call sign} xywh {70 181 150 24}
+        code0 {o->value(progStatus.my_staqth.c_str());}
+        class Fl_Input2
+      }
+      Fl_Input inp_my_staloc {
+        label {Sta Loc}
+        callback {progStatus.my_staloc = o->value();}
+        tooltip {Operator call sign} xywh {281 181 69 24}
+        code0 {o->value(progStatus.my_staloc.c_str());}
+        class Fl_Input2
+      }
     }
   }
 }

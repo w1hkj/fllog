@@ -45,8 +45,11 @@
 #include "gettext.h"
 #include "status.h"
 #include "logbook.h"
+#include "threads.h"
 
 using namespace std;
+
+static pthread_mutex_t exec_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 void upcase(string &s)
 {
@@ -78,22 +81,6 @@ int main_handler(int event)
 	return 0;
 }
 
-static std::string status_string;
-static void status_update(void *)
-{
-	status_display->insert(status_string.c_str());
-	status_display->show_insert_position();
-	status_display->redraw();
-	mainwindow->redraw();
-}
-
-void write_status(std::string s)
-{
-	LOG_INFO("%s", s.c_str());
-	status_string = s;
-	Fl::awake(status_update);
-}
-
 //======================================================================
 // xmlrpc support
 //======================================================================
@@ -117,12 +104,13 @@ public:
 	std::string callsign = std::string(params[0]);
 	std::string resultString = fetch_record(callsign.c_str());
 
-	result = resultString;
-
-	if (resultString.find(callsign) != std::string::npos) {
-		std::string status = "Found record for: ";
-		status.append(callsign).append("\n");
-		write_status(status);
+	if (resultString.empty()) {
+		result = "NO RECORD";
+	} else {
+		result = resultString;
+		std::string st = "Found record for: ";
+		st.append(callsign);
+		LOG_INFO("%s", st.c_str());
 	}
 
   }
@@ -135,6 +123,8 @@ public:
 static int duprecnbr;
 void goto_dup_rec(void *)
 {
+	guard_lock elock(&exec_mutex);
+
 	EditRecord(duprecnbr);
 
 	inpSearchString->value((qsodb.getRec(duprecnbr))->getField(CALL));
@@ -156,7 +146,7 @@ public:
 	{
 		if (params.size() != 6) {
 			result = "Wrong # parameters";
-			write_status("log_check_dup: wrong number of parameters\n");
+			LOG_INFO("%s", "Wrong # parameters");
 			return;
 		}
 		std::string callsign = std::string(params[0]);
@@ -172,30 +162,34 @@ public:
 		bool bmode = (mode != "0");
 		bool bstate = (state != "0");
 		bool bxchg = (xchg_in != "0");
-		int res = qsodb.duplicate(
-			callsign.c_str(),
-			(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, bspn,
-			freq.c_str(), bfreq,
-			state.c_str(), bstate,
-			mode.c_str(), bmode,
-			xchg_in.c_str(), bxchg, duprecnbr);
-		std::string status;
+		std::string st;
+		int res = 0;
+		{
+			guard_lock elock(&exec_mutex);
+			res = qsodb.duplicate(
+				callsign.c_str(),
+				(const char *)szDate(6), (const char *)szTime(0), (unsigned int)ispn, bspn,
+				freq.c_str(), bfreq,
+				state.c_str(), bstate,
+				mode.c_str(), bmode,
+				xchg_in.c_str(), bxchg, duprecnbr);
+		}
 		switch (res) {
 			case 1:
 				result = "true"; 
-				status = "Duplicate: ";
+				st = "Duplicate: ";
 				break;
 			case 2:
 				result = "possible";
-				status = "Possible dup: ";
+				st = "Possible dup: ";
 				break;
 			case 0:
 			default:  result = "false";
 		}
 
 		if (res > 0) {
-			status.append(callsign).append("\n");
-			write_status(status);
+			st.append(callsign);
+			LOG_INFO("%s", st.c_str());
 			Fl::awake(goto_dup_rec);
 		}
 
@@ -210,6 +204,8 @@ public:
 static std::string adif_add_record;
 static void add_record(void *)
 {
+	guard_lock elock(&exec_mutex);
+
 	xml_adif.add_record(adif_add_record.c_str(), qsodb);
 	loadBrowser(false);
 }
@@ -221,7 +217,10 @@ public:
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
-		adif_add_record = std::string(params[0]);
+		{
+			guard_lock elock(&exec_mutex);
+			adif_add_record = std::string(params[0]);
+		}
 		Fl::awake(add_record);
 	}
 	std::string help() { return std::string("log.add_record ADIF RECORD"); }
@@ -231,6 +230,7 @@ public:
 static std::string adif_update_record;
 static void update_record(void *)
 {
+	guard_lock elock(&exec_mutex);
 	xml_adif.update_record(adif_update_record.c_str(), qsodb);
 }
 
@@ -241,7 +241,10 @@ public:
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result)
 	{
-		adif_update_record = std::string(params[0]);
+		{
+			guard_lock elock(&exec_mutex);
+			adif_update_record = std::string(params[0]);
+		}
 		Fl::awake(update_record);
 	}
 	std::string help() { return std::string("log.update_record ADIF RECORD"); }

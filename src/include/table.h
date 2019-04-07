@@ -91,6 +91,7 @@ private:
 	int scrollbarSize;
 	int headerHeight;
 	int rowHeight;
+	int font_;
 
 	int selected;
 	char **curRow;
@@ -213,6 +214,8 @@ public:
 	void PrevPage ();
 	void NextPage ();
 	void GotoRow (int);
+
+	void font(int fnt) { font_ = fnt; }
 
 	int  vScrollWidth() { return (vScroll ? vScroll->w() : 0);}
 

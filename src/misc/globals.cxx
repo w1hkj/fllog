@@ -46,6 +46,8 @@ using namespace std;
 // Last value (true/false) determines if it's used with the KISS interface.
 // It must have 8 bit support. Current selection based on the modems used in FLAMP.
 
+// mode, smode, adif_mode, export_mode, export_submode
+
 const struct mode_info_t mode_info[NUM_MODES] = {
 
 {MODE_CW,"CW","CW","CW",""},
@@ -66,8 +68,8 @@ const struct mode_info_t mode_info[NUM_MODES] = {
 {MODE_SLOWHELL,"SLOWHELL","HELL","HELL",""},
 {MODE_HELLX5,"HELLX5","HELL","HELL",""},
 {MODE_HELLX9,"HELLX9","HELL","HELL",""},
-{MODE_FSKHELL,"FSKHELL","FMHELL","HELL","FSKHELL"},
-{MODE_FSKH105,"FSKH105","FMHELL","FMHELL",""},
+{MODE_FSKHELL,"FSKHELL","FSKHELL","HELL","FSKHELL"},
+{MODE_FSKH105,"FSKH105","FMHELL","HELL","FMHELL"},
 {MODE_HELL80,"HELL80","HELL80","HELL","HELL80"},
 
 {MODE_MFSK8,"MFSK8","MFSK8","MFSK","MFSK8"},
@@ -127,15 +129,16 @@ const struct mode_info_t mode_info[NUM_MODES] = {
 {MODE_8PSK1200F,"8PSK1200F","8PSK1200F","PSK",""},
 
 {MODE_OLIVIA,"OLIVIA","OLIVIA","OLIVIA",""},
-{MODE_OLIVIA_4_250,"Olivia-4-250","OLIVIA","OLIVIA","OLIVIA 4/250"},
-{MODE_OLIVIA_8_250,"Olivia-8-250","OLIVIA","OLIVIA","OLIVIA 8/250"},
-{MODE_OLIVIA_4_500,"Olivia-4-500","OLIVIA","OLIVIA","OLIVIA 4/500"},
-{MODE_OLIVIA_8_500,"Olivia-8-500","OLIVIA","OLIVIA","OLIVIA 8/500"},
-{MODE_OLIVIA_16_500,"Olivia-16-500","OLIVIA","OLIVIA","OLIVIA 16/500"},
-{MODE_OLIVIA_8_1000,"Olivia-8-1K","OLIVIA","OLIVIA","OLIVIA 8/1000"},
-{MODE_OLIVIA_16_1000,"Olivia-16-1K","OLIVIA","OLIVIA","OLIVIA 16/1000"},
-{MODE_OLIVIA_32_1000,"Olivia-32-1K","OLIVIA","OLIVIA","OLIVIA 32/1000"},
-{MODE_OLIVIA_64_2000,"Olivia-64-2K","OLIVIA","OLIVIA","OLIVIA 64/2000"},
+{MODE_OLIVIA_4_125,"OLIVIA-4/125","OLIVIA","OLIVIA","OLIVIA 4/125"},
+{MODE_OLIVIA_4_250,"OLIVIA-4/250","OLIVIA","OLIVIA","OLIVIA 4/250"},
+{MODE_OLIVIA_8_250,"OLIVIA-8/250","OLIVIA","OLIVIA","OLIVIA 8/250"},
+{MODE_OLIVIA_4_500,"OLIVIA-4/500","OLIVIA","OLIVIA","OLIVIA 4/500"},
+{MODE_OLIVIA_8_500,"OLIVIA-8/500","OLIVIA","OLIVIA","OLIVIA 8/500"},
+{MODE_OLIVIA_16_500,"OLIVIA-16/500","OLIVIA","OLIVIA","OLIVIA 16/500"},
+{MODE_OLIVIA_8_1000,"OLIVIA-8/1K","OLIVIA","OLIVIA","OLIVIA 8/1000"},
+{MODE_OLIVIA_16_1000,"OLIVIA-16/1K","OLIVIA","OLIVIA","OLIVIA 16/1000"},
+{MODE_OLIVIA_32_1000,"OLIVIA-32/1K","OLIVIA","OLIVIA","OLIVIA 32/1000"},
+{MODE_OLIVIA_64_2000,"OLIVIA-64/2K","OLIVIA","OLIVIA",""},
 
 {MODE_RTTY,"RTTY","RTTY","RTTY",""},
 
@@ -189,15 +192,22 @@ const struct mode_info_t mode_info[NUM_MODES] = {
 
 };
 
+std::string ucasestr( string str )
+{
+	std::string resu = str;
+	for( size_t i = 0 ; i < str.size(); ++i )
+		resu[i] = toupper(resu[i]);
+	return resu ;
+}
+
 std::string adif2export(std::string adif)
 {
-	std::string test = adif;
-	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
+	std::string test = ucasestr(adif);
 	for (int n = 0; n < NUM_MODES; n++) {
-		if (test == mode_info[n].sname ||
-			test == mode_info[n].adif_name ||
-			test == mode_info[n].export_mode ||
-			test == mode_info[n].export_submode)
+		if (test == ucasestr(mode_info[n].sname) ||
+			test == ucasestr(mode_info[n].adif_name) ||
+			test == ucasestr(mode_info[n].export_mode) ||
+			test == ucasestr(mode_info[n].export_submode))
 			return mode_info[n].export_mode;
 	}
 	return test;
@@ -205,14 +215,13 @@ std::string adif2export(std::string adif)
 
 std::string adif2submode(std::string adif)
 {
-	std::string test = adif;
-	for (size_t n = 0; n < test.length(); n++) test[n] = toupper(test[n]);
+	std::string test = ucasestr(adif);
 	for (int n = 0; n < NUM_MODES; n++) {
-		if (test == mode_info[n].sname ||
-			test == mode_info[n].adif_name ||
-			test == mode_info[n].export_mode ||
-			test == mode_info[n].export_submode)
-			return mode_info[n].export_submode;
+		if (test == ucasestr(mode_info[n].sname) ||
+			test == ucasestr(mode_info[n].adif_name) ||
+			test == ucasestr(mode_info[n].export_mode) ||
+			test == ucasestr(mode_info[n].export_submode))
+			return ucasestr(mode_info[n].export_submode);
 	}
 	return "";
 }

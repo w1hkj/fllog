@@ -45,6 +45,7 @@
 #include "logbook.h"
 #include "textio.h"
 #include "lgbook.h"
+#include "colorsfonts.h"
 #include "globals.h"
 #include "logger.h"
 #include "fileselect.h"
@@ -299,7 +300,11 @@ string adif_field(int num, const char *s)
 	char tempstr[100];
 	int slen = strlen(s);
 	if (slen == 0) return "";
-	int n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s", fields[num].name, slen, s);
+	int n;
+	if (progStatus.use_nulines)
+		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s\n", fields[num].name, slen, s);
+	else
+		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s", fields[num].name, slen, s);
 	if (n == -1) {
 		return "";
 	}
@@ -316,92 +321,38 @@ string export_rec(cQsoRec *rec)
 {
 	string record;
 	string notes;
-	string temp;
 
-	if (want_field(CALL)) {
-		temp = rec->getField(CALL);
-		if (temp.empty()) return "";
-		record += adif_field(CALL, temp.c_str());
-	}
-	if (want_field(QSO_DATE)) {
-		temp = rec->getField(QSO_DATE);
-		if (temp.empty()) return "";
-		record += adif_field(QSO_DATE, temp.c_str());
-	}
-	if (want_field(TIME_ON)) {
-		temp = rec->getField(TIME_ON);
-		if (temp.empty()) return "";
-		record += adif_field(TIME_ON, temp.c_str());
-	}
-	if (want_field(QSO_DATE_OFF)) {
-		temp = rec->getField(QSO_DATE_OFF);
-		if (temp.empty()) return "";
-		record += adif_field(QSO_DATE_OFF, temp.c_str());
-	}
-	if (want_field(TIME_OFF)) {
-		temp = rec->getField(TIME_OFF);
-		if (temp.empty()) return "";
-		record += adif_field(TIME_OFF, temp.c_str());
-	}
-	if (want_field(FREQ))
-		record += adif_field(FREQ, rec->getField(FREQ));
+	int critical[] = {CALL, QSO_DATE, TIME_ON, QSO_DATE_OFF, TIME_OFF,
+					  FREQ, MODE };
 
-	if (want_field(MODE)) {
-		record += adif_field(MODE, adif2export(rec->getField(MODE)).c_str());
-		string submode = adif2submode(rec->getField(MODE));
-		if (!submode.empty())
-			record += adif_field(SUBMODE, submode.c_str());
+	for (size_t n = 0; n < sizeof(critical)/sizeof(*critical); n++) {
+		if (want_field(critical[n]))
+			record += adif_field(critical[n], rec->getField(critical[n]));
 	}
-	if (want_field(RST_SENT))
-		record += adif_field(RST_SENT, rec->getField(RST_SENT));
-	if (want_field(RST_RCVD))
-		record += adif_field(RST_RCVD, rec->getField(RST_RCVD));
-	if (want_field(TX_PWR))
-		record += adif_field(TX_PWR, rec->getField(TX_PWR));
-	if (want_field(NAME))
-		record += adif_field(NAME, rec->getField(NAME));
-	if (want_field(QTH))
-		record += adif_field(QTH, rec->getField(QTH));
-	if (want_field(STATE))
-		record += adif_field(STATE, rec->getField(STATE));
-	if (want_field(COUNTRY))
-		record += adif_field(VE_PROV, rec->getField(COUNTRY));
-	if (want_field(GRIDSQUARE))
-		record += adif_field(GRIDSQUARE, rec->getField(GRIDSQUARE));
-	if (want_field(STX))
-		record += adif_field(STX, rec->getField(STX));
-	if (want_field(SRX))
-		record += adif_field(SRX, rec->getField(SRX));
-	if (want_field(XCHG1))
-		record += adif_field(XCHG1, rec->getField(XCHG1));
-	if (want_field(MYXCHG))
-		record += adif_field(MYXCHG, rec->getField(MYXCHG));
-	if (want_field(NOTES)) {
-		notes = rec->getField(NOTES);
-		for (size_t i = 0; i < notes.length(); i++)
-			if (notes[i] == '\n') notes[i] = ';';
-		record += adif_field(NOTES, notes.c_str());
+
+	int regular[] = {SUBMODE, BAND, RST_SENT, RST_RCVD, TX_PWR, NAME,
+					 QTH, STATE, VE_PROV, CNTY, COUNTRY, CONT, GRIDSQUARE,
+					 STX, SRX, XCHG1, MYXCHG,
+					 STA_CALL, OP_CALL, NOTES,
+					 CQZ, IOTA, DXCC, ITUZ,
+					 QSL_VIA,
+					 QSLRDATE, QSLSDATE,
+					 EQSLRDATE, EQSLSDATE,
+					 LOTWRDATE, LOTWSDATE,
+					 CLASS, ARRL_SECT,
+					 MY_GRID, MY_CITY,
+					 SS_SERNO, SS_PREC, SS_CHK, SS_SEC,
+					 AGE, TEN_TEN, CHECK,
+					 FD_CLASS, FD_SECTION,
+					 TROOPS, TROOPR, SCOUTR, SCOUTS };
+
+	for (size_t n = 0; n < sizeof(regular)/sizeof(*regular); n++) {
+		if (want_field(regular[n]))
+			record += adif_field(regular[n], rec->getField(regular[n]));
 	}
-	if (want_field(IOTA))
-		record += adif_field(IOTA, rec->getField(IOTA));
-	if (want_field(DXCC))
-		record += adif_field(DXCC, rec->getField(DXCC));
-	if (want_field(QSL_VIA))
-		record += adif_field(QSL_VIA, rec->getField(QSL_VIA));
-	if (want_field(QSLRDATE))
-		record += adif_field(QSLRDATE, rec->getField(QSLRDATE));
-	if (want_field(QSLSDATE))
-		record += adif_field(QSLSDATE, rec->getField(QSLSDATE));
-	if (want_field(EQSLRDATE))
-		record += adif_field(EQSLRDATE, rec->getField(EQSLRDATE));
-	if (want_field(EQSLSDATE))
-		record += adif_field(EQSLSDATE, rec->getField(EQSLSDATE));
-	if (want_field(LOTWRDATE))
-		record += adif_field(LOTWRDATE, rec->getField(LOTWRDATE));
-	if (want_field(LOTWSDATE))
-		record += adif_field(LOTWSDATE, rec->getField(LOTWSDATE));
 
 	record += "<EOR>\r\n";
+
 	return record;
 }
 
@@ -550,7 +501,7 @@ void cb_mnuOpenLogbook()
 	const char* p = FSEL::select(_("Open logbook file"), "ADIF\t*." ADIF_SUFFIX,
 					 logbook_filename.c_str());
 	Fl::flush();
-	if (p) {
+	if (p && *p) {
 		saveLogbook();
 		qsodb.deleteRecs();
 		logbook_filename = p;
@@ -588,7 +539,7 @@ void cb_mnuSaveLogbook() {
 
 	qsodb.isdirty(0);
 	restore_sort();
-	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
 
 }
 
@@ -690,7 +641,8 @@ void cb_mnuShowLogbook()
 
 void cb_mnuEvents()
 {
-	wEvents->show();
+	debug::position(mainwindow->x(), mainwindow->y() + mainwindow->h() + 26);
+	debug::show();
 }
 
 enum State {VIEWREC, NEWREC};
@@ -879,7 +831,7 @@ void update_fetch(void *)
 	mainwindow->redraw();
 }
 
-const char *fetch_record(const char *callsign)
+std::string fetch_record(const char *callsign)
 {
 	cQsoRec *rec = SearchLog(callsign);
 	if (rec) {
@@ -887,7 +839,7 @@ const char *fetch_record(const char *callsign)
 		Fl::awake(update_fetch);
 		return adif_record(rec);
 	} else
-		return "NO_RECORD";
+		return "";
 }
 
 void cb_search(Fl_Widget* w, void*)
@@ -958,6 +910,7 @@ void clearRecord()
 	inpSerNoOut_log->value ("");
 	inpSerNoIn_log->value ("");
 	inpXchgIn_log->value("");
+	inpMyXchg_log->value("");
 	inpNotes_log->value ("");
 	inpIOTA_log->value("");
 	inpDXCC_log->value("");
@@ -969,10 +922,13 @@ void clearRecord()
 	inpTX_pwr_log->value("");
 	inpSearchString->value ("");
 
-	inp_log_sta_call->value("");
-	inp_log_op_call->value("");
-	inp_log_sta_qth->value("");
-	inp_log_sta_loc->value("");
+	inpClass_log->value ("");
+	inpSection_log->value ("");
+
+	inp_log_sta_call->value(progStatus.mycall.c_str());
+	inp_log_op_call->value(progStatus.opcall.c_str());
+	inp_log_sta_qth->value(progStatus.my_staqth.c_str());
+	inp_log_sta_loc->value(progStatus.my_staloc.c_str());
 
 	inp_log_cwss_serno->value("");
 	inp_log_cwss_prec->value("");
@@ -1067,7 +1023,7 @@ void saveRecord()
 	reload_browser();
 
 	if (qsodb.nbrRecs() == 1)
-		adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+		adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
 	else
 		adifFile.writeAdifRec(&rec, logbook_filename.c_str());
 
@@ -1151,7 +1107,7 @@ void updateRecord() {
 
 	loadBrowser(true);
 
-	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
 
 }
 
@@ -1167,7 +1123,7 @@ void deleteRecord () {
 
 	loadBrowser(true);
 
-	adifFile.writeLog (logbook_filename.c_str(), &qsodb);
+	adifFile.writeLog (logbook_filename.c_str(), &qsodb, true);
 }
 
 void EditRecord( int i )

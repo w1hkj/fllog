@@ -29,11 +29,11 @@ decl {\#include "flinput2.h"} {public local
 Function {create_logbook_dialogs()} {open return_type void
 } {
   Fl_Window dlgLogbook {
-    label Logbook open
-    xywh {458 53 590 433} type Double color 47 hide resizable
+    label Logbook
+    xywh {381 49 590 433} type Double color 47 hide resizable
   } {
-    Fl_Menu_Bar {} {open
-      xywh {0 0 155 24}
+    Fl_Menu_Bar {} {
+      xywh {0 0 590 24}
     } {
       Submenu {} {
         label File
@@ -111,33 +111,6 @@ Function {create_logbook_dialogs()} {open return_type void
         }
       }
     }
-    Fl_Input inp_mycall {
-      label {Sta Call}
-      callback {progStatus.mycall = o->value();
-for (size_t n = 0; n < progStatus.mycall.length(); n++)
-progStatus.mycall[n] = toupper(progStatus.mycall[n]);
-o->value(progStatus.mycall.c_str());}
-      tooltip {My station call sign} xywh {215 0 80 24}
-      code0 {o->value(progStatus.mycall.c_str());}
-      class Fl_Input2
-    }
-    Fl_Input inp_opcall {
-      label {Op Call}
-      callback {progStatus.opcall = o->value();
-for (size_t n = 0; n < progStatus.opcall.length(); n++)
-progStatus.opcall[n] = toupper(progStatus.opcall[n]);
-o->value(progStatus.opcall.c_str());}
-      tooltip {Operator call sign} xywh {355 0 80 24}
-      code0 {o->value(progStatus.opcall.c_str());}
-      class Fl_Input2
-    }
-    Fl_Input inp_opname {
-      label {Oper'}
-      callback {progStatus.opname = o->value();}
-      tooltip {Operator name} xywh {507 0 80 24}
-      code0 {o->value(progStatus.opname.c_str());}
-      class Fl_Input2
-    }
     Fl_Input inpDate_log {
       label {Date On}
       tooltip {Date QSO started} xywh {5 45 100 24} align 5
@@ -166,7 +139,12 @@ inpTimeOn_log->value(szT);}
     }
     Fl_Input inpCall_log {
       label Call
-      tooltip {Call sign worked} xywh {179 45 152 24} align 5
+      callback {std::string call;
+call = o->value();
+for (size_t n = 0; n < call.length(); n++)
+	call[n] = toupper(call[n]);
+o->value(call.c_str());}
+      tooltip {Call sign worked} xywh {179 45 152 24} align 5 when 1
       class Fl_Input2
     }
     Fl_Input inpName_log {
@@ -210,7 +188,12 @@ inpTimeOff_log->value(szT);}
     }
     Fl_Input inpMode_log {
       label Mode
-      tooltip {Mode in use} xywh {335 87 158 24} align 5
+      callback {std::string call;
+call = o->value();
+for (size_t n = 0; n < call.length(); n++)
+	call[n] = toupper(call[n]);
+o->value(call.c_str());}
+      tooltip {Mode in use} xywh {335 87 158 24} align 5 when 1
       class Fl_Input2
     }
     Fl_Input inpTX_pwr_log {
@@ -549,7 +532,7 @@ wBrowser->gridEnabled (0);
 dlgLogbook->xclass(PACKAGE_TARNAME);} {}
   Fl_Window wExport {
     label {Export Setup} open
-    xywh {254 40 810 440} type Double visible
+    xywh {307 49 810 440} type Double hide
   } {
     Fl_Group {} {
       label {Select Records to Export} open
@@ -730,288 +713,49 @@ chkExportBrowser->check_all();}
         label Check
         xywh {670 26 70 15} down_box DOWN_BOX
       }
-      Fl_Check_Button btnSelectXchgIn {
-        label {Exchange In}
-        xywh {670 47 70 15} down_box DOWN_BOX
-      }
-      Fl_Check_Button btnSelectMyXchg {
-        label {Exchange Out}
-        xywh {670 68 70 15} down_box DOWN_BOX
+      Fl_Check_Button btnSelectXchg {
+        label Exchange
+        tooltip {Contest exchange in/out} xywh {670 49 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCNTY {
         label County
-        xywh {670 90 70 15} down_box DOWN_BOX
+        xywh {670 73 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCONT {
         label Continent
-        xywh {670 111 70 15} down_box DOWN_BOX
+        xywh {670 96 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectCQZ {
         label CQZ
-        xywh {670 133 70 15} down_box DOWN_BOX
+        xywh {670 120 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectDXCC {
         label DXCC
-        xywh {670 154 70 15} down_box DOWN_BOX
+        xywh {670 144 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectIOTA {
         label IOTA
-        xywh {670 176 70 15} down_box DOWN_BOX
+        xywh {670 167 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelectITUZ {
         label ITUZ
-        xywh {670 197 70 15} down_box DOWN_BOX
+        xywh {670 191 70 15} down_box DOWN_BOX
       }
-      Fl_Check_Button btnSelectClass {
-        label {FD class}
-        xywh {670 219 70 15} down_box DOWN_BOX
+      Fl_Check_Button btnSelectFD {
+        label {Field Day}
+        tooltip {Field day class/section} xywh {670 214 70 15} down_box DOWN_BOX
       }
-      Fl_Check_Button btnSelectSection {
-        label {FD section}
-        xywh {670 240 70 15} down_box DOWN_BOX
-      }
-      Fl_Check_Button btnSelect_cwss_serno {
-        label {CW SS SerNo R}
-        tooltip {CW sweepstakes rcvd ser. no.} xywh {670 262 70 15} down_box DOWN_BOX
-      }
-      Fl_Check_Button btnSelect_cwss_prec {
-        label {CW SS Prec'}
-        tooltip {CW sweepstakes precedence} xywh {670 283 70 15} down_box DOWN_BOX
-      }
-      Fl_Check_Button btnSelect_cwss_check {
-        label {CW SS Check}
-        xywh {670 305 70 15} down_box DOWN_BOX
-      }
-      Fl_Check_Button btnSelect_cwss_section {
-        label {CW SS Section}
-        tooltip {CW sweepstakes section} xywh {670 326 70 15} down_box DOWN_BOX
+      Fl_Check_Button btnSelectCWSS {
+        label {CW SS}
+        tooltip {CW sweepstakes data fields} xywh {670 238 70 15} down_box DOWN_BOX
       }
       Fl_Check_Button btnSelect_1010 {
         label {10-10}
-        tooltip {CW sweepstakes section} xywh {670 348 70 15} down_box DOWN_BOX
+        tooltip {CW sweepstakes section} xywh {672 262 70 15} down_box DOWN_BOX
       }
-      Fl_Button btnClearAllFields {
-        label {Clear All}
-        callback {btnSelectCall->value(0);
-btnSelectName->value(0);
-btnSelectFreq->value(0);
-btnSelectBand->value(0);
-btnSelectMode->value(0);
-btnSelectQSOdateOn->value(0);
-btnSelectQSOdateOff->value(0);
-btnSelectTimeON->value(0);
-btnSelectTimeOFF->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectQth->value(0);
-btnSelectLOC->value(0);
-btnSelectState->value(0);
-btnSelectAge->value(0);
-
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);
-btnSelectOperator->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectNotes->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelecteQSLrcvd->value(0);
-btnSelecteQSLsent->value(0);
-btnSelectLOTWrcvd->value(0);
-btnSelectLOTWsent->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-
-btnSelectCheck->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectDXCC->value(0);
-btnSelectIOTA->value(0);
-btnSelectITUZ->value(0);
-btnSelectClass->value(0);
-btnSelectSection->value(0);
-btnSelect_cwss_serno->value(0);
-btnSelect_cwss_prec->value(0);
-btnSelect_cwss_check->value(0);
-btnSelect_1010->value(0);}
-        xywh {412 373 85 20}
-      }
-      Fl_Button btnCheckAllFields {
-        label {Check All}
-        callback {btnSelectCall->value(1);
-btnSelectName->value(1);
-btnSelectFreq->value(1);
-btnSelectBand->value(1);
-btnSelectMode->value(1);
-btnSelectQSOdateOn->value(1);
-btnSelectQSOdateOff->value(1);
-btnSelectTimeON->value(1);
-btnSelectTimeOFF->value(1);
-btnSelectTX_pwr->value(1);
-btnSelectRSTsent->value(1);
-btnSelectRSTrcvd->value(1);
-btnSelectQth->value(1);
-btnSelectLOC->value(1);
-btnSelectState->value(1);
-btnSelectAge->value(1);
-
-btnSelectStaCall->value(1);
-btnSelectStaGrid->value(1);
-btnSelectStaCity->value(1);
-btnSelectOperator->value(1);
-btnSelectProvince->value(1);
-btnSelectCountry->value(1);
-btnSelectNotes->value(1);
-btnSelectQSLrcvd->value(1);
-btnSelectQSLsent->value(1);
-btnSelecteQSLrcvd->value(1);
-btnSelecteQSLsent->value(1);
-btnSelectLOTWrcvd->value(1);
-btnSelectLOTWsent->value(1);
-btnSelectQSL_VIA->value(1);
-btnSelectSerialIN->value(1);
-btnSelectSerialOUT->value(1);
-
-btnSelectCheck->value(1);
-btnSelectXchgIn->value(1);
-btnSelectMyXchg->value(1);
-btnSelectCNTY->value(1);
-btnSelectCONT->value(1);
-btnSelectCQZ->value(1);
-btnSelectDXCC->value(1);
-btnSelectIOTA->value(1);
-btnSelectITUZ->value(1);
-btnSelectClass->value(1);
-btnSelectSection->value(1);
-btnSelect_cwss_serno->value(1);
-btnSelect_cwss_prec->value(1);
-btnSelect_cwss_check->value(1);
-btnSelect_1010->value(1);}
-        xywh {507 373 85 20}
-      }
-      Fl_Button btnSetFieldDefaults {
-        label Defaults
-        callback {btnSelectCall->value(1);
-btnSelectName->value(1);
-btnSelectFreq->value(1);
-btnSelectBand->value(1);
-btnSelectMode->value(1);
-btnSelectQSOdateOn->value(1);
-btnSelectQSOdateOff->value(1);
-btnSelectTimeON->value(1);
-btnSelectTimeOFF->value(1);
-btnSelectTX_pwr->value(0);
-btnSelectRSTsent->value(1);
-btnSelectRSTrcvd->value(1);
-btnSelectQth->value(0);
-btnSelectLOC->value(0);
-btnSelectState->value(0);
-btnSelectAge->value(0);
-
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);
-btnSelectOperator->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectNotes->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelecteQSLrcvd->value(0);
-btnSelecteQSLsent->value(0);
-btnSelectLOTWrcvd->value(0);
-btnSelectLOTWsent->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-
-btnSelectCheck->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectDXCC->value(0);
-btnSelectIOTA->value(0);
-btnSelectITUZ->value(0);
-btnSelectClass->value(0);
-btnSelectSection->value(0);
-btnSelect_cwss_serno->value(0);
-btnSelect_cwss_prec->value(0);
-btnSelect_cwss_check->value(0);
-btnSelect_1010->value(0);}
-        xywh {602 373 85 20}
-      }
-      Fl_Button btnSetLoTWfields {
-        label LoTW
-        callback {btnSelectCall->value(1);
-btnSelectName->value(0);
-btnSelectFreq->value(1);
-btnSelectBand->value(0);
-btnSelectMode->value(1);
-btnSelectQSOdateOn->value(1);
-btnSelectQSOdateOff->value(0);
-btnSelectTimeON->value(1);
-btnSelectTimeOFF->value(0);
-btnSelectTX_pwr->value(0);
-btnSelectRSTsent->value(0);
-btnSelectRSTrcvd->value(0);
-btnSelectQth->value(0);
-btnSelectLOC->value(0);
-btnSelectState->value(0);
-btnSelectAge->value(0);
-
-btnSelectStaCall->value(0);
-btnSelectStaGrid->value(0);
-btnSelectStaCity->value(0);
-btnSelectOperator->value(0);
-btnSelectProvince->value(0);
-btnSelectCountry->value(0);
-btnSelectNotes->value(0);
-btnSelectQSLrcvd->value(0);
-btnSelectQSLsent->value(0);
-btnSelecteQSLrcvd->value(0);
-btnSelecteQSLsent->value(0);
-btnSelectLOTWrcvd->value(0);
-btnSelectLOTWsent->value(0);
-btnSelectQSL_VIA->value(0);
-btnSelectSerialIN->value(0);
-btnSelectSerialOUT->value(0);
-
-btnSelectCheck->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
-btnSelectCNTY->value(0);
-btnSelectCONT->value(0);
-btnSelectCQZ->value(0);
-btnSelectDXCC->value(0);
-btnSelectIOTA->value(0);
-btnSelectITUZ->value(0);
-btnSelectClass->value(0);
-btnSelectSection->value(0);
-btnSelect_cwss_serno->value(0);
-btnSelect_cwss_prec->value(0);
-btnSelect_cwss_check->value(0);
-btnSelect_1010->value(0);}
-        xywh {412 403 85 20}
-      }
-      Fl_Return_Button btnOK {
-        label OK
-        callback {wExport->hide();
-Export_log();}
-        xywh {697 403 85 20}
-      }
-      Fl_Button btnCancel {
-        label Cancel
-        callback {wExport->hide();}
-        xywh {602 403 85 20}
+      Fl_Check_Button btnSelectJOTA {
+        label JOTA
+        tooltip {JOTA fields} xywh {672 283 70 15} down_box DOWN_BOX
       }
       Fl_Button btnSeteQSLfields {
         label eQSL
@@ -1050,21 +794,194 @@ btnSelectSerialIN->value(0);
 btnSelectSerialOUT->value(0);
 
 btnSelectCheck->value(0);
-btnSelectXchgIn->value(0);
-btnSelectMyXchg->value(0);
+btnSelectXchg->value(0);
 btnSelectCNTY->value(0);
 btnSelectCONT->value(0);
 btnSelectCQZ->value(0);
 btnSelectDXCC->value(0);
 btnSelectIOTA->value(0);
 btnSelectITUZ->value(0);
-btnSelectClass->value(0);
-btnSelectSection->value(0);
-btnSelect_cwss_serno->value(0);
-btnSelect_cwss_prec->value(0);
-btnSelect_cwss_check->value(0);
-btnSelect_1010->value(0);}
-        xywh {507 403 85 20}
+btnSelectFD->value(0);
+btnSelectCWSS->value(0);
+btnSelect_1010->value(0);
+btnSelectJOTA->value(0);}
+        xywh {492 403 80 20}
+      }
+      Fl_Button btnClearAllFields {
+        label {Clear All}
+        callback {btnSelectCall->value(0);
+btnSelectName->value(0);
+btnSelectFreq->value(0);
+btnSelectBand->value(0);
+btnSelectMode->value(0);
+btnSelectQSOdateOn->value(0);
+btnSelectQSOdateOff->value(0);
+btnSelectTimeON->value(0);
+btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectFD->value(0);
+btnSelectCWSS->value(0);
+btnSelect_1010->value(0);
+btnSelectJOTA->value(0);}
+        xywh {402 373 80 20}
+      }
+      Fl_Button btnCheckAllFields {
+        label {Check All}
+        callback {btnSelectCall->value(1);
+btnSelectName->value(1);
+btnSelectFreq->value(1);
+btnSelectBand->value(1);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(1);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(1);
+btnSelectTX_pwr->value(1);
+btnSelectRSTsent->value(1);
+btnSelectRSTrcvd->value(1);
+btnSelectQth->value(1);
+btnSelectLOC->value(1);
+btnSelectState->value(1);
+btnSelectAge->value(1);
+
+btnSelectStaCall->value(1);
+btnSelectStaGrid->value(1);
+btnSelectStaCity->value(1);
+btnSelectOperator->value(1);
+btnSelectProvince->value(1);
+btnSelectCountry->value(1);
+btnSelectNotes->value(1);
+btnSelectQSLrcvd->value(1);
+btnSelectQSLsent->value(1);
+btnSelecteQSLrcvd->value(1);
+btnSelecteQSLsent->value(1);
+btnSelectLOTWrcvd->value(1);
+btnSelectLOTWsent->value(1);
+btnSelectQSL_VIA->value(1);
+btnSelectSerialIN->value(1);
+btnSelectSerialOUT->value(1);
+
+btnSelectCheck->value(1);
+btnSelectXchg->value(1);
+btnSelectCNTY->value(1);
+btnSelectCONT->value(1);
+btnSelectCQZ->value(1);
+btnSelectDXCC->value(1);
+btnSelectIOTA->value(1);
+btnSelectITUZ->value(1);
+btnSelectFD->value(1);
+btnSelectCWSS->value(1);
+btnSelect_1010->value(1);
+btnSelectJOTA->value(1);}
+        xywh {492 373 80 20}
+      }
+      Fl_Button btnSetFieldDefaults {
+        label Defaults
+        callback {if ( Fl::event_button() == FL_RIGHT_MOUSE)
+	progStatus.save_defaults();
+else
+	progStatus.load_defaults();}
+        tooltip {left click - set preset defaults
+right click - save current as presets} xywh {580 373 80 20}
+      }
+      Fl_Button btnSetLoTWfields {
+        label LoTW
+        callback {btnSelectCall->value(1);
+btnSelectName->value(0);
+btnSelectFreq->value(1);
+btnSelectBand->value(0);
+btnSelectMode->value(1);
+btnSelectQSOdateOn->value(1);
+btnSelectQSOdateOff->value(0);
+btnSelectTimeON->value(1);
+btnSelectTimeOFF->value(0);
+btnSelectTX_pwr->value(0);
+btnSelectRSTsent->value(0);
+btnSelectRSTrcvd->value(0);
+btnSelectQth->value(0);
+btnSelectLOC->value(0);
+btnSelectState->value(0);
+btnSelectAge->value(0);
+
+btnSelectStaCall->value(0);
+btnSelectStaGrid->value(0);
+btnSelectStaCity->value(0);
+btnSelectOperator->value(0);
+btnSelectProvince->value(0);
+btnSelectCountry->value(0);
+btnSelectNotes->value(0);
+btnSelectQSLrcvd->value(0);
+btnSelectQSLsent->value(0);
+btnSelecteQSLrcvd->value(0);
+btnSelecteQSLsent->value(0);
+btnSelectLOTWrcvd->value(0);
+btnSelectLOTWsent->value(0);
+btnSelectQSL_VIA->value(0);
+btnSelectSerialIN->value(0);
+btnSelectSerialOUT->value(0);
+
+btnSelectCheck->value(0);
+btnSelectXchg->value(0);
+btnSelectCNTY->value(0);
+btnSelectCONT->value(0);
+btnSelectCQZ->value(0);
+btnSelectDXCC->value(0);
+btnSelectIOTA->value(0);
+btnSelectITUZ->value(0);
+btnSelectFD->value(0);
+btnSelectCWSS->value(0);
+btnSelect_1010->value(0);
+btnSelectJOTA->value(0);} selected
+        xywh {402 403 80 20}
+      }
+      Fl_Button btnCancel {
+        label Cancel
+        callback {wExport->hide();}
+        xywh {580 403 80 20}
+      }
+      Fl_Return_Button btnOK {
+        label OK
+        callback {wExport->hide();
+Export_log();}
+        xywh {697 403 85 20}
+      }
+      Fl_Check_Button btn_use_nulines {
+        label {1/line}
+        callback {progStatus.use_nulines = o->value();}
+        tooltip {Separate fields with new line} xywh {670 375 70 15} down_box DOWN_BOX
+        code0 {o->value(progStatus.use_nulines);}
       }
     }
   }
@@ -1187,17 +1104,6 @@ btnCabRSTsent->value(1);
 btnCabRSTrcvd->value(1);}
         xywh {539 277 110 24}
       }
-    }
-  }
-  Fl_Window wEvents {
-    label {Event Log} open
-    xywh {459 518 590 124} type Double hide resizable non_modal
-  } {
-    Fl_Text_Display status_display {
-      xywh {2 2 586 120} resizable
-      code0 {Fl_Text_Buffer *txtbuffer = new Fl_Text_Buffer();}
-      code1 {txtbuffer->text("");}
-      code2 {o->buffer(txtbuffer);}
     }
   }
 }

@@ -55,7 +55,7 @@ FIELD fields[] = {
 	{FREQ,         12,    "FREQ",             &btnSelectFreq},      // QSO frequency in Mhz
 	{CALL,         30,    "CALL",             &btnSelectCall},      // contacted stations CALLSIGN
 	{MODE,         20,    "MODE",             &btnSelectMode},      // QSO mode
-	{SUBMODE,      20,    "SUBMODE",          NULL},                // QSO submode
+	{SUBMODE,      20,    "SUBMODE",          &btnSelectMode},      // QSO submode
 	{NAME,         80,    "NAME",             &btnSelectName},      // contacted operators NAME
 	{QSO_DATE,     8,     "QSO_DATE",         &btnSelectQSOdateOn}, // QSO data
 	{QSO_DATE_OFF, 8,     "QSO_DATE_OFF",     &btnSelectQSOdateOff},// QSO data OFF, according to ADIF 2.2.6
@@ -91,11 +91,11 @@ FIELD fields[] = {
 	{SRX,          50,    "SRX",              &btnSelectSerialIN},  // received serial number for a contest QSO
 	{STX,          50,    "STX",              &btnSelectSerialOUT}, // QSO transmitted serial number
 
-	{XCHG1,        100,   "SRX_STRING",       &btnSelectXchgIn},    // contest exchange #1 / free1 in xlog
-	{MYXCHG,       100,   "STX_STRING",       &btnSelectMyXchg},    // contest exchange sent
+	{XCHG1,        100,   "SRX_STRING",       &btnSelectXchg},      // contest exchange #1 / free1 in xlog
+	{MYXCHG,       100,   "STX_STRING",       &btnSelectXchg},      // contest exchange sent
 
-	{CLASS,        20,    "CLASS",            &btnSelectClass},     // Field Day class received
-	{ARRL_SECT,    20,    "ARRL_SECT",        &btnSelectSection},   // Field Day section received
+	{CLASS,        20,    "CLASS",            &btnSelectFD},        // Field Day class received
+	{ARRL_SECT,    20,    "ARRL_SECT",        &btnSelectFD},        // Field Day section received
 
 	{TX_PWR,       8,     "TX_PWR",           &btnSelectTX_pwr},    // power transmitted by this station
 
@@ -104,22 +104,22 @@ FIELD fields[] = {
 	{MY_GRID,      8,     "MY_GRIDSQUARE",    &btnSelectStaGrid},   // Xmt station locator
 	{MY_CITY,     60,     "MY_CITY",          &btnSelectStaCity},   // Xmt station location
 
-	{SS_SEC,       20,    "CWSS_SECTION",     &btnSelect_cwss_section},   // CW sweepstakes
-	{SS_SERNO,     20,    "CWSS_SERNO",       &btnSelect_cwss_serno},
-	{SS_PREC,      20,    "CWSS_PREC",        &btnSelect_cwss_prec},
-	{SS_CHK,       20,    "CWSS_CHK",         &btnSelect_cwss_check},
+	{SS_SEC,       20,    "CWSS_SECTION",     &btnSelectCWSS},      // CW sweepstakes
+	{SS_SERNO,     20,    "CWSS_SERNO",       &btnSelectCWSS},
+	{SS_PREC,      20,    "CWSS_PREC",        &btnSelectCWSS},
+	{SS_CHK,       20,    "CWSS_CHK",         &btnSelectCWSS},
 
 	{AGE,          2,     "AGE",              &btnSelectAge},       // contacted operators age in years
 	{TEN_TEN,      10,    "TEN_TEN",          &btnSelect_1010},     // ten ten # of other station
 	{CHECK,        10,    "CHECK",            &btnSelectCheck},     // contest identifier
 
-	{FD_CLASS,     20,    "FD_CLASS",         &btnSelectClass},     // Field Day Rcvd
-	{FD_SECTION,   20,    "FD_SECTION",       &btnSelectSection},   // FD section received
+	{FD_CLASS,     20,    "FD_CLASS",         &btnSelectFD},        // Field Day Rcvd
+	{FD_SECTION,   20,    "FD_SECTION",       &btnSelectFD},        // FD section received
 
-	{TROOPS,       20,    "TROOPS",           NULL},                // JOTA troop number sent
-	{TROOPR,       20,    "TROOPR",           NULL},                // JOTA troop number received
-	{SCOUTS,       20,    "SCOUTS",           NULL},
-	{SCOUTR,       20,    "SCOUTR",           NULL},
+	{TROOPS,       20,    "TROOPS",           &btnSelectJOTA},      // JOTA troop number sent
+	{TROOPR,       20,    "TROOPR",           &btnSelectJOTA},      // JOTA troop number received
+	{SCOUTS,       20,    "SCOUTS",           &btnSelectJOTA},
+	{SCOUTR,       20,    "SCOUTR",           &btnSelectJOTA},
 
 	{NUMFIELDS,    0,     "",             NULL}
 };
@@ -133,19 +133,15 @@ FIELD fields[] = {
 /*
 	{COMMENT,      256,   "COMMENT",      NULL},                // comment field for QSO
 	{ADDRESS,      256,   "ADDRESS",      NULL},                // contacted stations mailing address
-	{AGE,          2,     "AGE",          NULL},                // contacted operators age in years
-	{ARRL_SECT,    20,    "ARRL_SECT",    NULL},                // contacted stations ARRL section
 	{CONTEST_ID,   20,    "CONTEST_ID",   NULL},                // QSO contest identifier
 	{PFX,          20,    "PFX",          NULL},                // WPA prefix
 	{PROP_MODE,    100,   "PROP_MODE",    NULL},                // propogation mode
 	{QSL_MSG,      256,   "QSL_MSG",      NULL},                // personal message to appear on qsl card
 	{QSL_RCVD,     4,     "QSL_RCVD",     NULL},                // QSL received status
 	{QSL_SENT,     4,     "QSL_SENT",     NULL},                // QSL sent status
-	{QSL_VIA,      20,    "QSL_VIA",      NULL},                // QSL via this person
 	{RX_PWR,       8,     "RX_PWR",       NULL},                // power of other station in watts
 	{SAT_MODE,     20,    "SAT_MODE",     NULL},                // satellite mode
 	{SAT_NAME,     20,    "SAT_NAME",     NULL},                // satellite name
-	{TEN_TEN,      10,    "TEN_TEN",      NULL}                 // ten ten # of other station
 };
 */
 
@@ -359,41 +355,28 @@ void cAdifIO::readfile_(std::string fname, cQsoDb *db)
 	float t = t1.tv_sec - t0.tv_sec + (t1.tv_nsec - t0.tv_nsec)/1e9;
 
 
-	if (!feof(adiFile))
+	if (!feof(adiFile)) {
 		snprintf(szmsg, sizeof(szmsg), "\
 ================================================\n\
 ERROR reading logbook %s\n\
       read %d records in %4.1f seconds\n\
-================================================\n", fname.c_str(), db->nbrRecs(), t);
-	else {
+================================================", fname.c_str(), db->nbrRecs(), t);
+		read_errors.assign(szmsg);
+	} else {
 		snprintf(szmsg, sizeof(szmsg), "\
 ================================================\n\
 Read Logbook: %s\n\
       read %d records in %4.1f seconds\n\
-================================================\n", fname.c_str(), db->nbrRecs(), t);
-		LOG_INFO("logfile: %s, read %d records in %4.1f seconds", fname.c_str(), db->nbrRecs(), t);
+================================================", fname.c_str(), db->nbrRecs(), t);
+		read_errors.assign(szmsg);
 		if (num_read_errors) {
-			if (!read_errors.empty()) {
-				read_errors.append("\n");
-				read_errors.append(szmsg);
-			} else
-				read_errors.assign(szmsg);
-			snprintf(szmsg, sizeof(szmsg),
-				"Corrected %d errors.  Save logbook and then reload\n",
-				num_read_errors);
-			read_errors.append("\
-================================================\n").append(szmsg);
-			read_errors.append("\
-================================================\n");
-			if (db == &qsodb)
-				write_status(read_errors);
-		} else
-			if (db == &qsodb)
-				write_status(szmsg);
+			snprintf(szmsg, sizeof(szmsg), "\
+\nCorrected %d errors.\n\
+================================================", num_read_errors);
+			read_errors.append(szmsg);
+		}
 	}
-
-//	if (db == &qsodb)
-//		write_status(adif_read_OK);
+	LOG_INFO("%s", read_errors.c_str());
 
 	fclose(adiFile);
 }
@@ -643,10 +626,11 @@ void cAdifIO::update_record(const char *buffer, cQsoDb &db)
 	db.isdirty(0);
 	db.SortByDate();
 
-	std::string status = "Updated record: ";
-	status.append(buffer);
+	std::string st = "Updated record: ";
+	st.append(buffer);
+	LOG_INFO("%s", st.c_str());
 
-	write_status(status);
+	writeLog(progStatus.logbookfilename.c_str(), &db, true);
 
 	loadBrowser(true);
 
@@ -665,23 +649,32 @@ void cAdifIO::add_record(const char *buffer, cQsoDb &db)
 	int found;
 	char * p = strchr((char *)buffer,'<'); // find first ADIF specifier
 
-	adifqso = 0;
+	adifqso = db.newrec();
 	while (p) {
 		found = findfield(p + 1);
-		if (found > -1) {
-			if (!adifqso) adifqso = db.newrec(); // need new record in db
+		if (found > -1)
 			fillfield (found, p + 1);
-		} else if (found == -1) // <eor> reached;
-			adifqso = 0;
+		else if (found == -1) // <eor> reached;
+			break;
 		p = strchr(p + 1,'<');
 	}
+	std::string st = buffer;
+
+	if (st.find("<OP_CALL:") == std::string::npos)
+		fillfield(OP_CALL, const_cast<char *>(progStatus.opcall.c_str()));
+	if (st.find("<STA_CALL:") == std::string::npos)
+		fillfield(STA_CALL, const_cast<char *>(progStatus.mycall.c_str()));
+
 	db.SortByDate();
-	std::string status = buffer;
-	size_t ptr = status.find("<CALL:");
-	if (ptr != std::string::npos) ptr = status.find(">", ptr);
-	status.erase(0, ptr + 1);
-	ptr = status.find("<");
-	status.erase(ptr);
-	status.insert(0, "Add record: ").append("\n");
-	write_status(status);
+
+	size_t ptr = st.find("<CALL:");
+	if (ptr != std::string::npos) ptr = st.find(">", ptr);
+	st.erase(0, ptr + 1);
+	ptr = st.find("<");
+	st.erase(ptr);
+	st.insert(0, "Add record: ");
+	LOG_INFO("%s", st.c_str());
+
+	writeLog(progStatus.logbookfilename.c_str(), &db, true);
+
 }

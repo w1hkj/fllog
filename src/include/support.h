@@ -30,6 +30,4 @@ extern void on_line_help();
 extern void start_server(int);
 extern void exit_server();
 
-extern void write_status(std::string s);
-
 #endif

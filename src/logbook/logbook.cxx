@@ -25,7 +25,9 @@
 // ---------------------------------------------------------------------
 
 #include <config.h>
-
+#include <iostream>
+#include <fstream>
+#include <sstream>
 #include <cstring>
 
 #include <FL/Fl.H>
@@ -39,6 +41,44 @@
 using namespace std;
 
 std::string log_checksum;
+
+void rotate_log(std::string filename)
+{
+	FILE *fp;
+	std::string oldfn, newfn;
+	const char *ext[] = {".5", ".4", ".3", ".2", ".1"};
+
+	for (int i = 0; i < 4; i++) {
+		newfn.assign(filename).append(ext[i]);
+		oldfn.assign(filename).append(ext[i+1]);
+		if ((fp = fopen(oldfn.c_str(), "r")) == NULL)
+			continue;
+		fclose(fp);
+		rename(oldfn.c_str(), newfn.c_str());
+	}
+
+	newfn.assign(filename).append(ext[4]);
+	char buffer[65536];
+
+	FILE *original = fopen(filename.c_str(), "rb");
+	if (original) {
+		FILE *backup = fopen(newfn.c_str(), "wb");
+		if (backup) {
+			size_t n;
+			while (1) {
+				memset(buffer, 0, sizeof(buffer));
+				n = fread(buffer, 1, sizeof(buffer), original);
+				n = fwrite(buffer, 1, n, backup);
+				if (feof(original)) {
+					break;
+				}
+			}
+			fflush(backup);
+			fclose(backup);
+		}
+		fclose(original);
+	}
+}
 
 void do_load_browser(void *)
 {
@@ -54,10 +94,10 @@ void start(void *)
 	} else
 		logbook_filename = progStatus.logbookfilename;
 
-	adifFile.readFile (logbook_filename, &qsodb);
+	qsodb.deleteRecs();
+	adifFile.readFile (logbook_filename.c_str(), &qsodb);
 
-	if (qsodb.nbrRecs() == 0)
-		adifFile.writeFile(logbook_filename, &qsodb);
+	rotate_log(logbook_filename);
 
 	txtLogFile->value(progStatus.logbookfilename.c_str());
 	txtLogFile->redraw();
@@ -69,6 +109,7 @@ void start(void *)
 
 	qsodb.isdirty(0);
 	activateButtons();
+
 }
 
 void start_logbook ()

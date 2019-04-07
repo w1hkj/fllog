@@ -65,7 +65,7 @@ static Fl_Text_Display* text;
 static Fl_Text_Buffer* buffer;
 
 debug* debug::inst = 0;
-debug::level_e debug::level = debug::WARN_LEVEL;
+debug::level_e debug::level = debug::INFO_LEVEL;
 uint32_t debug::mask = ~0u;
 
 const char* prefix[] = { _("Quiet"), _("Error"), _("Warning"), _("Info"), _("Debug") };
@@ -83,13 +83,20 @@ Fl_Menu_Item src_menu[] = {
 	{ 0 }
 };
 
+int debug_visible()
+{
+	if (window)
+		return window->visible();
+	return 0;
+}
+
 void debug::start(const char* filename)
 {
 	if (debug::inst)
 		return;
 	inst = new debug(filename);
 
-	window = new Fl_Double_Window(500, 256, _("Event log"));
+	window = new Fl_Double_Window( 600, 200, _("Event log"));
 
 	int pad = 2;
 	Fl_Menu_Button* button = new Fl_Menu_Button(pad, pad, 128, 20, _("Log sources"));
@@ -104,22 +111,22 @@ void debug::start(const char* filename)
 	slider->step(1.0);
 	slider->value(level);
 	slider->callback(slider_cb);
-	
+
 	Fl_Button* savebtn  = new Fl_Button(window->w() - 124, pad, 60, 20, "save");
 	savebtn->callback(save_cb);
-	
+
 	Fl_Button* clearbtn = new Fl_Button(window->w() - 60, pad, 60, 20, "clear");
 	clearbtn->callback(clear_cb);
 
 	text = new Fl_Text_Display(pad, slider->h()+pad, window->w()-2*pad, window->h()-slider->h()-2*pad, 0);
 	text->textfont(FL_COURIER);
 	text->textsize(FL_NORMAL_SIZE);
-    text->wrap_mode(true, 60);
+	text->wrap_mode(true, 60);
 	window->resizable(text);
-	
+
 	buffer = new Fl_Text_Buffer();
 	text->buffer(buffer);
-	
+
 	window->end();
 }
 
@@ -142,8 +149,8 @@ void debug::log(level_e level, const char* func, const char* srcf, int line, con
 
 	snprintf(fmt, sizeof(fmt), "%c: %s: %s\n", *prefix[level], func, format);
 
-    while(debug_in_use) MilliSleep(1);
-    
+	while(debug_in_use) MilliSleep(1);
+
 	va_list args;
 	va_start(args, format);
 
@@ -166,7 +173,7 @@ void debug::log(level_e level, const char* func, const char* srcf, int line, con
 	fflush(wfile);
 #endif
 
-    Fl::awake(sync_text, 0);
+	Fl::awake(sync_text, 0);
 
 //	Fl::add_timeout(0.0, sync_text, (void*)nw);
 }
@@ -185,25 +192,11 @@ void debug::show(void)
 
 void debug::sync_text(void* arg)
 {
-/*
-	intptr_t toread = (intptr_t)arg;
-	size_t block = MIN((size_t)toread, sizeof(buf) - 1);
-	ssize_t n;
-    string tempbuf;
-
-	while (toread > 0) {
-		if ((n = read(rfd, buf, block)) <= 0)
-			break;
-		buf[n] = '\0';
-		tempbuf.append(buf);
-		toread -= n;
-	}
-	text->insert(tempbuf.c_str());
-*/
-    debug_in_use = true;
-    text->insert(estr.c_str());
-    estr = "";
-    debug_in_use = false;
+	debug_in_use = true;
+	text->insert(estr.c_str());
+	text->show_insert_position();
+	estr = "";
+	debug_in_use = false;
 }
 
 debug::debug(const char* filename)
@@ -229,6 +222,28 @@ debug::~debug()
 {
 	fclose(wfile);
 	fclose(rfile);
+}
+
+void debug::resize(int x, int y, int w, int h)
+{
+	window->resize(x, y, w, h);
+	window->redraw();
+}
+
+void debug::position(int x, int y)
+{
+	window->position(x, y);
+	window->redraw();
+}
+
+void debug::font(int fn)
+{
+	text->textfont(fn);
+}
+
+void debug::font_size(int sz)
+{
+	text->textsize(sz);
 }
 
 static void slider_cb(Fl_Widget* w, void*)

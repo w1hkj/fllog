@@ -38,6 +38,10 @@ public:
 			const char* format, ...) format__(printf, 5, 6);
 	static void elog(const char* func, const char* srcf, int line, const char* text);
 	static void show(void);
+	static void resize(int x, int y, int w, int h);
+	static void position(int x, int y);
+	static void font(int);
+	static void font_size(int);
 	static level_e level;
 	static uint32_t mask;
 private:
@@ -77,6 +81,8 @@ unused__ static uint32_t log_source_ = debug::LOG_OTHER;
 #endif
 
 #define LOG_SET_SOURCE(source__) log_source_ = source__
+
+extern int debug_visible();
 
 #endif // _DEBUG_H_
 

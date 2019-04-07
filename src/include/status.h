@@ -13,22 +13,24 @@ enum sorttype {NONE, SORTCALL, SORTDATE, SORTFREQ, SORTMODE};
 
 struct status {
 // dialog characteristics
-	int			mainX;
-	int			mainY;
-	int			mainW;
-	int			mainH;
+	int  		mainX;
+	int  		mainY;
+	int  		mainW;
+	int  		mainH;
 
-	int			LOGBOOKtextsize;
+	int  		LOGBOOKtextsize;
 	Fl_Font		LOGBOOKtextfont;
 	Fl_Color	LOGBOOKtextcolor;
 	Fl_Color	LOGBOOKcolor;
 
-    bool        BrowseTimeOFF;
+	bool        BrowseTimeOFF;
 // logbook entries
 	string logbookfilename;
 	string mycall;
 	string opcall;
 	string opname;
+	string my_staqth;
+	string my_staloc;
 
 	sorttype	lastsort;
 	bool callfwd;
@@ -38,44 +40,60 @@ struct status {
 
 	string server_port;
 
-	bool SelectCall;
-	bool SelectName;
-	bool SelectFreq;
-	bool SelectBand;
-	bool SelectMode;
-	bool SelectQSOdateOn;
-	bool SelectQSOdateOff;
-	bool SelectTimeON;
-	bool SelectTimeOFF;
-	bool SelectQth;
-	bool SelectLOC;
-	bool SelectState;
-	bool SelectProvince;
-	bool SelectCountry;
-	bool SelectQSLrcvd;
-	bool SelectQSLsent;
-	bool SelectSerialIN;
-	bool SelectSerialOUT;
-	bool SelectXchgIn;
-	bool SelectMyXchg;
-	bool SelectRSTsent;
-	bool SelectRSTrcvd;
-	bool SelectIOTA;
-	bool SelectDXCC;
-	bool SelectCNTY;
-	bool SelectCONT;
-	bool SelectCQZ;
-	bool SelectITUZ;
-	bool SelectTX_pwr;
-	bool SelectNotes;
-	bool SelectQSL_VIA;
-	bool SelectOperator;
-	bool SelectStaCall;
-	bool SelectStaGrid;
-	bool SelectStaCity;
+	int  SelectCall;
+	int  SelectName;
+	int  SelectFreq;
+	int  SelectBand;
+	int  SelectMode;
+	int  SelectQSOdateOn;
+	int  SelectQSOdateOff;
+	int  SelectTimeON;
+	int  SelectTimeOFF;
+	int  SelectTX_pwr;
+	int  SelectRSTsent;
+	int  SelectRSTrcvd;
+	int  SelectQth;
+	int  SelectLOC;
+	int  SelectState;
+	int  SelectAge;
+
+	int  SelectStaCall;
+	int  SelectStaGrid;
+	int  SelectStaCity;
+	int  SelectOperator;
+	int  SelectProvince;
+	int  SelectCountry;
+	int  SelectNotes;
+	int  SelectQSLrcvd;
+	int  SelectQSLsent;
+	int  SelecteQSLrcvd;
+	int  SelecteQSLsent;
+	int  SelectLOTWrcvd;
+	int  SelectLOTWsent;
+	int  SelectQSL_VIA;
+	int  SelectSerialIN;
+	int  SelectSerialOUT;
+
+	int  SelectCheck;
+	int  SelectXchg;
+	int  SelectCNTY;
+	int  SelectCONT;
+	int  SelectCQZ;
+	int  SelectDXCC;
+	int  SelectIOTA;
+	int  SelectITUZ;
+	int  SelectFD;
+	int  SelectCWSS;
+	int  Select_1010;
+	int  SelectJOTA;
+
+	int  use_nulines;  // separate each reported field with a new line character
+	int  event_log_open;
 
 	void saveLastState();
 	void loadLastState();
+	void save_defaults();
+	void load_defaults();
 };
 
 extern status progStatus;

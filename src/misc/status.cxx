@@ -55,6 +55,9 @@ status progStatus = {
 	"",						// mycall
 	"",						// opcall
 	"",						// opname
+	"",						// string my_staqth;
+	"",						// string my_staloc;
+
 	SORTDATE,
 	true,
 	true,
@@ -62,42 +65,55 @@ status progStatus = {
 	true,
 	"8421",
 
-	1,	//bool SelectCall
-	1,	//bool SelectName
-	1,	//bool SelectFreq
-	1,	//bool SelectBand
-	1,	//bool SelectMode
-	1,	//bool SelectQSOdateOn
-	1,	//bool SelectQSOdateOff
-	1,	//bool SelectTimeON
-	1,	//bool SelectTimeOFF
-	0,	//bool SelectQth
-	0,	//bool SelectLOC
-	0,	//bool SelectState
-	0,	//bool SelectProvince
-	0,	//bool SelectCountry
-	0,	//bool SelectQSLrcvd
-	0,	//bool SelectQSLsent
-	0,	//bool SelectSerialIN
-	0,	//bool SelectSerialOUT
-	0,	//bool SelectXchgIn
-	0,	//bool SelectMyXchg
-	0,	//bool SelectRSTsent
-	1,	//bool SelectRSTrcvd
-	0,	//bool SelectIOTA
-	0,	//bool SelectDXCC
-	0,	//bool SelectCNTY
-	0,	//bool SelectCONT
-	0,	//bool SelectCQZ
-	0,	//bool SelectITUZ
-	0,	//bool SelectTX_pwr
-	0,	//bool SelectNotes
-	0,	//bool SelectQSL_VIA
-	0,	//bool SelectOperator
-	0,	//bool SelectStaCall
-	0,	//bool SelectStaGrid
-	0	//bool SelectStaCity
+	1,	//int  SelectCall;
+	1,	//int  SelectName;
+	1,	//int  SelectFreq;
+	1,	//int  SelectBand;
+	1,	//int  SelectMode;
+	1,	//int  SelectQSOdateOn;
+	1,	//int  SelectQSOdateOff;
+	1,	//int  SelectTimeON;
+	1,	//int  SelectTimeOFF;
+	0,	//int  SelectTX_pwr;
+	0,	//int  SelectRSTsent;
+	1,	//int  SelectRSTrcvd;
+	0,	//int  SelectQth;
+	0,	//int  SelectLOC;
+	0,	//int  SelectState;
+	0,	//int  SelectAge;
 
+	0,	//int  SelectStaCall;
+	0,	//int  SelectStaGrid;
+	0,	//int  SelectStaCity;
+	0,	//int  SelectOperator;
+	0,	//int  SelectProvince;
+	0,	//int  SelectCountry;
+	0,	//int  SelectNotes;
+	0,	//int  SelectQSLrcvd;
+	0,	//int  SelectQSLsent;
+	0,	//int  SelecteQSLrcvd;
+	0,	//int  SelecteQSLsent;
+	0,	//int  SelectLOTWrcvd;
+	0,	//int  SelectLOTWsent;
+	0,	//int  SelectQSL_VIA
+	0,	//int  SelectSerialIN;
+	0,	//int  SelectSerialOUT;
+
+	0,	//int  SelectCheck;
+	0,	//int  SelectXchg;
+	0,	//int  SelectCNTY;
+	0,	//int  SelectCONT;
+	0,	//int  SelectCQZ;
+	0,	//int  SelectDXCC;
+	0,	//int  SelectIOTA;
+	0,	//int  SelectITUZ;
+	0,	//int  SelectFD;
+	0,	//int  SelectCWSS;
+	0,	//int  Select_1010;
+	0,	//int  SelectJOTA;
+
+	1,	//int  use_nulines;
+	1	//int  event_log_open;
 };
 
 void status::saveLastState()
@@ -130,6 +146,8 @@ void status::saveLastState()
 	spref.set("mycall", mycall.c_str());
 	spref.set("opcall", opcall.c_str());
 	spref.set("opname", opname.c_str());
+	spref.set("my_staqth", my_staqth.c_str());
+	spref.set("my_staloc", my_staloc.c_str());
 
 	spref.set("lastsort", lastsort);
 	spref.set("callfwd", callfwd);
@@ -147,33 +165,48 @@ void status::saveLastState()
 	spref.set("SelectQSOdateOff", SelectQSOdateOff);
 	spref.set("SelectTimeON", SelectTimeON);
 	spref.set("SelectTimeOFF", SelectTimeOFF);
+	spref.set("SelectTX_pwr", SelectTX_pwr);
+	spref.set("SelectRSTsent", SelectRSTsent);
+	spref.set("SelectRSTrcvd", SelectRSTrcvd);
 	spref.set("SelectQth", SelectQth);
 	spref.set("SelectLOC", SelectLOC);
 	spref.set("SelectState", SelectState);
-	spref.set("SelectProvince", SelectProvince);
-	spref.set("SelectCountry", SelectCountry);
-	spref.set("SelectQSLrcvd", SelectQSLrcvd);
-	spref.set("SelectQSLsent", SelectQSLsent);
-	spref.set("SelectSerialIN", SelectSerialIN);
-	spref.set("SelectSerialOUT", SelectSerialOUT);
-	spref.set("SelectXchgIn", SelectXchgIn);
-	spref.set("SelectMyXchg", SelectMyXchg);
-	spref.set("SelectRSTsent", SelectRSTsent);
-	spref.set("SelectRSTrcvd", SelectRSTrcvd);
-	spref.set("SelectIOTA", SelectIOTA);
-	spref.set("SelectDXCC", SelectDXCC);
-	spref.set("SelectCNTY", SelectCNTY);
-	spref.set("SelectCONT", SelectCONT);
-	spref.set("SelectCQZ", SelectCQZ);
-	spref.set("SelectITUZ", SelectITUZ);
-	spref.set("SelectTX_pwr", SelectTX_pwr);
-	spref.set("SelectNotes", SelectNotes);
-	spref.set("SelectQSL_VIA", SelectQSL_VIA);
-	spref.set("SelectOperator", SelectOperator);
+	spref.set("SelectAge", SelectAge);
+
 	spref.set("SelectStaCall", SelectStaCall);
 	spref.set("SelectStaGrid", SelectStaGrid);
 	spref.set("SelectStaCity", SelectStaCity);
+	spref.set("SelectOperator", SelectOperator);
+	spref.set("SelectProvince", SelectProvince);
+	spref.set("SelectCountry", SelectCountry);
+	spref.set("SelectNotes", SelectNotes);
+	spref.set("SelectQSLrcvd", SelectQSLrcvd);
+	spref.set("SelectQSLsent", SelectQSLsent);
+	spref.set("SelecteQSLrcvd", SelecteQSLrcvd);
+	spref.set("SelecteQSLsent", SelecteQSLsent);
+	spref.set("SelectLOTWrcvd", SelectLOTWrcvd);
+	spref.set("SelectLOTWsent", SelectLOTWsent);
+	spref.set("SelectQSL_VIA", SelectQSL_VIA);
+	spref.set("SelectSerialIN", SelectSerialIN);
+	spref.set("SelectSerialOUT", SelectSerialOUT);
 
+	spref.set("SelectCheck", SelectCheck);
+	spref.set("SelectXchg", SelectXchg);
+	spref.set("SelectCNTY", SelectCNTY);
+	spref.set("SelectCONT", SelectCONT);
+	spref.set("SelectCQZ", SelectCQZ);
+	spref.set("SelectDXCC", SelectDXCC);
+	spref.set("SelectIOTA", SelectIOTA);
+	spref.set("SelectITUZ", SelectITUZ);
+	spref.set("SelectFD", SelectFD);
+	spref.set("SelectCWSS", SelectCWSS);
+	spref.set("Select_1010", Select_1010);
+	spref.set("SelectJOTA", SelectJOTA);
+
+	spref.set("use_nulines", use_nulines);
+
+	int visible = debug_visible();
+	spref.set("event_log_open", visible);
 }
 
 void status::loadLastState()
@@ -214,6 +247,12 @@ void status::loadLastState()
 		spref.get("opname", defbuffer, opname.c_str(), 199);
 		opname = defbuffer;
 
+		spref.get("my_staqth", defbuffer, my_staqth.c_str(), 199);
+		my_staqth = defbuffer;
+
+		spref.get("my_staloc", defbuffer, my_staloc.c_str(), 199);
+		my_staloc = defbuffer;
+
 		if (spref.get("lastsort", i, lastsort)) lastsort = (sorttype) i;
 		if (spref.get("callfwd", i, callfwd)) callfwd = i;
 		if (spref.get("datefwd", i, datefwd)) datefwd = i;
@@ -222,41 +261,157 @@ void status::loadLastState()
 
 		spref.get("server_port", defbuffer, server_port.c_str(), 199); server_port = defbuffer;
 
-		spref.get("SelectName", i, i); SelectName = i;
-		spref.get("SelectFreq", i, i); SelectFreq = i;
-		spref.get("SelectBand", i, i); SelectBand = i;
-		spref.get("SelectMode", i, i); SelectMode = i;
-		spref.get("SelectQSOdateOn", i, i); SelectQSOdateOn = i;
-		spref.get("SelectQSOdateOff", i, i); SelectQSOdateOff = i;
-		spref.get("SelectTimeON", i, i); SelectTimeON = i;
-		spref.get("SelectTimeOFF", i, i); SelectTimeOFF = i;
-		spref.get("SelectQth", i, i); SelectQth = i;
-		spref.get("SelectLOC", i, i); SelectLOC = i;
-		spref.get("SelectState", i, i); SelectState = i;
-		spref.get("SelectProvince", i, i); SelectProvince = i;
-		spref.get("SelectCountry", i, i); SelectCountry = i;
-		spref.get("SelectQSLrcvd", i, i); SelectQSLrcvd = i;
-		spref.get("SelectQSLsent", i, i); SelectQSLsent = i;
-		spref.get("SelectSerialIN", i, i); SelectSerialIN = i;
-		spref.get("SelectSerialOUT", i, i); SelectSerialOUT = i;
-		spref.get("SelectXchgIn", i, i); SelectXchgIn = i;
-		spref.get("SelectMyXchg", i, i); SelectMyXchg = i;
-		spref.get("SelectRSTsent", i, i); SelectRSTsent = i;
-		spref.get("SelectRSTrcvd", i, i); SelectRSTrcvd = i;
-		spref.get("SelectIOTA", i, i); SelectIOTA = i;
-		spref.get("SelectDXCC", i, i); SelectDXCC = i;
-		spref.get("SelectCNTY", i, i); SelectCNTY = i;
-		spref.get("SelectCONT", i, i); SelectCONT = i;
-		spref.get("SelectCQZ", i, i); SelectCQZ = i;
-		spref.get("SelectITUZ", i, i); SelectITUZ = i;
-		spref.get("SelectTX_pwr", i, i); SelectTX_pwr = i;
-		spref.get("SelectNotes", i, i); SelectNotes = i;
-		spref.get("SelectQSL_VIA", i, i); SelectQSL_VIA = i;
-		spref.get("SelectOperator", i, i); SelectOperator = i;
-		spref.get("SelectStaCall", i, i); SelectStaCall = i;
-		spref.get("SelectStaGrid", i, i); SelectStaGrid = i;
-		spref.get("SelectStaCity", i, i); SelectStaCity = i;
+	spref.get("SelectCall", SelectCall, SelectCall);
+	spref.get("SelectName", SelectName, SelectName);
+	spref.get("SelectFreq", SelectFreq, SelectFreq);
+	spref.get("SelectBand", SelectBand, SelectBand);
+	spref.get("SelectMode", SelectMode, SelectMode);
+	spref.get("SelectQSOdateOn", SelectQSOdateOn, SelectQSOdateOn);
+	spref.get("SelectQSOdateOff", SelectQSOdateOff, SelectQSOdateOff);
+	spref.get("SelectTimeON", SelectTimeON, SelectTimeON);
+	spref.get("SelectTimeOFF", SelectTimeOFF, SelectTimeOFF);
+	spref.get("SelectTX_pwr", SelectTX_pwr, SelectTX_pwr);
+	spref.get("SelectRSTsent", SelectRSTsent, SelectRSTsent);
+	spref.get("SelectRSTrcvd", SelectRSTrcvd, SelectRSTrcvd);
+	spref.get("SelectQth", SelectQth, SelectQth);
+	spref.get("SelectLOC", SelectLOC, SelectLOC);
+	spref.get("SelectState", SelectState, SelectState);
+	spref.get("SelectAge", SelectAge, SelectAge);
+
+	spref.get("SelectStaCall", SelectStaCall, SelectStaCall);
+	spref.get("SelectStaGrid", SelectStaGrid, SelectStaGrid);
+	spref.get("SelectStaCity", SelectStaCity, SelectStaCity);
+	spref.get("SelectOperator", SelectOperator, SelectOperator);
+	spref.get("SelectProvince", SelectProvince, SelectProvince);
+	spref.get("SelectCountry", SelectCountry, SelectCountry);
+	spref.get("SelectNotes", SelectNotes, SelectNotes);
+	spref.get("SelectQSLrcvd", SelectQSLrcvd, SelectQSLrcvd);
+	spref.get("SelectQSLsent", SelectQSLsent, SelectQSLsent);
+	spref.get("SelecteQSLrcvd", SelecteQSLrcvd, SelecteQSLrcvd);
+	spref.get("SelecteQSLsent", SelecteQSLsent, SelecteQSLsent);
+	spref.get("SelectLOTWrcvd", SelectLOTWrcvd, SelectLOTWrcvd);
+	spref.get("SelectLOTWsent", SelectLOTWsent, SelectLOTWsent);
+	spref.get("SelectQSL_VIA", SelectQSL_VIA, SelectQSL_VIA);
+	spref.get("SelectSerialIN", SelectSerialIN, SelectSerialIN);
+	spref.get("SelectSerialOUT", SelectSerialOUT, SelectSerialOUT);
+
+	spref.get("SelectCheck", SelectCheck, SelectCheck);
+	spref.get("SelectXchg", SelectXchg, SelectXchg);
+	spref.get("SelectCNTY", SelectCNTY, SelectCNTY);
+	spref.get("SelectCONT", SelectCONT, SelectCONT);
+	spref.get("SelectCQZ", SelectCQZ, SelectCQZ);
+	spref.get("SelectDXCC", SelectDXCC, SelectDXCC);
+	spref.get("SelectIOTA", SelectIOTA, SelectIOTA);
+	spref.get("SelectITUZ", SelectITUZ, SelectITUZ);
+	spref.get("SelectFD", SelectFD, SelectFD);
+	spref.get("SelectCWSS", SelectCWSS, SelectCWSS);
+	spref.get("Select_1010", Select_1010, Select_1010);
+	spref.get("SelectJOTA", SelectJOTA, SelectJOTA);
+
+	spref.get("use_nulines", use_nulines, use_nulines);
+
+	spref.get("event_log_open", event_log_open, event_log_open);
 
 	}
 }
 
+void status::save_defaults()
+{
+	SelectCall = btnSelectCall->value();
+	SelectName = btnSelectName->value();
+	SelectFreq = btnSelectFreq->value();
+	SelectBand = btnSelectBand->value();
+	SelectMode = btnSelectMode->value();
+	SelectQSOdateOn = btnSelectQSOdateOn->value();
+	SelectQSOdateOff = btnSelectQSOdateOff->value();
+	SelectTimeON = btnSelectTimeON->value();
+	SelectTimeOFF = btnSelectTimeOFF->value();
+	SelectTX_pwr = btnSelectTX_pwr->value();
+	SelectRSTsent = btnSelectRSTsent->value();
+	SelectRSTrcvd = btnSelectRSTrcvd->value();
+	SelectQth = btnSelectQth->value();
+	SelectLOC = btnSelectLOC->value();
+	SelectState = btnSelectState->value();
+	SelectAge = btnSelectAge->value();
+
+	SelectStaCall = btnSelectStaCall->value();
+	SelectStaGrid = btnSelectStaGrid->value();
+	SelectStaCity = btnSelectStaCity->value();
+	SelectOperator = btnSelectOperator->value();
+	SelectProvince = btnSelectProvince->value();
+	SelectCountry = btnSelectCountry->value();
+	SelectNotes = btnSelectNotes->value();
+	SelectQSLrcvd = btnSelectQSLrcvd->value();
+	SelectQSLsent = btnSelectQSLsent->value();
+	SelecteQSLrcvd = btnSelecteQSLrcvd->value();
+	SelecteQSLsent = btnSelecteQSLsent->value();
+	SelectLOTWrcvd = btnSelectLOTWrcvd->value();
+	SelectLOTWsent = btnSelectLOTWsent->value();
+	SelectQSL_VIA = btnSelectQSL_VIA->value();
+	SelectSerialIN = btnSelectSerialIN->value();
+	SelectSerialOUT = btnSelectSerialOUT->value();
+
+	SelectCheck = btnSelectCheck->value();
+	SelectXchg = btnSelectXchg->value();
+	SelectCNTY = btnSelectCNTY->value();
+	SelectCONT = btnSelectCONT->value();
+	SelectCQZ = btnSelectCQZ->value();
+	SelectDXCC = btnSelectDXCC->value();
+	SelectIOTA = btnSelectIOTA->value();
+	SelectITUZ = btnSelectITUZ->value();
+	SelectFD = btnSelectFD->value();
+	SelectCWSS = btnSelectCWSS->value();
+	Select_1010 = btnSelect_1010->value();
+	SelectJOTA = btnSelectJOTA->value();
+
+}
+
+void status::load_defaults()
+{
+	btnSelectCall->value(SelectCall);
+	btnSelectName->value(SelectName);
+	btnSelectFreq->value(SelectFreq);
+	btnSelectBand->value(SelectBand);
+	btnSelectMode->value(SelectMode);
+	btnSelectQSOdateOn->value(SelectQSOdateOn);
+	btnSelectQSOdateOff->value(SelectQSOdateOff);
+	btnSelectTimeON->value(SelectTimeON);
+	btnSelectTimeOFF->value(SelectTimeOFF);
+	btnSelectTX_pwr->value(SelectTX_pwr);
+	btnSelectRSTsent->value(SelectRSTsent);
+	btnSelectRSTrcvd->value(SelectRSTrcvd);
+	btnSelectQth->value(SelectQth);
+	btnSelectLOC->value(SelectLOC);
+	btnSelectState->value(SelectState);
+	btnSelectAge->value(SelectAge);
+
+	btnSelectStaCall->value(SelectStaCall);
+	btnSelectStaGrid->value(SelectStaGrid);
+	btnSelectStaCity->value(SelectStaCity);
+	btnSelectOperator->value(SelectOperator);
+	btnSelectProvince->value(SelectProvince);
+	btnSelectCountry->value(SelectCountry);
+	btnSelectNotes->value(SelectNotes);
+	btnSelectQSLrcvd->value(SelectQSLrcvd);
+	btnSelectQSLsent->value(SelectQSLsent);
+	btnSelecteQSLrcvd->value(SelecteQSLrcvd);
+	btnSelecteQSLsent->value(SelecteQSLsent);
+	btnSelectLOTWrcvd->value(SelectLOTWrcvd);
+	btnSelectLOTWsent->value(SelectLOTWsent);
+	btnSelectQSL_VIA->value(SelectQSL_VIA);
+	btnSelectSerialIN->value(SelectSerialIN);
+	btnSelectSerialOUT->value(SelectSerialOUT);
+
+	btnSelectCheck->value(SelectCheck);
+	btnSelectXchg->value(SelectXchg);
+	btnSelectCNTY->value(SelectCNTY);
+	btnSelectCONT->value(SelectCONT);
+	btnSelectCQZ->value(SelectCQZ);
+	btnSelectDXCC->value(SelectDXCC);
+	btnSelectIOTA->value(SelectIOTA);
+	btnSelectITUZ->value(SelectITUZ);
+	btnSelectFD->value(SelectFD);
+	btnSelectCWSS->value(SelectCWSS);
+	btnSelect_1010->value(Select_1010);
+	btnSelectJOTA->value(SelectJOTA);
+}

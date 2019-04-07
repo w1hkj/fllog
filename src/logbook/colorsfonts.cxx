@@ -96,10 +96,40 @@ static void cb_btnClrFntClose(Fl_Button* o, void*) {
   o->window()->hide();
 }
 
+Fl_Input2 *inp_mycall=(Fl_Input2 *)0;
+
+static void cb_inp_mycall(Fl_Input2* o, void*) {
+  progStatus.mycall = o->value();
+for (size_t n = 0; n < progStatus.mycall.length(); n++)
+progStatus.mycall[n] = toupper(progStatus.mycall[n]);
+o->value(progStatus.mycall.c_str());
+}
+
+Fl_Input2 *inp_opcall=(Fl_Input2 *)0;
+
+static void cb_inp_opcall(Fl_Input2* o, void*) {
+  progStatus.opcall = o->value();
+for (size_t n = 0; n < progStatus.opcall.length(); n++)
+progStatus.opcall[n] = toupper(progStatus.opcall[n]);
+o->value(progStatus.opcall.c_str());
+}
+
+Fl_Input2 *inp_my_staqth=(Fl_Input2 *)0;
+
+static void cb_inp_my_staqth(Fl_Input2* o, void*) {
+  progStatus.my_staqth = o->value();
+}
+
+Fl_Input2 *inp_my_staloc=(Fl_Input2 *)0;
+
+static void cb_inp_my_staloc(Fl_Input2* o, void*) {
+  progStatus.my_staloc = o->value();
+}
+
 Fl_Double_Window* make_config_items() {
   font_browser = new Font_Browser;
-  { dlgConfigItems = new Fl_Double_Window(375, 169, _("Configuration Items"));
-    { Fl_Group* o = new Fl_Group(2, 2, 370, 65, _("Log Table"));
+  { dlgConfigItems = new Fl_Double_Window(375, 255, _("Configuration Items"));
+    { Fl_Group* o = new Fl_Group(2, 2, 371, 65, _("Log Table"));
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { Fl_Check_Button* o = btnBrowseTimeOFF = new Fl_Check_Button(27, 27, 70, 15, _("Browse Time OFF"));
@@ -109,7 +139,7 @@ Fl_Double_Window* make_config_items() {
       } // Fl_Check_Button* btnBrowseTimeOFF
       o->end();
     } // Fl_Group* o
-    { Fl_Group* o = new Fl_Group(2, 70, 370, 65, _("Control Fonts / Colors"));
+    { Fl_Group* o = new Fl_Group(2, 70, 371, 65, _("Control Fonts / Colors"));
       o->box(FL_ENGRAVED_FRAME);
       o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
       { Fl_Output* o = LOGBOOKdisplay = new Fl_Output(17, 94, 98, 25);
@@ -129,9 +159,70 @@ Fl_Double_Window* make_config_items() {
       } // Fl_Button* btnLOGBOOKdefault_colors_font
       o->end();
     } // Fl_Group* o
-    { btnClrFntClose = new Fl_Button(292, 139, 75, 25, _("Close"));
+    { btnClrFntClose = new Fl_Button(281, 223, 80, 25, _("Close"));
       btnClrFntClose->callback((Fl_Callback*)cb_btnClrFntClose);
     } // Fl_Button* btnClrFntClose
+    { Fl_Group* o = new Fl_Group(2, 136, 371, 79, _("Station"));
+      o->box(FL_ENGRAVED_BOX);
+      o->align(Fl_Align(FL_ALIGN_TOP_LEFT|FL_ALIGN_INSIDE));
+      { Fl_Input2* o = inp_mycall = new Fl_Input2(140, 148, 80, 24, _("Sta Call"));
+        inp_mycall->tooltip(_("My station call sign"));
+        inp_mycall->box(FL_DOWN_BOX);
+        inp_mycall->color(FL_BACKGROUND2_COLOR);
+        inp_mycall->selection_color(FL_SELECTION_COLOR);
+        inp_mycall->labeltype(FL_NORMAL_LABEL);
+        inp_mycall->labelfont(0);
+        inp_mycall->labelsize(14);
+        inp_mycall->labelcolor(FL_FOREGROUND_COLOR);
+        inp_mycall->callback((Fl_Callback*)cb_inp_mycall);
+        inp_mycall->align(Fl_Align(FL_ALIGN_LEFT));
+        inp_mycall->when(FL_WHEN_RELEASE);
+        o->value(progStatus.mycall.c_str());
+      } // Fl_Input2* inp_mycall
+      { Fl_Input2* o = inp_opcall = new Fl_Input2(281, 148, 69, 24, _("Op Call"));
+        inp_opcall->tooltip(_("Operator call sign"));
+        inp_opcall->box(FL_DOWN_BOX);
+        inp_opcall->color(FL_BACKGROUND2_COLOR);
+        inp_opcall->selection_color(FL_SELECTION_COLOR);
+        inp_opcall->labeltype(FL_NORMAL_LABEL);
+        inp_opcall->labelfont(0);
+        inp_opcall->labelsize(14);
+        inp_opcall->labelcolor(FL_FOREGROUND_COLOR);
+        inp_opcall->callback((Fl_Callback*)cb_inp_opcall);
+        inp_opcall->align(Fl_Align(FL_ALIGN_LEFT));
+        inp_opcall->when(FL_WHEN_RELEASE);
+        o->value(progStatus.opcall.c_str());
+      } // Fl_Input2* inp_opcall
+      { Fl_Input2* o = inp_my_staqth = new Fl_Input2(70, 181, 150, 24, _("Sta QTH"));
+        inp_my_staqth->tooltip(_("My station call sign"));
+        inp_my_staqth->box(FL_DOWN_BOX);
+        inp_my_staqth->color(FL_BACKGROUND2_COLOR);
+        inp_my_staqth->selection_color(FL_SELECTION_COLOR);
+        inp_my_staqth->labeltype(FL_NORMAL_LABEL);
+        inp_my_staqth->labelfont(0);
+        inp_my_staqth->labelsize(14);
+        inp_my_staqth->labelcolor(FL_FOREGROUND_COLOR);
+        inp_my_staqth->callback((Fl_Callback*)cb_inp_my_staqth);
+        inp_my_staqth->align(Fl_Align(FL_ALIGN_LEFT));
+        inp_my_staqth->when(FL_WHEN_RELEASE);
+        o->value(progStatus.my_staqth.c_str());
+      } // Fl_Input2* inp_my_staqth
+      { Fl_Input2* o = inp_my_staloc = new Fl_Input2(281, 181, 69, 24, _("Sta Loc"));
+        inp_my_staloc->tooltip(_("Operator call sign"));
+        inp_my_staloc->box(FL_DOWN_BOX);
+        inp_my_staloc->color(FL_BACKGROUND2_COLOR);
+        inp_my_staloc->selection_color(FL_SELECTION_COLOR);
+        inp_my_staloc->labeltype(FL_NORMAL_LABEL);
+        inp_my_staloc->labelfont(0);
+        inp_my_staloc->labelsize(14);
+        inp_my_staloc->labelcolor(FL_FOREGROUND_COLOR);
+        inp_my_staloc->callback((Fl_Callback*)cb_inp_my_staloc);
+        inp_my_staloc->align(Fl_Align(FL_ALIGN_LEFT));
+        inp_my_staloc->when(FL_WHEN_RELEASE);
+        o->value(progStatus.my_staloc.c_str());
+      } // Fl_Input2* inp_my_staloc
+      o->end();
+    } // Fl_Group* o
     dlgConfigItems->xclass(PACKAGE_TARNAME);
     dlgConfigItems->end();
   } // Fl_Double_Window* dlgConfigItems
