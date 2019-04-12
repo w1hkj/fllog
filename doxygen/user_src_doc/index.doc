@@ -18,12 +18,12 @@
 
 /*!
 
-\mainpage FLLog Users Manual - Version 1.1
+\mainpage FLLog Users Manual - Version 1.2
 
 \tableofcontents
 
 <center>
-\image latex flloglogo.eps "" width=0.5in
+\image latex flloglogo.png "" width=0.5in
 \image html flloglogo.png ""
 </center>
 
@@ -42,44 +42,39 @@ more than a single program may corrupt the file.
 The complete set of logbook fields are:
 <center>
 
-| ADIF FIELD        |  USE                                            |
-|:-----------------:|:----------------------------------------------- |
-| BAND              | QSO band (computed from frequency)              |
-| <b>CALL</b>       | contacted stations call sign                    |
-| CNTY              | county                                          |
-| <b>COMMENT</b>    | comment field for QSO                           |
-| <b>COUNTRY</b>    | contacted stations DXCC entity name             |
-| CQZ               | CQ zone                                         |
-| DXCC              | contacted stations DXCC country code            |
-| <b>FREQ</b>       | QSO frequency in MHz                            |
-| <b>GRIDSQUARE</b> | contacted stations Maidenhead Grid Square (Loc) |
-| IOTA              | Islands On The Air                              |
-| IOTA              | Islands-On-The-Air designator                   |
-| ITUZ              | ITU zone                                        |
-| MODE              | QSO mode                                        |
-| MYXCHG            | sent contest exchange                           |
-| <b>NAME</b>       | contacted operators name                        |
-| QSLRDATE          | QSL received date                               |
-| QSLSDATE          | QSL sent date                                   |
-| QSLSDATE          | QSL sent date                                   |
-| <b>QSO_DATE</b>   | QSO data at start of contact                    |
-| <b>QTH</b>        | contacted stations city                         |
-| <b>RST_RCVD</b>   | received signal report                          |
-| <b>RST_SENT</b>   | sent signal report                              |
-| <b>SRX</b>        | QSO received serial number                      |
-| <b>STATE</b>      | contacted stations state                        |
-| <b>STX</b>        | QSO transmitted serial number                   |
-| <b>TIME_OFF</b>   | end time of QSO in HHMM format                  |
-| <b>TIME_ON</b>    | start time of QSO in HHMM format                |
-| <b>TX_PWR</b>     | power transmitted by this station               |
-| <b>VE_PROV</b>    | 2 letter abbreviation for Canadian Province     |
-| <b>XCHG1</b>      | received contest exchange                       |
+| ADIF FIELD   |  USE                 || ADIF FIELD       |  USE                    |
+|:-------------|:---------------------||:-----------------|:------------------------|
+| AGE          | Rx age               || MY_GRIDSQUARE    | Tx station locator      |
+| ARRL_SECT    | Rx Field Day section || NAME             | Rx name                 |
+| BAND         | QSO band             || NOTES            | QSO notes               |
+| CALL         | Rx CALLSIGN          || OPERATOR         | Logging person callsign |
+| CHECK        | contest identifier   || QSLRDATE         | QSL received date       |
+| CLASS        | Rx Field Day class   || QSLSDATE         | QSL sent date           |
+| CNTY         | Rx county            || QSL_VIA          | Rx QSL contact          |
+| CONT         | Rx continent         || QSO_DATE         | QSO data                |
+| COUNTRY      | Rx DXCC              || QSO_DATE_OFF     | QSO data OFF            |
+| CQZ          | Rx CQ Zone           || QTH              | Rx city                 |
+| CWSS_CHK     | Rx CW SS check       || RST_RCVD         | Rx report               |
+| CWSS_PREC    | Rx CW SS precedence  || RST_SENT         | Tx signal report        |
+| CWSS_SECTION | Rx CW SS section     || SCOUTR           | Rx JOTA scout name      |
+| CWSS_SERNO   | Rx CW SS serial nbr  || SCOUTS           | Rx JOTA scout name      |
+| DXCC         | Rx DXCC Code         || SRX              | Rx serial number        |
+| EQSLRDATE    | EQSL received date   || SRX_STRING       | Rx contest exchange #1  |
+| EQSLSDATE    | EQSL sent date       || STATE            | Rx State                |
+| FD_CLASS     | Rx Field Day Class   || STATION_CALLSIGN | Tx Callsign             |
+| FD_SECTION   | Rx FD section        || STX              | Tx serial number        |
+| FREQ         | QSO frequency in Mhz || STX_STRING       | Tx contest exchange     |
+| GRIDSQUARE   | Rx locator           || SUBMODE          | QSO submode             |
+| IOTA         | Rx IOTA              || TEN_TEN          | Rx ten ten #            |
+| ITUZ         | Rx ITU zone          || TIME_OFF         | HHMM or HHMMSS in UTC   |
+| LOTWRDATE    | LoTW received date   || TIME_ON          | HHMM or HHMMSS in UTC   |
+| LOTWSDATE    | LoTW sent date       || TROOPR           | Rx JOTA troop number    |
+| MODE         | QSO mode             || TROOPS           | Rx JOTA troop number    |
+| MY_CITY      | Xmt station location || TX_PWR           | Tx Xmt station power    |
+|              |                      || VE_PROV          | Rx Canadian Province    |
 
 <br>
 </center>
-
-These fields (<b>BOLD</b>) are sent to fllog by the client program, which
-may be fldigi.
 
 The data in the fllog logbook can be exported to external text files; ADIF,
 text, and CSV (comma separated value).   The ADIF can be read by any ADIF
@@ -95,14 +90,11 @@ the most recent qso and fill the Name, Qth and other fields from the
 logbook.  This data is then passed back to the client program.
 
 You open the logbook by selecting from the View menu; View/Logbook.
-The logbook title bar will show you which logbook you currently have open.
+The logbook "File:" control will show you which logbook you currently have open.
 FLlogi can maintain an unlimited (except for disk space) number of logbooks.
 
-The full pathname of the open log file will appear in the File: control.
-The file name will be on the title bar.
-
 <center>
-\image latex logbook.eps "Logbook Server" width=5.5in
+\image latex logbook.png "Logbook Server" width=5.5in
 \image html logbook.png "Logbook Server"
 </center>
 
@@ -124,10 +116,66 @@ your data for use with an external database or for uploading to LOTW or
 eQSL.  Data from those sources can also be used for importing into the
 logbook.
 
+\subsection ssConfig Configure
+Access the configuration dialog from the "Config" menu.
+
+<center>
+\image latex config.png "Configure" width=2.5in
+\image html config.png "Configure"
+</center>
+
+The log browser can be set to view either time ON or time OFF.
+
+The main dialog font, font size, font color, and background colors can be changed to
+any that the operating system supports.  The program will try to resize the
+main dialog and it's contents to the new setting.
+
+The station entries are those recorded with each new logbook record.  Change these
+as necessary when you change your operation environment.
+
+\subsection ssEvents Event log
+
+Two dialogs open the first time you use fllog, the logbook dialog shown above
+and an event log dialog.
+<center>
+\image latex event_log.png "Event Log" width=5.5in
+\image html event_log.png "Event log"
+</center>
+The event log exposes program operation, particularly the data flow between
+the fllog server and any connect client programs such as fldigi.  Moving the
+level slider to the right exposes more event details.  The events are also
+written to a file named "debug_log.txt" in the default fllog files folder,
+<br>
+<center>
+| OS             | location                                            |
+|:---------------|:----------------------------------------------------|
+|W2K, XP         |C:\\Documents and Settings\\<urlogin>\\fllog.files\\ |
+|Vista, 7, 8, 10 |C:\\User\\<urlogin>\\fllog.files\\                   |
+|Linux           |/home/<user-name>/.fllog/                            |
+|OS-X            |/Users/<user-name>/.fllog/                           |
+</center>
+<br>
+
+It's contents are the same as displayed in the event log dialog:
+<br>
+\verbatim
+I: main: FLLOG 1.2.6 log started on 
+Fri Apr 12 08:14:54 2019
+I: readfile_:
+================================================
+Read Logbook: /home/dave/.fllog/logbook.adif
+      read 3474 records in  0.1 seconds
+================================================
+\endverbatim
+<br>
+The program remembers the visibility of the event log.  On subsequent program
+starts the event log dialog will only be displayed if that was it's state the
+last time the program was run and exited.  Access to the event log dialog is
+on the Help menu.
+
 \ref sFllogDesc "Top of Page"
 
 \section sLogExport Exporting Logbook Data
-
 
 The user may export all or selected records consisting of all or selected
 fields.  Access to this export function of available from the menu
@@ -139,7 +187,7 @@ fields.  Access to this export function of available from the menu
 Selecting the Export ADIF menu item opens the following dialog:
 
 <center>
-\image latex export-setup.eps "Export Setup" width=5.5in
+\image latex export-setup.png "Export Setup" width=5.5in
 \image html export-setup.png "Export Setup"
 </center>
 <br>
@@ -150,6 +198,17 @@ you want to export with the right panel controls.  Press the OK button to
 continue or Cancel to abort the operation.  A file chooser dialog will open
 which allows you to specify the name and location of the exported file.  Use
 the extension ".adi" on Windows and ".adif" on the other OS'.
+
+Right click on the "Defaults" button to save the currently selected fields
+as the new default.  Left click on the "Defaults" button to enable the
+default fields.
+
+Enable the "1/line" check box if you want the adif record to be written with
+one field per line.  That increases the file size, but makes the file easier
+to read.
+
+The "eQSL" and "LoTW" buttons will preset the fields to the minumum required
+fields for the respective exports.
 
 \subsection ssExportTextCSV Export Text / CSV
 
@@ -169,7 +228,7 @@ spreadsheet programs such as Gnumeric, Open Office or MS Excel.
 \section sCabrilloReport Creating a Cabrillo Report
 
 <center>
-\image latex cabrillo-setup.eps "Cabrillo Setup" width=5.5in
+\image latex cabrillo-setup.png "Cabrillo Setup" width=5.5in
 \image html cabrillo-setup.png "Cabrillo Setup"
 </center>
 <br>
