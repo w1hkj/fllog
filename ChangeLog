@@ -1,8 +1,28 @@
 
 
-=Version 1.2.5=
+=Version 1.2.6=
 
-2018-01-13  David Freese  <w1hkj@bellsouth.net>
+2019-04-12  David Freese  <w1hkj@bellsouth.net>
+
+	79a7ecd: OS X build
+	7048549: Documentation
+	51bab10: Miscellaneous changes
+	78056ce: EQSLSDATE
+	e3959e0: FMHELL
+	0bec1bc: Dup check/reverse
+	0b619bd: XmlRpc Server
+	dd4c423: eQSL/LoTW submit dates
+	4798954: Duplicates
+	a8a8b8b: New/Cancel
+	0416ba9: gm date/time
+	861ce93: Export ADIF
+	d155fb7: QSOdb structure
+	c70f852: nulog
+	e2ea153: OS X build scripts
+	f7372e4: Merge resort
+
+
+=Version 1.2.5=
 
 	3cbfc7c: status log
 	f2a3c28: db update
