@@ -110,7 +110,7 @@ void Fl_Calendar_Base::update ()
 		days[i]->hide ();
 
 	for (i=dow; i<(dim+dow); i++) {
-		char t[8];
+		char t[15];
 		snprintf (t, sizeof(t), "%d", (i-dow+1));
 		days[i]->label (strdup(t));
 		days[i]->color (52);
@@ -253,7 +253,7 @@ void Fl_Calendar::update ()
 	int i;
 
 	for (i=dow; i<(dim+dow); i++) {
-		char t[8];
+		char t[15];
 		snprintf (t, sizeof(t), "%d", (i-dow+1));
 		days[i]->label (strdup(t));
 	}

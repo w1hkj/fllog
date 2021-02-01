@@ -394,7 +394,7 @@ void DefaultExport()
 		progStatus.SelectQSLsent = btnSelectQSLsent->value();
 		progStatus.SelectSerialIN = btnSelectSerialIN->value();
 		progStatus.SelectSerialOUT = btnSelectSerialOUT->value();
-		progStatus.SelectXchg = btnSelectXchg->value();
+		progStatus.SelectXchgIn = btnSelectXchgIn->value();
 		progStatus.SelectRSTsent = btnSelectRSTsent->value();
 		progStatus.SelectRSTrcvd = btnSelectRSTrcvd->value();
 		progStatus.SelectIOTA = btnSelectIOTA->value();
@@ -410,7 +410,15 @@ void DefaultExport()
 		progStatus.SelectStaCall = btnSelectStaCall->value();
 		progStatus.SelectStaGrid = btnSelectStaGrid->value();
 		progStatus.SelectStaCity = btnSelectStaCity->value();
-		progStatus.SelectCWSS = btnSelectCWSS->value();
+
+		progStatus.SelectClass = btnSelectClass->value();
+		progStatus.SelectSection = btnSelectSection->value();
+
+		progStatus.Select_cwss_serno = btnSelect_cwss_serno->value();
+		progStatus.Select_cwss_prec = btnSelect_cwss_prec->value();
+		progStatus.Select_cwss_check = btnSelect_cwss_check->value();
+		progStatus.Select_cwss_section = btnSelect_cwss_section->value();
+
 		progStatus.SelectJOTA = btnSelectJOTA->value();
 	} else {
 		btnSelectCall->value(progStatus.SelectCall);
@@ -431,7 +439,7 @@ void DefaultExport()
 		btnSelectQSLsent->value(progStatus.SelectQSLsent);
 		btnSelectSerialIN->value(progStatus.SelectSerialIN);
 		btnSelectSerialOUT->value(progStatus.SelectSerialOUT);
-		btnSelectXchg->value(progStatus.SelectXchg);
+		btnSelectXchgIn->value(progStatus.SelectXchgIn);
 		btnSelectRSTsent->value(progStatus.SelectRSTsent);
 		btnSelectRSTrcvd->value(progStatus.SelectRSTrcvd);
 		btnSelectIOTA->value(progStatus.SelectIOTA);
@@ -447,7 +455,15 @@ void DefaultExport()
 		btnSelectStaCall->value(progStatus.SelectStaCall);
 		btnSelectStaGrid->value(progStatus.SelectStaGrid);
 		btnSelectStaCity->value(progStatus.SelectStaCity);
-		btnSelectCWSS->value(progStatus.SelectCWSS);
+
+		btnSelectClass->value(progStatus.SelectClass);
+		btnSelectSection->value(progStatus.SelectSection);
+
+		btnSelect_cwss_serno->value(progStatus.Select_cwss_serno);
+		btnSelect_cwss_prec->value(progStatus.Select_cwss_prec);
+		btnSelect_cwss_check->value(progStatus.Select_cwss_check);
+		btnSelect_cwss_section->value(progStatus.Select_cwss_section);
+
 		btnSelectJOTA->value(progStatus.SelectJOTA);
 	}
 }
@@ -513,11 +529,10 @@ void on_line_help()
 
 //----------------------------------------------------------------------
 
-void * fllog_terminate(void) {
+void fllog_terminate() {
 	std::cerr << "terminating" << std::endl;
 	fl_message("Closing fllog");
 	cbExit();
-	return 0;
 }
 
 void showEvents(void *)
@@ -599,7 +614,7 @@ int main (int argc, char *argv[])
 
 	Fl::set_fonts(0);
 
-	std::terminate_handler(fllog_terminate);
+	std::set_terminate(fllog_terminate);
 
 	int arg_idx;
 

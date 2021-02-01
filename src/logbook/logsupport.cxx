@@ -42,6 +42,7 @@
 #include "status.h"
 #include "date.h"
 #include "adif_io.h"
+#include "field_def.h"
 #include "logbook.h"
 #include "textio.h"
 #include "lgbook.h"
@@ -176,8 +177,8 @@ static const char *month_name[] =
 
 char *szDate(int fmt)
 {
-	static char szDt[20];
-	static char szMonth[10];
+	static char szDt[50];
+	static char szMonth[20];
 
 	time_t tmptr;
 	tm sTime;
@@ -295,16 +296,16 @@ void Export_TXT()
 	txtFile.writeTXTFile(p, &qsodb);
 }
 
-string adif_field(int num, const char *s)
+string adif_field(int num, std::string s)
 {
 	char tempstr[100];
-	int slen = strlen(s);
+	int slen = s.length();
 	if (slen == 0) return "";
 	int n;
 	if (progStatus.use_nulines)
-		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s\n", fields[num].name, slen, s);
+		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s\n", fields[num].name, slen, s.c_str());
 	else
-		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s", fields[num].name, slen, s);
+		n = snprintf(tempstr, sizeof(tempstr), "<%s:%d>%s", fields[num].name, slen, s.c_str());
 	if (n == -1) {
 		return "";
 	}
@@ -320,40 +321,23 @@ bool want_field(int j)
 string export_rec(cQsoRec *rec)
 {
 	string record;
-	string notes;
 
-	int critical[] = {CALL, QSO_DATE, TIME_ON, QSO_DATE_OFF, TIME_OFF,
-					  FREQ, MODE };
-
-	for (size_t n = 0; n < sizeof(critical)/sizeof(*critical); n++) {
-		if (want_field(critical[n]))
-			record += adif_field(critical[n], rec->getField(critical[n]));
+	std::string afield;
+	for (int n = FREQ; n < EXPORT; n++) {
+		if (want_field(n)) {
+			if (n == MODE) {
+				afield = adif_field(MODE, adif2export(rec->getField(MODE)));
+			} else if (n == SUBMODE) {
+				afield = adif_field(SUBMODE, adif2submode(rec->getField(MODE)));
+			} else
+				afield = adif_field(n, rec->getField(n));
+			if (!afield.empty())  record += afield;
+		}
 	}
-
-	int regular[] = {SUBMODE, BAND, RST_SENT, RST_RCVD, TX_PWR, NAME,
-					 QTH, STATE, VE_PROV, CNTY, COUNTRY, CONT, GRIDSQUARE,
-					 STX, SRX, XCHG1, MYXCHG,
-					 STA_CALL, OP_CALL, NOTES,
-					 CQZ, IOTA, DXCC, ITUZ,
-					 QSL_VIA,
-					 QSLRDATE, QSLSDATE,
-					 EQSLRDATE, EQSLSDATE,
-					 LOTWRDATE, LOTWSDATE,
-					 CLASS, ARRL_SECT,
-					 MY_GRID, MY_CITY,
-					 SS_SERNO, SS_PREC, SS_CHK, SS_SEC,
-					 AGE, TEN_TEN, CHECK,
-					 FD_CLASS, FD_SECTION,
-					 TROOPS, TROOPR, SCOUTR, SCOUTS };
-
-	for (size_t n = 0; n < sizeof(regular)/sizeof(*regular); n++) {
-		if (want_field(regular[n]))
-			record += adif_field(regular[n], rec->getField(regular[n]));
-	}
-
 	record += "<EOR>\r\n";
 
 	return record;
+
 }
 
 void Export_ADIF()
@@ -404,6 +388,8 @@ void Export_ADIF()
 	ofstream ofile(sp.c_str());
 	ofile << adif;
 	ofile.close();
+
+	return;
 
 }
 
@@ -985,8 +971,10 @@ void saveRecord()
 	rec.putField(SRX, inpSerNoIn_log->value());
 	rec.putField(STX, inpSerNoOut_log->value());
 	rec.putField(XCHG1, inpXchgIn_log->value());
-	rec.putField(CLASS, inpClass_log->value());
-	rec.putField(ARRL_SECT, inpSection_log->value());
+
+	rec.putField(FD_CLASS, inpClass_log->value());
+	rec.putField(FD_SECTION, inpSection_log->value());
+
 	rec.putField(MYXCHG, inpMyXchg_log->value());
 	rec.putField(CNTY, inpCNTY_log->value());
 	rec.putField(IOTA, inpIOTA_log->value());
@@ -1070,8 +1058,10 @@ void updateRecord() {
 	rec.putField(STX, inpSerNoOut_log->value());
 	rec.putField(XCHG1, inpXchgIn_log->value());
 	rec.putField(MYXCHG, inpMyXchg_log->value());
-	rec.putField(CLASS, inpClass_log->value());
-	rec.putField(ARRL_SECT, inpSection_log->value());
+
+	rec.putField(FD_CLASS, inpClass_log->value());
+	rec.putField(FD_SECTION, inpSection_log->value());
+
 	rec.putField(CNTY, inpCNTY_log->value());
 	rec.putField(IOTA, inpIOTA_log->value());
 	rec.putField(DXCC, inpDXCC_log->value());
@@ -1162,8 +1152,10 @@ void EditRecord( int i )
 	inpSerNoIn_log->value(editQSO->getField(SRX));
 	inpSerNoOut_log->value(editQSO->getField(STX));
 	inpXchgIn_log->value(editQSO->getField(XCHG1));
-	inpClass_log->value(editQSO->getField(CLASS));
-	inpSection_log->value(editQSO->getField(ARRL_SECT));
+
+	inpClass_log->value(editQSO->getField(FD_CLASS));
+	inpSection_log->value(editQSO->getField(FD_SECTION));
+
 	inpMyXchg_log->value(editQSO->getField(MYXCHG));
 	inpCNTY_log->value(editQSO->getField(CNTY));
 	inpIOTA_log->value(editQSO->getField(IOTA));

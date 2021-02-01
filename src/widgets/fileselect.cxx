@@ -164,7 +164,7 @@ const char* saveas(const char* title, const char* filter, const char* def)
 	if (!stitle.empty()) native.title(stitle.c_str());
 	native.type(Fl_Native_File_Chooser::BROWSE_SAVE_FILE);
 	if (!sfilter.empty()) native.filter(sfilter.c_str());
-	native.options(Fl_Native_File_Chooser::NEW_FOLDER || Fl_Native_File_Chooser::SAVEAS_CONFIRM);
+	native.options(Fl_Native_File_Chooser::NEW_FOLDER | Fl_Native_File_Chooser::SAVEAS_CONFIRM);
 	if (!sdef.empty()) native.preset_file(sdef.c_str());
 
 	filename.clear();

@@ -100,15 +100,25 @@ status progStatus = {
 	0,	//int  SelectSerialOUT;
 
 	0,	//int  SelectCheck;
-	0,	//int  SelectXchg;
+
+	0,	//int  SelectXchgIn;
+	0,	//int  SelectMyXchg;
+
 	0,	//int  SelectCNTY;
 	0,	//int  SelectCONT;
 	0,	//int  SelectCQZ;
 	0,	//int  SelectDXCC;
 	0,	//int  SelectIOTA;
 	0,	//int  SelectITUZ;
-	0,	//int  SelectFD;
-	0,	//int  SelectCWSS;
+
+	0,	//int  SelectClass;
+	0,	//int  SelectSection;
+
+	0,	//int  Select_cwss_serno;
+	0,	//int  Select_cwss_prec;
+	0,	//int  Select_cwss_check;
+	0,	//int  Select_cwss_section;
+
 	0,	//int  Select_1010;
 	0,	//int  SelectJOTA;
 
@@ -191,15 +201,25 @@ void status::saveLastState()
 	spref.set("SelectSerialOUT", SelectSerialOUT);
 
 	spref.set("SelectCheck", SelectCheck);
-	spref.set("SelectXchg", SelectXchg);
+
+	spref.set("SelectXchgIn", SelectXchgIn);
+	spref.set("SelectMyXchg", SelectMyXchg);
+
 	spref.set("SelectCNTY", SelectCNTY);
 	spref.set("SelectCONT", SelectCONT);
 	spref.set("SelectCQZ", SelectCQZ);
 	spref.set("SelectDXCC", SelectDXCC);
 	spref.set("SelectIOTA", SelectIOTA);
 	spref.set("SelectITUZ", SelectITUZ);
-	spref.set("SelectFD", SelectFD);
-	spref.set("SelectCWSS", SelectCWSS);
+
+	spref.set("SelectClass", SelectClass);
+	spref.set("SelectSection", SelectSection);
+
+	spref.set("Select_cwss_serno", Select_cwss_serno);
+	spref.set("Select_cwss_prec", Select_cwss_prec);
+	spref.set("Select_cwss_check", Select_cwss_check);
+	spref.set("Select_cwss_section", Select_cwss_section);
+
 	spref.set("Select_1010", Select_1010);
 	spref.set("SelectJOTA", SelectJOTA);
 
@@ -296,15 +316,25 @@ void status::loadLastState()
 	spref.get("SelectSerialOUT", SelectSerialOUT, SelectSerialOUT);
 
 	spref.get("SelectCheck", SelectCheck, SelectCheck);
-	spref.get("SelectXchg", SelectXchg, SelectXchg);
+
+	spref.get("SelectXchgIn", SelectXchgIn, SelectXchgIn);
+	spref.get("SelectMyXchg", SelectMyXchg, SelectMyXchg);
+
 	spref.get("SelectCNTY", SelectCNTY, SelectCNTY);
 	spref.get("SelectCONT", SelectCONT, SelectCONT);
 	spref.get("SelectCQZ", SelectCQZ, SelectCQZ);
 	spref.get("SelectDXCC", SelectDXCC, SelectDXCC);
 	spref.get("SelectIOTA", SelectIOTA, SelectIOTA);
 	spref.get("SelectITUZ", SelectITUZ, SelectITUZ);
-	spref.get("SelectFD", SelectFD, SelectFD);
-	spref.get("SelectCWSS", SelectCWSS, SelectCWSS);
+
+	spref.get("SelectClass", SelectClass, SelectClass);
+	spref.get("SelectSection", SelectSection, SelectSection);
+
+	spref.get("Select_cwss_serno", Select_cwss_serno, Select_cwss_serno);
+	spref.get("Select_cwss_prec", Select_cwss_prec, Select_cwss_prec);
+	spref.get("Select_cwss_check", Select_cwss_check, Select_cwss_check);
+	spref.get("Select_cwss_section", Select_cwss_section, Select_cwss_section);
+
 	spref.get("Select_1010", Select_1010, Select_1010);
 	spref.get("SelectJOTA", SelectJOTA, SelectJOTA);
 
@@ -352,15 +382,25 @@ void status::save_defaults()
 	SelectSerialOUT = btnSelectSerialOUT->value();
 
 	SelectCheck = btnSelectCheck->value();
-	SelectXchg = btnSelectXchg->value();
+
+	SelectXchgIn = btnSelectXchgIn->value();
+	SelectMyXchg = btnSelectMyXchg->value();
+
 	SelectCNTY = btnSelectCNTY->value();
 	SelectCONT = btnSelectCONT->value();
 	SelectCQZ = btnSelectCQZ->value();
 	SelectDXCC = btnSelectDXCC->value();
 	SelectIOTA = btnSelectIOTA->value();
 	SelectITUZ = btnSelectITUZ->value();
-	SelectFD = btnSelectFD->value();
-	SelectCWSS = btnSelectCWSS->value();
+
+	SelectClass = btnSelectClass->value();
+	SelectSection = btnSelectSection->value();
+
+	Select_cwss_serno = btnSelect_cwss_serno->value();
+	Select_cwss_prec = btnSelect_cwss_prec->value();
+	Select_cwss_check = btnSelect_cwss_check->value();
+	Select_cwss_section = btnSelect_cwss_section->value();
+
 	Select_1010 = btnSelect_1010->value();
 	SelectJOTA = btnSelectJOTA->value();
 
@@ -403,15 +443,25 @@ void status::load_defaults()
 	btnSelectSerialOUT->value(SelectSerialOUT);
 
 	btnSelectCheck->value(SelectCheck);
-	btnSelectXchg->value(SelectXchg);
+
+	btnSelectXchgIn->value(SelectXchgIn);
+	btnSelectMyXchg->value(SelectMyXchg);
+
 	btnSelectCNTY->value(SelectCNTY);
 	btnSelectCONT->value(SelectCONT);
 	btnSelectCQZ->value(SelectCQZ);
 	btnSelectDXCC->value(SelectDXCC);
 	btnSelectIOTA->value(SelectIOTA);
 	btnSelectITUZ->value(SelectITUZ);
-	btnSelectFD->value(SelectFD);
-	btnSelectCWSS->value(SelectCWSS);
+
+	btnSelectClass->value(SelectClass);
+	btnSelectSection->value(SelectSection);
+
+	btnSelect_cwss_serno->value(Select_cwss_serno);
+	btnSelect_cwss_prec->value(Select_cwss_prec);
+	btnSelect_cwss_check->value(Select_cwss_check);
+	btnSelect_cwss_section->value(Select_cwss_section);
+
 	btnSelect_1010->value(Select_1010);
 	btnSelectJOTA->value(SelectJOTA);
 }

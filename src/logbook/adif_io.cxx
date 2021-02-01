@@ -91,11 +91,8 @@ FIELD fields[] = {
 	{SRX,          50,    "SRX",              &btnSelectSerialIN},  // received serial number for a contest QSO
 	{STX,          50,    "STX",              &btnSelectSerialOUT}, // QSO transmitted serial number
 
-	{XCHG1,        100,   "SRX_STRING",       &btnSelectXchg},      // contest exchange #1 / free1 in xlog
-	{MYXCHG,       100,   "STX_STRING",       &btnSelectXchg},      // contest exchange sent
-
-	{CLASS,        20,    "CLASS",            &btnSelectFD},        // Field Day class received
-	{ARRL_SECT,    20,    "ARRL_SECT",        &btnSelectFD},        // Field Day section received
+	{XCHG1,        100,   "SRX_STRING",       &btnSelectXchgIn},    // contest exchange #1 / free1 in xlog
+	{MYXCHG,       100,   "STX_STRING",       &btnSelectMyXchg},    // contest exchange sent
 
 	{TX_PWR,       8,     "TX_PWR",           &btnSelectTX_pwr},    // power transmitted by this station
 
@@ -104,17 +101,17 @@ FIELD fields[] = {
 	{MY_GRID,      8,     "MY_GRIDSQUARE",    &btnSelectStaGrid},   // Xmt station locator
 	{MY_CITY,     60,     "MY_CITY",          &btnSelectStaCity},   // Xmt station location
 
-	{SS_SEC,       20,    "CWSS_SECTION",     &btnSelectCWSS},      // CW sweepstakes
-	{SS_SERNO,     20,    "CWSS_SERNO",       &btnSelectCWSS},
-	{SS_PREC,      20,    "CWSS_PREC",        &btnSelectCWSS},
-	{SS_CHK,       20,    "CWSS_CHK",         &btnSelectCWSS},
+	{SS_SEC,       20,    "CWSS_SECTION",     &btnSelect_cwss_section},   // CW sweepstakes
+	{SS_SERNO,     20,    "CWSS_SERNO",       &btnSelect_cwss_serno},
+	{SS_PREC,      20,    "CWSS_PREC",        &btnSelect_cwss_prec},
+	{SS_CHK,       20,    "CWSS_CHK",         &btnSelect_cwss_check},
 
 	{AGE,          2,     "AGE",              &btnSelectAge},       // contacted operators age in years
 	{TEN_TEN,      10,    "TEN_TEN",          &btnSelect_1010},     // ten ten # of other station
 	{CHECK,        10,    "CHECK",            &btnSelectCheck},     // contest identifier
 
-	{FD_CLASS,     20,    "FD_CLASS",         &btnSelectFD},        // Field Day Rcvd
-	{FD_SECTION,   20,    "FD_SECTION",       &btnSelectFD},        // FD section received
+	{FD_CLASS,     20,    "FD_CLASS",         &btnSelectClass},     // Field Day Rcvd
+	{FD_SECTION,   20,    "FD_SECTION",       &btnSelectSection},   // FD section received
 
 	{TROOPS,       20,    "TROOPS",           &btnSelectJOTA},      // JOTA troop number sent
 	{TROOPR,       20,    "TROOPR",           &btnSelectJOTA},      // JOTA troop number received

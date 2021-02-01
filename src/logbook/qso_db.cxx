@@ -159,7 +159,7 @@ void cQsoRec::trimFields () {
 			p = s.length();
 		}
 //make all upper case if Callsign or Mode
-		if (i == CALL || i == MODE) {
+		if (i == CALL || i == MODE || i == SUBMODE) {
 			for (p = 0; p < s.length(); p++)
 				s[p] = toupper(s[p]);
 		}
@@ -677,8 +677,12 @@ int cQsoDb::matched( cQsoRec *rec )
 // found match
 
 //	printf("%10s, %12s, %s, %s, %s\n%10s, %12s, %s, %s, %s\n",
-//		rec->getField(CALL), rec->getField(FREQ), rec->getField(QSO_DATE), rec->getField(TIME_ON), rec->getField(MODE),
-//		qsorec[i].getField(CALL), qsorec[i].getField(FREQ), qsorec[i].getField(QSO_DATE), qsorec[i].getField(TIME_ON), qsorec[i].getField(MODE) );
+//		rec->getField(CALL), rec->getField(FREQ),
+//		rec->getField(QSO_DATE), rec->getField(TIME_ON),
+//		rec->getField(MODE), rec->getField(SUBMODE),
+//		qsorec[i].getField(CALL), qsorec[i].getField(FREQ),
+//		qsorec[i].getField(QSO_DATE), qsorec[i].getField(TIME_ON),
+//		qsorec[i].getField(MODE), qsorec[i].getField(SUBMODE) );
 //	printf("epoch test: %ud ~= %ud ==> %d\n", (uint)lotwdatetime, (uint)qsodatetime, difftime);
 
 		return i;

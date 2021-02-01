@@ -75,15 +75,25 @@ struct status {
 	int  SelectSerialOUT;
 
 	int  SelectCheck;
-	int  SelectXchg;
+
+	int  SelectXchgIn;
+	int  SelectMyXchg;
+
 	int  SelectCNTY;
 	int  SelectCONT;
 	int  SelectCQZ;
 	int  SelectDXCC;
 	int  SelectIOTA;
 	int  SelectITUZ;
-	int  SelectFD;
-	int  SelectCWSS;
+
+	int  SelectClass;
+	int  SelectSection;
+
+	int  Select_cwss_serno;
+	int  Select_cwss_prec;
+	int  Select_cwss_check;
+	int  Select_cwss_section;
+
 	int  Select_1010;
 	int  SelectJOTA;
 
