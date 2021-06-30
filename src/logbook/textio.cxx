@@ -206,9 +206,9 @@ int cTextFile::writeCSVFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, ",\"%s\"", pRec->getField(MYXCHG));
 
 				if (btnSelectClass->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(FD_CLASS));
+					fprintf (txtFile, ",\"%s\"", pRec->getField(CLASS));
 				if (btnSelectSection->value())
-					fprintf (txtFile, ",\"%s\"", pRec->getField(FD_SECTION));
+					fprintf (txtFile, ",\"%s\"", pRec->getField(ARRL_SECT));
 
 				if (btnSelectOperator->value())
 					fprintf (txtFile, ",\"%s\"", pRec->getField(OP_CALL));
@@ -286,7 +286,8 @@ void cTextFile::writeTXTHeader(FILE *txtFile)
 	if (btnSelectMyXchg->value())    fprintf (txtFile, "%-20s", "STX_STRING");
 
 	if (btnSelectClass->value())     fprintf (txtFile, "%-15s", "CLASS");
-	if (btnSelectSection->value())   fprintf (txtFile, "%-15s", "SECTION");
+	if (btnSelectSection->value())   fprintf (txtFile, "%-15s", "ARRL_SECT");
+
 	if (btnSelectOperator->value())  fprintf (txtFile, "%-15s", "OP_CALL");
 	if (btnSelectStaCall->value())   fprintf (txtFile, "%-15s", "STA_CALL");
 	if (btnSelectStaGrid->value())   fprintf (txtFile, "%-15s", "MY_GRID");
@@ -395,9 +396,9 @@ int cTextFile::writeTXTFile (const char *fname, cQsoDb *db) {
 					fprintf (txtFile, "%-20s", pRec->getField(MYXCHG));
 
 				if (btnSelectClass->value())
-					fprintf (txtFile, "%-15s", pRec->getField(FD_CLASS));
+					fprintf (txtFile, "%-15s", pRec->getField(CLASS));
 				if (btnSelectSection->value())
-					fprintf (txtFile, "%-15s", pRec->getField(FD_SECTION));
+					fprintf (txtFile, "%-15s", pRec->getField(ARRL_SECT));
 
 				if (btnSelectOperator->value())
 					fprintf (txtFile, "%-15s", pRec->getField(OP_CALL));

@@ -972,8 +972,8 @@ void saveRecord()
 	rec.putField(STX, inpSerNoOut_log->value());
 	rec.putField(XCHG1, inpXchgIn_log->value());
 
-	rec.putField(FD_CLASS, inpClass_log->value());
-	rec.putField(FD_SECTION, inpSection_log->value());
+	rec.putField(CLASS, inpClass_log->value());
+	rec.putField(ARRL_SECT, inpSection_log->value());
 
 	rec.putField(MYXCHG, inpMyXchg_log->value());
 	rec.putField(CNTY, inpCNTY_log->value());
@@ -1059,8 +1059,8 @@ void updateRecord() {
 	rec.putField(XCHG1, inpXchgIn_log->value());
 	rec.putField(MYXCHG, inpMyXchg_log->value());
 
-	rec.putField(FD_CLASS, inpClass_log->value());
-	rec.putField(FD_SECTION, inpSection_log->value());
+	rec.putField(CLASS, inpClass_log->value());
+	rec.putField(ARRL_SECT, inpSection_log->value());
 
 	rec.putField(CNTY, inpCNTY_log->value());
 	rec.putField(IOTA, inpIOTA_log->value());
@@ -1153,8 +1153,8 @@ void EditRecord( int i )
 	inpSerNoOut_log->value(editQSO->getField(STX));
 	inpXchgIn_log->value(editQSO->getField(XCHG1));
 
-	inpClass_log->value(editQSO->getField(FD_CLASS));
-	inpSection_log->value(editQSO->getField(FD_SECTION));
+	inpClass_log->value(editQSO->getField(CLASS));
+	inpSection_log->value(editQSO->getField(ARRL_SECT));
 
 	inpMyXchg_log->value(editQSO->getField(MYXCHG));
 	inpCNTY_log->value(editQSO->getField(CNTY));
