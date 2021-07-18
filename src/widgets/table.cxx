@@ -1103,7 +1103,7 @@ int Table::handle(int event) {
       selected = row;
 
       // Create new selection
-      int len = 0;
+      int len = 1;
       char **tableRow = data[selected];
       char *buffer;
 
@@ -1112,9 +1112,10 @@ int Table::handle(int event) {
 
       // Create a tab separated list from data.
       buffer = (char*)malloc(len);
+      buffer[0] = 0;
       strcpy(buffer, tableRow[0]);
       for (int col = 1; col < nCols; col++) {
-        strcat(buffer, "\t");
+		strcat(buffer, "\t");
         strcat(buffer, tableRow[col]);
       }
       Fl::selection(*this, buffer, len);
