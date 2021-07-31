@@ -76,6 +76,8 @@
 #include "lgbook.h"
 #include "colorsfonts.h"
 
+#include "XmlRpcClient.h"
+
 int parse_args(int argc, char **argv, int& idx);
 
 Fl_Double_Window *mainwindow = NULL;
@@ -608,8 +610,17 @@ void exit_main(Fl_Widget *w)
 	cbExit();
 }
 
+static std::string pname = "";
+
 int main (int argc, char *argv[])
 {
+	pname = argv[0];
+	size_t pn = pname.rfind("/");
+	if (pn != std::string::npos) pname.erase(0, pn + 1);
+	pn = pname.rfind("\\");
+	if (pn != std::string::npos) pname.erase(0, pn + 1);
+	XmlRpc::set_pname(pname);
+
 	Fl::visual(FL_RGB); // insure 24 bit color operation
 
 	Fl::set_fonts(0);
