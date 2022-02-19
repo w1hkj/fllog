@@ -49,7 +49,6 @@
 #include "gettext.h"
 #include "fllog.h"
 
-using namespace std;
 
 #define MAX_LINES 65536
 
@@ -139,7 +138,7 @@ void debug::stop(void)
 
 static char fmt[1024];
 static char sztemp[1024];
-static string estr = "";
+static std::string estr = "";
 bool   debug_in_use = false;
 
 void debug::log(level_e level, const char* func, const char* srcf, int line, const char* format, ...)
@@ -265,7 +264,7 @@ static void clear_cb(Fl_Widget* w, void*)
 
 static void save_cb(Fl_Widget* w, void*)
 {
-	string filename = LogHomeDir;
+	std::string filename = LogHomeDir;
 	filename.append("debug_log.txt");
 	buffer->savefile(filename.c_str());
 }

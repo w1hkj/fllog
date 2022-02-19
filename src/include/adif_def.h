@@ -28,7 +28,6 @@
 
 #include "field_def.h"
 
-using namespace std;
 
 struct FIELD {
   int  type;

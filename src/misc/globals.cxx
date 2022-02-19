@@ -37,10 +37,9 @@
 #include "globals.h"
 #include "util.h"
 
-using namespace std;
 
 // ************ Elements are in enum trx_mode order. ************
-// N.B. it is not valid to use an _("NLS") string in this table!!
+// N.B. it is not valid to use an _("NLS") std::string in this table!!
 // ... doing so will break the Fl_menu_item table 'menu_'.  -Kamal
 
 // Last value (true/false) determines if it's used with the KISS interface.
@@ -192,7 +191,7 @@ const struct mode_info_t mode_info[NUM_MODES] = {
 
 };
 
-std::string ucasestr( string str )
+std::string ucasestr( std::string str )
 {
 	std::string resu = str;
 	for( size_t i = 0 ; i < str.size(); ++i )
@@ -237,7 +236,7 @@ std::ostream& operator<<(std::ostream& s, const qrg_mode_t& m)
 
 std::istream& operator>>(std::istream& s, qrg_mode_t& m)
 {
-	string sMode;
+	std::string sMode;
 	char temp[255];
 	int mnbr;
 	s >> m.rfcarrier >> m.rmode >> m.carrier >> sMode;
@@ -246,7 +245,7 @@ std::istream& operator>>(std::istream& s, qrg_mode_t& m)
 	m.usage = temp;
 	while (m.usage[0] == ' ') m.usage.erase(0,1);
 
-// handle case for reading older type of specification string
+// handle case for reading older type of specification std::string
 	if (sscanf(sMode.c_str(), "%d", &mnbr)) {
 		m.mode = mnbr;
 		return s;
@@ -262,9 +261,9 @@ std::istream& operator>>(std::istream& s, qrg_mode_t& m)
 
 std::string qrg_mode_t::str(void)
 {
-	ostringstream s;
-	s << setiosflags(ios::fixed)
-	  << setprecision(3) << rfcarrier/1000.0 << '|'
+	std::ostringstream s;
+	s << std::setiosflags(std::ios::fixed)
+	  << std::setprecision(3) << rfcarrier/1000.0 << '|'
 	  << rmode << '|'
 	  << (mode < NUM_MODES ? mode_info[mode].sname : "NONE") << '|'
 //	  << carrier;

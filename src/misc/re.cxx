@@ -27,7 +27,6 @@
 
 #include "re.h"
 
-using namespace std;
 
 
 re_t::re_t(const char* pattern_, int cflags_)
@@ -103,7 +102,7 @@ bool re_t::match(const char* str, int eflags_)
 	return found;
 }
 
-const string& re_t::submatch(size_t n) const
+const std::string& re_t::submatch(size_t n) const
 {
 	return substrings[n];
 }

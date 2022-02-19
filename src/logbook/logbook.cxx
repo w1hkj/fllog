@@ -38,7 +38,6 @@
 #include "debug.h"
 #include "status.h"
 
-using namespace std;
 
 std::string log_checksum;
 

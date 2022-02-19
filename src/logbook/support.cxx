@@ -47,11 +47,10 @@
 #include "logbook.h"
 #include "threads.h"
 
-using namespace std;
 
 static pthread_mutex_t exec_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-void upcase(string &s)
+void upcase(std::string &s)
 {
 	for (size_t n = 0; n < s.length(); n++) s[n] = toupper(s[n]);
 }
@@ -252,7 +251,7 @@ public:
 } log_update_record(&log_server);
 
 struct MLIST {
-	string name; string signature; string help;
+	std::string name; std::string signature; std::string help;
 } mlist[] = {
 	{ "log.add_record",    "s:s", "adds new ADIF-RECORD" },
 	{ "log.get_record",    "s:s", "returns ADIF-RECORD for CALL" },
@@ -267,7 +266,7 @@ public:
 
 	void execute(XmlRpcValue& params, XmlRpcValue& result) {
 
-		vector<XmlRpcValue> methods;
+		std::vector<XmlRpcValue> methods;
 		for (size_t n = 0; n < sizeof(mlist) / sizeof(*mlist); ++n) {
 			XmlRpcValue::ValueStruct item;
 			item["name"]      = mlist[n].name;

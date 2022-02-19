@@ -104,16 +104,15 @@ The filter type must be terminated with a '\n' on OS X or the application crashe
 
 */
 
-using namespace std;
 
 namespace FSEL {
 
-string filename;
+std::string filename;
 
 void create(void) {};
 void destroy(void) {};
 
-string stitle, sfilter, sdef;
+std::string stitle, sfilter, sdef;
 
 const char* select(const char* title, const char* filter, const char* def)
 {

@@ -25,6 +25,7 @@
 #include "config.h"
 
 #include <stdlib.h>
+#include <string>
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -81,10 +82,10 @@
 int parse_args(int argc, char **argv, int& idx);
 
 Fl_Double_Window *mainwindow = NULL;
-string LogHomeDir;
-string TempDir;
-string defFileName;
-string title;
+std::string LogHomeDir;
+std::string TempDir;
+std::string defFileName;
+std::string title;
 
 //pthread_t *serial_thread = 0;
 //pthread_t *digi_thread = 0;
@@ -509,14 +510,14 @@ void visit_URL(void* arg)
 			 strerror(errno), url);
 	}
 #else
-	if ((int)ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL) <= 32)
+	if ((size_t)ShellExecute(NULL, "open", url, NULL, NULL, SW_SHOWNORMAL) <= 32)
 		fl_alert(_("Could not open url:\n%s\n"), url);
 #endif
 }
 
 void about()
 {
-	string msg = "\
+	std::string msg = "\
 %s\n\
 Version %s\n\
 copyright W1HKJ, 2009-11\n\
@@ -581,7 +582,7 @@ void make_pixmap(Pixmap *xpm, const char **data)
 static void checkdirectories(void)
 {
 	struct {
-		string& dir;
+		std::string& dir;
 		const char* suffix;
 		void (*new_dir_func)(void);
 	} dirs[] = {
@@ -594,7 +595,7 @@ static void checkdirectories(void)
 			dirs[i].dir.assign(LogHomeDir).append(dirs[i].suffix).append("/");
 
 		if ((r = mkdir(dirs[i].dir.c_str(), 0777)) == -1 && errno != EEXIST) {
-			cerr << _("Could not make directory") << ' ' << dirs[i].dir
+			std::cerr << _("Could not make directory") << ' ' << dirs[i].dir
 				 << ": " << strerror(errno) << '\n';
 			exit(EXIT_FAILURE);
 		}
@@ -647,12 +648,12 @@ int main (int argc, char *argv[])
 	checkdirectories();
 
 	try {
-		debug::start(string(LogHomeDir).append("status_log.txt").c_str());
+		debug::start(std::string(LogHomeDir).append("status_log.txt").c_str());
 		time_t t = time(NULL);
 		LOG(debug::INFO_LEVEL, debug::LOG_OTHER, _("%s log started on \n%s"), PACKAGE_STRING, ctime(&t));
 	}
 	catch (const char* error) {
-		cerr << error << '\n';
+		std::cerr << error << '\n';
 		debug::stop();
 		exit(1);
 	}

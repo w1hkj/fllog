@@ -7,7 +7,6 @@
 
 #include "fllog.h"
 
-using namespace std;
 
 enum sorttype {NONE, SORTCALL, SORTDATE, SORTFREQ, SORTMODE};
 
@@ -25,12 +24,12 @@ struct status {
 
 	bool        BrowseTimeOFF;
 // logbook entries
-	string logbookfilename;
-	string mycall;
-	string opcall;
-	string opname;
-	string my_staqth;
-	string my_staloc;
+	std::string logbookfilename;
+	std::string mycall;
+	std::string opcall;
+	std::string opname;
+	std::string my_staqth;
+	std::string my_staloc;
 
 	sorttype	lastsort;
 	bool callfwd;
@@ -38,7 +37,7 @@ struct status {
 	bool modefwd;
 	bool freqfwd;
 
-	string server_port;
+	std::string server_port;
 
 	int  SelectCall;
 	int  SelectName;

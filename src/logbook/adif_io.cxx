@@ -40,7 +40,6 @@
 #include "support.h"
 #include "timeops.h"
 
-using namespace std;
 
 #ifdef __WOE32__
 static const char *szEOL = "\r\n";
@@ -145,7 +144,7 @@ FIELD fields[] = {
 };
 */
 
-static string read_errors;
+static std::string read_errors;
 static int    num_read_errors;
 
 static char *fastlookup = 0;
@@ -228,12 +227,12 @@ char * cAdifIO::fillfield (int fieldnum, char *buff, int recnbr)
 		p1++;
 	}
 
-	string tmp = "";
+	std::string tmp = "";
 	tmp.assign(p2+1, fldsize);
 
 // added to disallow very large corrupted adif fields
 	if (fldsize > fields[fieldnum].fsize) {
-		string bfr = buff;
+		std::string bfr = buff;
 		tmp.erase(fields[fieldnum].fsize);
 		if (recnbr != -1) {
 			static char szmsg[1000];
@@ -279,7 +278,7 @@ void cAdifIO::readfile_(std::string fname, cQsoDb *db)
 #endif
 
 	char buff[16384];
-	string sbuff;
+	std::string sbuff;
 	memset(buff, 0, 16384);
 	int retnbr = fread(buff, 1, 16384, adiFile);
 	if (retnbr) sbuff.assign(buff, retnbr);
@@ -385,9 +384,9 @@ static const char *adifmt = "<%s:%d>";
 
 // write ALL or SELECTED records to the designated file
 
-int cAdifIO::writeFile (string fname, cQsoDb *db)
+int cAdifIO::writeFile (std::string fname, cQsoDb *db)
 {
-	string ADIFHEADER;
+	std::string ADIFHEADER;
 	ADIFHEADER = "File: %s";
 	ADIFHEADER.append(szEOL);
 	ADIFHEADER.append("<ADIF_VER:%d>%s");
@@ -400,7 +399,7 @@ int cAdifIO::writeFile (string fname, cQsoDb *db)
 	ADIFHEADER.append(szEOL);
 // open the adif file
 	cQsoRec *rec;
-	string sFld;
+	std::string sFld;
 	adiFile = fl_fopen (fname.c_str(), "wb");
 	if (!adiFile)
 		return 1;
@@ -443,10 +442,10 @@ int cAdifIO::writeFile (string fname, cQsoDb *db)
 
 // write ALL records to the common log
 
-static string adif_file_image;
-static string adif_file_name;
-static string records;
-static string record;
+static std::string adif_file_image;
+static std::string adif_file_name;
+static std::string records;
+static std::string record;
 static char recfield[200];
 static int nrecs;
 
@@ -454,7 +453,7 @@ static cQsoDb *adif_db;
 
 static cAdifIO *adifIO = 0;
 
-void cAdifIO::readFile (string fname, cQsoDb *db)
+void cAdifIO::readFile (std::string fname, cQsoDb *db)
 {
 	adif_file_name = fname.c_str();
 	adif_db = db;
@@ -532,7 +531,7 @@ int cAdifIO::writeLog (const char *fname, cQsoDb *db, bool immediate) {
 
 void cAdifIO::writelog_()
 {
-	string ADIFHEADER;
+	std::string ADIFHEADER;
 	ADIFHEADER = "File: %s";
 	ADIFHEADER.append(szEOL);
 	ADIFHEADER.append("<ADIF_VER:%d>%s");
