@@ -1,7 +1,17 @@
-2021-08-04  dave-w1hkj  <w1hkj@bellsouth.net>
+2022-06-05  dave-w1hkj  <w1hkj@bellsouth.net>
 
-	5b31548: Version 1.2.7
-	01ce544: XmlRpc Client ID
+	314f1c0: alpha
+	0a6bdaf: colors fonts
+
+2022-06-05  Kenji Rikitake  <kenji.rikitake@acm.org>
+
+	8ddb9fd: Add Submode support
+
+2022-02-19  dave-w1hkj  <w1hkj@bellsouth.net>
+
+	cd8de05: namespace std
+	d588186: Version 1.2.7
+	2bb5aaf: XmlRpc Client ID
 	c670ef1: openSUSE Tumbleweed
 	4177fd2: FD fields
 
