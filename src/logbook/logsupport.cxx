@@ -878,6 +878,7 @@ void clearRecord()
 	inpFreq_log->value ("");
 	inpBand_log->value ("");
 	inpMode_log->value ("");
+	inpSubMode_log->value ("");
 	inpQth_log->value ("");
 	inpState_log->value ("");
 	inpVE_Prov_log->value ("");
@@ -950,6 +951,7 @@ void saveRecord()
 	rec.putField(FREQ, inpFreq_log->value());
 	rec.putField(BAND, inpBand_log->value());
 	rec.putField(MODE, inpMode_log->value());
+	rec.putField(SUBMODE, inpSubMode_log->value());
 	rec.putField(QTH, inpQth_log->value());
 	rec.putField(STATE, inpState_log->value());
 	rec.putField(VE_PROV, inpVE_Prov_log->value());
@@ -1036,6 +1038,7 @@ void updateRecord() {
 	rec.putField(FREQ, inpFreq_log->value());
 	rec.putField(BAND, inpBand_log->value());
 	rec.putField(MODE, inpMode_log->value());
+	rec.putField(SUBMODE, inpSubMode_log->value());
 	rec.putField(QTH, inpQth_log->value());
 	rec.putField(STATE, inpState_log->value());
 	rec.putField(VE_PROV, inpVE_Prov_log->value());
@@ -1133,6 +1136,7 @@ void EditRecord( int i )
 	inpFreq_log->value (editQSO->getField(FREQ));
 	inpBand_log->value (editQSO->getField(BAND));
 	inpMode_log->value (editQSO->getField(MODE));
+	inpSubMode_log->value (editQSO->getField(SUBMODE));
 	inpState_log->value (editQSO->getField(STATE));
 	inpVE_Prov_log->value (editQSO->getField(VE_PROV));
 	inpCountry_log->value (editQSO->getField(COUNTRY));

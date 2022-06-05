@@ -193,12 +193,22 @@ call = o->value();
 for (size_t n = 0; n < call.length(); n++)
 	call[n] = toupper(call[n]);
 o->value(call.c_str());}
-      tooltip {Mode in use} xywh {335 87 158 24} align 5 when 1
+      tooltip {Mode in use} xywh {335 87 104 24} align 5 when 1
+      class Fl_Input2
+    }
+    Fl_Input inpSubMode_log {
+      label Submode
+      callback {std::string call;
+call = o->value();
+for (size_t n = 0; n < call.length(); n++)
+	call[n] = toupper(call[n]);
+o->value(call.c_str());}
+      tooltip {Submode in use} xywh {439 87 60 24} align 5 when 1
       class Fl_Input2
     }
     Fl_Input inpTX_pwr_log {
       label Pwr
-      tooltip {Transmit power used} xywh {497 87 50 24} align 5
+      tooltip {Transmit power used} xywh {503 87 40 24} align 5
       class Fl_Input2
     }
     Fl_Input inpRstS_log {

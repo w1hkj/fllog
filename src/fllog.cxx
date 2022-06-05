@@ -149,6 +149,8 @@ void LOGBOOK_colors_font()
 	int width_pwr  = fl_width("0000");
 	int width_loc  = fl_width("XX88XXX");
 	int width_mode = fl_width("CONTESTIA");
+	// 2/3 of width_mode
+	int width_submode = fl_width("MFSK16");
 
 	int dlg_width =	inpDate_log->x() +
 					width_date + 2 +
@@ -156,6 +158,7 @@ void LOGBOOK_colors_font()
 					width_time + 2 +
 					width_freq + 2 +
 					width_mode + 2 +
+					width_submode + 2 +
 					width_pwr + 2 +
 					width_rst + 2;
 //					+ width_date + 2;
@@ -168,9 +171,10 @@ void LOGBOOK_colors_font()
 		width_pwr  = (int)(1.0 * width_pwr * progStatus.mainW / dlg_width);
 		width_loc  = (int)(1.0 * width_loc * progStatus.mainW / dlg_width);
 		width_mode = (int)(1.0 * width_mode * progStatus.mainW / dlg_width);
+		width_submode = (int)(1.0 * width_submode * progStatus.mainW / dlg_width);
 		width_freq = (progStatus.mainW -
 						width_date - width_time - width_mode -
-						width_pwr - width_rst - 14);
+						width_submode - width_pwr - width_rst - 14);
 		dlg_width = progStatus.mainW;
 	}
 
@@ -233,8 +237,11 @@ void LOGBOOK_colors_font()
 	xpos = inpRstS_log->x() - 2 - width_pwr;
 	inp_font_pos(inpTX_pwr_log, xpos, ypos, width_pwr, wh);
 
-	xpos = inpFreq_log->x() + width_freq + 2;
-	xwidth = inpTX_pwr_log->x() - 2 - xpos;
+	xpos = inpTX_pwr_log->x() - 2 - width_submode;
+	inp_font_pos(inpSubMode_log, xpos, ypos, width_submode, wh);
+
+	xpos = inpName_log->x();
+	xwidth = inpSubMode_log->x() - 2 - xpos;
 	inp_font_pos(inpMode_log, xpos, ypos, xwidth, wh);
 
 // row 3
